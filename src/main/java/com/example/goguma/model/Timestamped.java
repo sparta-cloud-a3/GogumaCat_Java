@@ -1,4 +1,4 @@
-package com.example.goguma;
+package com.example.goguma.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +19,5 @@ public abstract class Timestamped {
     private LocalDateTime createdAt;
 
     @LastModifiedDate // 마지막 변경 시점
-    private LocalDateTime modifiedAt;
+    private LocalDateTime updatedAt;
 }

@@ -1,4 +1,4 @@
-package com.example.goguma;
+package com.example.goguma.dto;
 
 
 import lombok.Getter;

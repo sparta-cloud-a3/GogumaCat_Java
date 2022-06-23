@@ -1,6 +1,5 @@
-package com.example.goguma.login;
+package com.example.goguma.model;
 
-import com.example.goguma.Timestamped;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +10,11 @@ import javax.persistence.*;
 @Entity
 public class Post extends Timestamped {
     @Id // ID 값, Primary Key로 사용하겠다는 뜻입니다.
-    @GeneratedValue(strategy = GenerationType.AUTO) // 자동 증가 명령입니다.
-    private Long post_id;
+    @GeneratedValue// 자동 증가 명령입니다.
+    @Column(name = "post_id")
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
     private User user;
 

@@ -1,11 +1,11 @@
-package com.example.goguma.login.service;
+package com.example.goguma.service;
 
-import com.example.goguma.login.User;
-import com.example.goguma.login.dto.CheckRequestDto;
-import com.example.goguma.login.repository.UserRepository;
-import com.example.goguma.login.dto.SignupRequestDto;
-import com.example.goguma.login.security.kakao.KakaoOAuth2;
-import com.example.goguma.login.security.kakao.KakaoUserInfo;
+import com.example.goguma.model.User;
+import com.example.goguma.dto.CheckRequestDto;
+import com.example.goguma.repository.UserRepository;
+import com.example.goguma.dto.SignupRequestDto;
+import com.example.goguma.security.kakao.KakaoOAuth2;
+import com.example.goguma.security.kakao.KakaoUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,6 +1,6 @@
-package com.example.goguma.login.repository;
+package com.example.goguma.repository;
 
-import com.example.goguma.login.User;
+import com.example.goguma.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

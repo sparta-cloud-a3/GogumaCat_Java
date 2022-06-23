@@ -1,7 +1,8 @@
-package com.example.goguma;
+package com.example.goguma.service;
 
-import com.example.goguma.login.User;
-import com.example.goguma.login.repository.UserRepository;
+import com.example.goguma.dto.PasswordCheckDto;
+import com.example.goguma.model.User;
+import com.example.goguma.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

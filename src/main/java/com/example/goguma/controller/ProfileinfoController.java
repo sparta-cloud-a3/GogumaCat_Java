@@ -1,6 +1,7 @@
-package com.example.goguma;
+package com.example.goguma.controller;
 
-import org.springframework.stereotype.Controller;
+import com.example.goguma.dto.PasswordCheckDto;
+import com.example.goguma.service.PwService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 

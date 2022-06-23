@@ -1,6 +1,6 @@
-package com.example.goguma;
+package com.example.goguma.controller;
 
-import com.example.goguma.login.security.UserDetailsImpl;
+import com.example.goguma.security.UserDetailsImpl;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

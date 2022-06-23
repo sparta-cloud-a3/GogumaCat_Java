@@ -1,7 +1,7 @@
-package com.example.goguma.login.security;
+package com.example.goguma.security;
 
-import com.example.goguma.login.User;
-import com.example.goguma.login.repository.UserRepository;
+import com.example.goguma.model.User;
+import com.example.goguma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

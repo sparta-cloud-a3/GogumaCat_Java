@@ -1,4 +1,4 @@
-package com.example.goguma.login.security.kakao;
+package com.example.goguma.security.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

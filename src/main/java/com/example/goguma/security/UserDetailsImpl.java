@@ -1,6 +1,6 @@
-package com.example.goguma.login.security;
+package com.example.goguma.security;
 
-import com.example.goguma.login.User;
+import com.example.goguma.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
