@@ -14,10 +14,10 @@ function fileupload() {
     }
 }
 
-function get_posts(username) {
+function get_posts(user_id) {
     $.ajax({
         type: "GET",
-        url: `/get_posts?username_give=${username}`,
+        url: `/user/get_posts/${user_id}`,
         data: {},
         success: function (response) {
             $("#card-box-post").empty();

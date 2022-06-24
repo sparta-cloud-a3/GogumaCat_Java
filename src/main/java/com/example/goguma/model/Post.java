@@ -28,7 +28,7 @@ public class Post extends Timestamped {
     private String content;
 
     @Column(nullable = false)
-    private int like_count;
+    private int likeCount;
 
     @Column(nullable = false)
     private String address;

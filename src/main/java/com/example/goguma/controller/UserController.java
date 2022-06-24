@@ -1,12 +1,15 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.dto.CheckRequestDto;
+import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @Controller
@@ -73,4 +76,9 @@ public class UserController {
         return result;
     }
 
+    @ResponseBody
+    @GetMapping("/user/get_posts/<id>")
+    public List<PostResponseDto> getMyPosts(@PathVariable Long id) {
+        return userService.getMyPosts(id);
+    }
 }

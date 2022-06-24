@@ -1,11 +1,18 @@
 package com.example.goguma.service;
 
+import com.example.goguma.dto.PostImgResponseDto;
+import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.model.Post;
+import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.dto.CheckRequestDto;
+import com.example.goguma.repository.PostImgRepository;
+import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
 import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
 import com.example.goguma.security.kakao.KakaoUserInfo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,24 +21,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final AuthenticationManager authenticationManager;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
-
-    @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, KakaoOAuth2 kakaoOAuth2, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.kakaoOAuth2 = kakaoOAuth2;
-        this.authenticationManager = authenticationManager;
-    }
-
+    private final PostRepository postRepository;
+    private final PostImgRepository postImgRepository;
 
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -117,4 +120,27 @@ public class UserService {
         return count;
     }
 
+    /**
+     * 내가 작성한 게시물 가져오기
+     * @param userId
+     * @return List<PostResponseDto> posts: 작성한 게시물
+     */
+    public List<PostResponseDto> getMyPosts(Long userId) {
+        List<Post> findPosts = postRepository.findByUserId(userId);
+        List<PostResponseDto> posts = new ArrayList<>();
+        List<PostImg> findPostImgs;
+        List<PostImgResponseDto> postImgs = new ArrayList<>();
+        for (Post findPost : findPosts) {
+            findPostImgs = postImgRepository.findByPostId(findPost.getId());
+            for (PostImg findPostImg : findPostImgs) {
+                postImgs.add(new PostImgResponseDto(findPostImg.getImg_url()));
+            }
+            posts.add(new PostResponseDto(
+                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount(), postImgs
+            ));
+            postImgs.clear();
+        }
+        //사진 추가 해야됨
+        return posts;
+    }
 }

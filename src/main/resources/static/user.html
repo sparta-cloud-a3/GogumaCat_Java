@@ -38,6 +38,7 @@
 
     <script>
         //jinja2 사용이라 남겨뒀습니다!
+        //get_posts에선 username대신 user_id를 가져와야됨
         $(document).ready(function () {
             get_posts('{{ user_info.username }}');
             let tabsWithContent = (function () {
