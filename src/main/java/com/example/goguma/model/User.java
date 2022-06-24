@@ -33,7 +33,7 @@ public class User extends Timestamped {
     }
 
     // ID가 자동으로 생성 및 증가합니다.
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "user_id")
     private Long id;

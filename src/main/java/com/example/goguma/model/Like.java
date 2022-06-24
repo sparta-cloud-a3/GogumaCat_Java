@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "likes")
 public class Like extends Timestamped {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "like_id")
     private Long id;
 

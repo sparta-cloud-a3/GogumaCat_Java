@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class PostImg {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_img_id")
     private Long id;
 

@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 public class Post extends Timestamped {
     @Id // ID 값, Primary Key로 사용하겠다는 뜻입니다.
-    @GeneratedValue// 자동 증가 명령입니다.
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
 
