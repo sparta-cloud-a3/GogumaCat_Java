@@ -160,38 +160,7 @@ function check_dup_nick() {
     });
 }
 
-function check_pw() {
-    let pw = $("#input-check-pw").val();
 
-    if (pw == "") {
-        $("#help-check-password").text("비밀번호를 입력해주세요.")
-        $("#input-check-pw").focus()
-        return
-    } else {
-        $("#input-check-pw").val("")
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/profileinfo/check",
-        data: {
-            'password': pw
-        },
-        success: function (response) {
-            console.log(response)
-            if (response == 1) {
-                $("#help-check-password").removeClass("is-danger")
-                $("#help-check-password").text("비밀번호를 입력해주세요.")
-                $("#modal-check-pw").removeClass("is-active")
-                $("#modal-edit").addClass("is-active")
-            } else {
-                $("#help-check-password").text("비밀번호가 틀렸습니다.")
-                $("#help-check-password").addClass("is-danger")
-                $("#input-check-pw").val("")
-            }
-        }
-    });
-}
 
 function juso() {
     new daum.Postcode({

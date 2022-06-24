@@ -26,4 +26,5 @@ public class HomeController {
         model.addAttribute("profileInfo", userDetails.getProfileInfo());
         return "user";
     }
+    // 닉네임이 바뀌면 해당 닉네임의 프로필페이지로 이동 구현 해야합니다. 지금은 {nickname}부분을 바꿔도 계속 본인 페이지에 남아있어요 ㅠ
 }

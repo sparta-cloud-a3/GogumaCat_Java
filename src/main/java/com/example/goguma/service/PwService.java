@@ -18,17 +18,12 @@ public class PwService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public int checkPw(PasswordCheckDto passwordCheckDto){
+    public boolean checkPw(PasswordCheckDto passwordCheckDto){
+        String nickname = passwordCheckDto.getNickname();
         String pw = passwordCheckDto.getPassword();
-//        String encoderPw = passwordEncoder.encode(pw);
-        Optional<User> found = userRepository.findByPassword(pw);
-
-        int count = 0;
-        if (found.isPresent()) {
-            count += 1;
-        } else {
-            count = 0;
-        }
-        return count;
+        Optional<User> found = userRepository.findByNickname(nickname);
+        String dbPw = found.get().getPassword();
+        boolean result = passwordEncoder.matches(pw, dbPw);
+        return result;
     }
 }

@@ -8,4 +8,5 @@ import lombok.Setter;
 @Setter
 public class PasswordCheckDto {
     private String password;
+    private String nickname;
 }

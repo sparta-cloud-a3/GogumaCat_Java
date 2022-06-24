@@ -35,7 +35,42 @@
 
     <!-- css 분리-->
     <link rel="stylesheet" type="text/css" href="/css/user.css"/>
+    <script th:inline="javascript">
+        function check_pw() {
+            let nickname = [[${nickname}]]
+            let pw = $("#input-check-pw").val();
 
+            if (pw == "") {
+                $("#help-check-password").text("비밀번호를 입력해주세요.")
+                $("#input-check-pw").focus()
+                return
+            } else {
+                $("#input-check-pw").val("")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/profileinfo/check",
+                data: {
+                    'password': pw,
+                    'nickname': nickname
+                },
+                success: function (result) {
+                    console.log(result)
+                    if (result) {
+                        $("#help-check-password").removeClass("is-danger")
+                        $("#help-check-password").text("비밀번호를 입력해주세요.")
+                        $("#modal-check-pw").removeClass("is-active")
+                        $("#modal-edit").addClass("is-active")
+                    } else {
+                        $("#help-check-password").text("비밀번호가 틀렸습니다.")
+                        $("#help-check-password").addClass("is-danger")
+                        $("#input-check-pw").val("")
+                    }
+                }
+            });
+        }
+    </script>
     <script>
         //jinja2 사용이라 남겨뒀습니다!
         $(document).ready(function () {
@@ -103,7 +138,7 @@
             <div class="media-content">
                 <div class="content">
                     <p>
-                        <strong>[[${nickname}]]</strong> <small>@[[${username}]]</small>
+                        <strong>[[${nickname}]]</strong> <small>[[${username}]]</small>
                         <br>
                         [[${profileInfo}]]
                         <div th:if="${not #strings.isEmpty(kakaoId)}">
@@ -139,7 +174,7 @@
                                     <p>
                                         <input id="input-check-pw" class="input" type="password"
                                                value="" style="width: 520px">
-                                        <button class="button is-light" style="float: right" onclick="check_pw()">확인
+                                        <button class="button is-light" style="float: right" th:onclick="check_pw()">확인
                                         </button>
                                     <p id="help-check-password" class="help">비밀번호를 입력해주세요.</p>
                                 </div>
