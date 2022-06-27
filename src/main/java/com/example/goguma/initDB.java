@@ -18,7 +18,7 @@ public class initDB {
 
     private final InitService initService;
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         initService.dbInit1();
     }
@@ -43,9 +43,9 @@ public class initDB {
             em.clear();
 
 
-            Post post1 = new Post(user1, "title1", 1000, "content1", 1, "서울시 중구 띵동", false);
-            Post post2 = new Post(user1, "title2", 2000, "content2", 2, "서울시 중구 띵동", false);
-            Post post3 = new Post(user2, "title3", 2000, "content2", 2, "서울시 중구 띵동", false);
+            Post post1 = new Post(user1, "title1", 1000, "content1", 1, "서울시 중구 띵동", "2022-6-30 ~2022-7-4", false);
+            Post post2 = new Post(user1, "title2", 2000, "content2", 2, "서울시 중구 띵동","2022-6-30 ~2022-7-4", false);
+            Post post3 = new Post(user2, "title3", 2000, "content2", 2, "서울시 중구 띵동", "2022-6-30 ~2022-7-4", false);
 
             em.persist(post1);
             em.persist(post2);

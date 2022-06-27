@@ -42,13 +42,14 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private boolean isSold;
 
-    public Post(User user, String title, int price, String content, int likeCount, String address, boolean isSold) {
+    public Post(User user, String title, int price, String content, int likeCount, String address, String date, boolean isSold) {
         this.user = user;
         this.title = title;
         this.price = price;
         this.content = content;
         this.likeCount = likeCount;
         this.address = address;
+        this.date = date;
         this.isSold = isSold;
     }
 

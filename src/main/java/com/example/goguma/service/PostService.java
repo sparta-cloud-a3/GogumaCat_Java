@@ -8,6 +8,7 @@ import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
+import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
+    private final UserRepository userRepository;
 
     /**
      * 전체 게시물 가져오기
@@ -65,13 +67,16 @@ public class PostService {
         return postResponseDto;
     }
 
-    public Post registerPost(PostRequestDto postRequestDto) {
+    public Post registerPost(PostRequestDto postRequestDto, Long userId) {
         String title = postRequestDto.getTitle();
         int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));
         String date = postRequestDto.getDate();
         String content = postRequestDto.getContent();
         String address = postRequestDto.getAddress();
-        Post post = new Post(title, price, content, 0, address, date, false);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
+        );
+        Post post = new Post(user, title, price, content, 0, address, date, false);
 
         postRepository.save(post);
 

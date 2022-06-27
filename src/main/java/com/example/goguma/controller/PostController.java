@@ -43,7 +43,7 @@ public class PostController {
     @PostMapping(value = "/user_post", consumes = {"multipart/form-data"})
     @ResponseBody
     public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        Post temp = postService.registerPost(postRequestDto);
+        Post temp = postService.registerPost(postRequestDto, userDetails.getId());
 
         return temp;
     }
