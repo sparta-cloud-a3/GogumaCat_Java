@@ -58,7 +58,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/sign_up/check_dup", method = RequestMethod.POST)
+    @PostMapping ("/user/sign_up/check_dup")
     public int checkUser(CheckRequestDto requestDto){
         int result = userService.checkUser(requestDto);
         System.out.println(result);
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/user/sign_up/check_dup_nick", method = RequestMethod.POST)
+    @PostMapping("/user/sign_up/check_dup_nick")
     public int checkNickname (CheckRequestDto requestDto){
         int result = userService.checkNickname(requestDto);
         System.out.println(result);

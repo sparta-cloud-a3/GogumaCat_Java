@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class HomeController {
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("id",userDetails.getId());
         model.addAttribute("nickname", userDetails.getNickname());
         return "index";
     }
 
 
-    @GetMapping("/profileinfo/{nickname}")
-    public String info(@PathVariable String nickname, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/profileinfo/{id}")
+    public String info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("id",userDetails.getId());
         model.addAttribute("nickname", userDetails.getNickname());
         model.addAttribute("username", userDetails.getUsername());
         model.addAttribute("profilePic", userDetails.getProfilePic());

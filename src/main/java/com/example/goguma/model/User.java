@@ -1,5 +1,6 @@
 package com.example.goguma.model;
 
+import com.example.goguma.dto.ProfileUpdateDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -30,6 +31,13 @@ public class User extends Timestamped {
         this.kakaoId = kakaoId;
         this.profilePic = profilePic;
         this.profileInfo = null;
+    }
+    public void update(ProfileUpdateDto profileUpdateDto,String password){
+        this.nickname = profileUpdateDto.getNickname();
+        this.password = password;
+        this.address = profileUpdateDto.getAddress();
+        this.profilePic = profileUpdateDto.getProfilePic();
+        this.profileInfo = profileUpdateDto.getProfileInfo();
     }
 
     // ID가 자동으로 생성 및 증가합니다.
