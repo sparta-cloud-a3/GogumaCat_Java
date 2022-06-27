@@ -35,4 +35,28 @@ public class Post extends Timestamped {
 
     @Column(nullable = false)
     private boolean is_sold;
+
+    public Post(User user, String title, int price, String content, int likeCount, String address, boolean is_sold) {
+        this.user = user;
+        this.title = title;
+        this.price = price;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.address = address;
+        this.is_sold = is_sold;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", user=" + user +
+                ", title='" + title + '\'' +
+                ", price=" + price +
+                ", content='" + content + '\'' +
+                ", likeCount=" + likeCount +
+                ", address='" + address + '\'' +
+                ", is_sold=" + is_sold +
+                '}';
+    }
 }

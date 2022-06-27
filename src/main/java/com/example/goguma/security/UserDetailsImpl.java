@@ -40,6 +40,10 @@ public class UserDetailsImpl implements UserDetails {
     public String getAddress() { return user.getAddress(); }
     public Long getKakaoId() { return user.getKakaoId();}
 
+    public Long getUserId() {
+        return user.getId();
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

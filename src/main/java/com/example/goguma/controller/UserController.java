@@ -77,8 +77,8 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/user/get_posts/<id>")
-    public List<PostResponseDto> getMyPosts(@PathVariable Long id) {
-        return userService.getMyPosts(id);
+    @GetMapping("/user/get_posts/{userId}")
+    public List<PostResponseDto> getMyPosts(@PathVariable Long userId) {
+        return userService.getMyPosts(userId);
     }
 }

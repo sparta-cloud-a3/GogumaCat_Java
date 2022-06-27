@@ -132,6 +132,7 @@ public class UserService {
         List<PostImgResponseDto> postImgs = new ArrayList<>();
         for (Post findPost : findPosts) {
             findPostImgs = postImgRepository.findByPostId(findPost.getId());
+            //post의 사진 추가
             for (PostImg findPostImg : findPostImgs) {
                 postImgs.add(new PostImgResponseDto(findPostImg.getImg_url()));
             }
@@ -140,7 +141,7 @@ public class UserService {
             ));
             postImgs.clear();
         }
-        //사진 추가 해야됨
+
         return posts;
     }
 }

@@ -1,28 +1,17 @@
-let order = "latest"
-let page = 1
 $(document).ready(function () {
-    order = "latest"
-    page = 1
-    listing(order, page);
+    listing();
 });
 
-function listing(new_order, new_page) {
-    order = new_order
-    page = new_page
-    console.log(order, page)
+function listing() {
     $.ajax({
         type: "GET",
-        url: `/listing?order=${order}&page=${page}`,
+        url: "/all",
         data: {},
         success: function (response) {
             $("#card-box").empty();
-            let posts = response["posts"];
 
-            pagination(parseInt(response["last_page_num"]), page, "main")
-            console.log("posts:", posts)
-
-            for (let i = 0; i < posts.length; i++) {
-                make_post(posts[i]);
+            for (let i = 0; i < response.length; i++) {
+                make_post(response[i]);
             }
         }
     });
@@ -30,14 +19,14 @@ function listing(new_order, new_page) {
 
 function make_post(post) {
     let temp_html = `<div class="col" style="cursor: pointer;">
-                                <div class="card h-100" id="card-${post['idx']}">
+                                <div class="card h-100" id="card-${post['post_id']}">
                                     <!--사진 수정-->
-                                    <img src="${post['file']}" class="card-img-top image" onclick="location.href='/posts/${post['idx']}'">
+                                    <img src="" class="card-img-top image" onclick="location.href='/posts/${post['post_id']}'">
                                     <div class="card-body">
-                                        <h5 class="card-title" onclick="location.href='/posts/${post['idx']}'">${post['title']}</h5>
+                                        <h5 class="card-title" onclick="location.href='/posts/${post['post_id']}'">${post['title']}</h5>
                                         <p class="card-text" style="font-weight: bold;">${post['price']}원</p>
                                         <p class="address-text">${post['address']}</p>
-                                        <p class="card-text small-text">관심 ${post['like_count']}</p>
+                                        <p class="card-text small-text">관심 ${post['likeCount']}</p>
                                     </div>
                                 </div>
                             </div>`

@@ -18,12 +18,14 @@ public class HomeController {
 
     @GetMapping("/profileinfo/{nickname}")
     public String info(@PathVariable String nickname, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         model.addAttribute("nickname", userDetails.getNickname());
         model.addAttribute("username", userDetails.getUsername());
         model.addAttribute("profilePic", userDetails.getProfilePic());
         model.addAttribute("kakaoId", userDetails.getKakaoId());
         model.addAttribute("address", userDetails.getAddress());
         model.addAttribute("profileInfo", userDetails.getProfileInfo());
+        model.addAttribute("userId", userDetails.getUserId());
         return "user";
     }
 }

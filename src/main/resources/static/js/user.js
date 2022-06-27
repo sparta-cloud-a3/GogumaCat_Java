@@ -24,19 +24,18 @@ function get_posts(user_id) {
             $("#card-box-comment").empty();
             $("#card-box-review").empty();
             $("#card-box-like").empty();
-            let posts = response["posts"];
-            let comments = response["comments"];
-            let reviews = response["reviews"];
-            let likes = response["likes"];
-            for (let i = 0; i < posts.length; i++) {
-                make_post(posts[i], "post");
+            for (let i = 0; i < response.length; i++) {
+                make_post(response[i], "post");
             }
-            for (let i = 0; i < comments.length; i++) {
-                make_post(comments[i], "comment");
-            }
-            for (let i = 0; i < likes.length; i++) {
-                make_post(likes[i], "like");
-            }
+//            let comments = response["comments"];
+//            let reviews = response["reviews"];
+//            let likes = response["likes"];
+//            for (let i = 0; i < comments.length; i++) {
+//                make_post(comments[i], "comment");
+//            }
+//            for (let i = 0; i < likes.length; i++) {
+//                make_post(likes[i], "like");
+//            }
         }
     });
 }
