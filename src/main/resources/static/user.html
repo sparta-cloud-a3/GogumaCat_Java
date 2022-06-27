@@ -327,7 +327,7 @@
                                     <div class="level-right">
                                         <div class="level-item">
                                             <a class="button is-sparta"
-                                               th:onclick="update_profile('{{ user_info.nickname }}')">업데이트</a>
+                                               th:attr="onclick=|update_profile('${nickname}')|">업데이트</a>
                                         </div>
                                         <div class="level-item">
                                             <a class="button is-sparta is-outlined"
