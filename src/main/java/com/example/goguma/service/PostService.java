@@ -55,7 +55,7 @@ public class PostService {
 
         PostResponseDto postResponseDto = new PostResponseDto(
                 post.getId(), post.getTitle(), post.getPrice(), post.getAddress(), post.getLikeCount(),
-                post.getContent(), user.getId(), user.getNickname(), post.getCreatedAt()
+                post.getContent(), user.getId(), user.getNickname(), user.getProfilePic(), post.getCreatedAt()
         );
 
         List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);

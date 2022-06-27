@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>[[${post.writerNickname}]] | 고구마캣</title>
@@ -95,8 +95,8 @@
             var content = '<div class="overlay_info">';
             content += '    <a><strong>여기서 만나요!</strong></a>';
             content += '    <div class="desc">';
-            content += '        <img src="/static/info_image.png" style="object-fit: fill" >';
-            content += '        <span class="address">[[${post.address}]]</span>';
+            content += '        <img src="/img/info_image.png" style="object-fit: fill" >';
+            content += '        <span class="address" th:text="${post.address}">거래할 주소 입니다.</span>';
             content += '    </div>';
             content += '</div>';
 
@@ -148,7 +148,7 @@
                 $.ajax({
                     type: "POST",
                     url: '/post/delete',
-                    data: {idx: idx_give},
+                    data: {postId: idx_give},
                     success: function (response) { // 성공하면
                         if (response["result"] == "success") {
                             alert("삭제 되었습니다!");
@@ -158,27 +158,23 @@
                 })
             }
         }
-
-
-
     </script>
 </head>
 <body>
 <div class="sideBanner">
-            <span class="txt-label">
-            </span>
+    <span class="txt-label"></span>
 </div>
 
 <div class="size">
-    <section class="float-right login-btn" onclick="location.href='/user/[[${post.writeUserId}]]'"
+    <section class="float-right login-btn" th:onclick="|location.href='@{/profileinfo/{userId}(userId=${userId})}'|" onclick="location.href='/'"
              style='cursor:pointer;'>
         <i class="fa-solid fa-cat fa-lg"></i>
-        <span style="font-weight: bold">&nbsp;&nbsp;"[[${user.nickname}]]"</span>님 환영합니다.
+        &nbsp;&nbsp;<span style="font-weight: bold" th:text="${nickname}">닉네임</span>님 환영합니다.
     </section>
 
     <section class="hero" onclick="window.location.href='/'" style='width: 300px; cursor:pointer;'>
         <div class="hero-body">
-            <img class="hero-img" src="/static/gogumacat.png">
+            <img class="hero-img" src="/img/gogumacat.png">
             <span class="title hero-font">고구마캣</span>
         </div>
     </section>
@@ -187,31 +183,27 @@
 
 <div class="content">
     <div class="jumbo">
-        <div class="container">
-            <img src="{{ post.file }}">
+        <div class="container" th:each="postImg:${post.postImgs}">
+            <img th:src="${postImg.imgUrl}">
         </div>
     </div>
     <div class="user-info" id="user_information">
-        {% if user.profile_pic == "" %}
-        <img src="{{ user.profile_pic_real }}" id=user_profile>
-        {% else %}
-        <img id=user_profile src="{{ user.profile_pic }}">
-        {% endif %}
-        {% if user_info.nickname == user.nickname %}
-        <div class="menu dropdown" style="float: right;">
+        <img th:if="${profile_pic}==''" th:src="/img/profile_image.png" id=user_profile>
+        <img th:unless="${profile_pic}==''" th:src="${post.writerProfile}" id=user_profile>
+        <!--자신의 게시물이면 수정 삭제 가능한 버튼 추가-->
+        <div class="menu dropdown" style="float: right;" th:if="${nickname}==${post.writerNickname}">
             <i class="fa-solid fa-ellipsis-vertical fa-2x dropbtn" onclick="myFunction()"
                style="float:right; margin: auto 20px 0px auto; "></i>
             <div id="myDropdown" class="dropdown-content">
-                <a href="/posting_update/[[${post.writeUserId}]]/[[${post.postId}]]">수정하기<i
+                <a th:href="@{/posting_update/{userId}/{postId}(userId=${post.writeUserId}, postId=${post.postId})}">수정하기<i
                         class="fa-solid fa-pencil" style="margin-left: 8px"></i></a>
-                <a href="javascript:deletePost()">삭제하기<i class="fa-solid fa-trash-can"
-                                                         style="color: red; margin-left: 8px"></i></a>
+                <a href="javascript:deletePost()">삭제하기<i class="fa-solid fa-trash-can" style="color: red; margin-left: 8px"></i></a>
             </div>
         </div>
-        {% endif %}
+
         <div style="margin-left: 10px;">
-            <h4 id="user_name">[[${post.writerNickname}]]</h4>
-            <h6 id="user_locate" style="margin-top: 6px;"> [[${post.address}]]</h6>
+            <h4 id="user_name" th:text="${post.writerNickname}">작성자 닉네임</h4>
+            <h6 id="user_locate" style="margin-top: 6px;" th:text="${post.address}">거래 주소</h6>
         </div>
 
         <hr>
@@ -219,29 +211,28 @@
             <a class="heart-icon" id="heart_a" aria-label="like" onclick="toggle_like({{ post.idx }})"
                style="float:right; margin: 40px 20px 0px 0px">
                     <span class="icon is-small">
-                        {% if post.like_by_me %}
-                            <i id="heart" class="fa-solid fa-heart fa-3x" aria-hidden="true"></i>
-                        {% else %}
-                            <i id="heart" class="fa-regular fa-heart fa-3x" aria-hidden="true"></i>
-                        {% endif %}
+                        <i th:if="${likeByMe}" id="heart" class="fa-solid fa-heart fa-3x" aria-hidden="true"></i>
+                        <i th:unless="${likeByMe}" id="heart" class="fa-regular fa-heart fa-3x" aria-hidden="true"></i>
                     </span>
             </a>
         </div>
     </div>
     <div class=content-name;>
-        <h1>[[${post.title}]]</h1>
-        <h4>[[${post.price}]]원 (1일 기준) <small>1월 1일</small></h4>
+        <h1 th:text="${post.title}">글제목</h1>
+        <h4 th:text="${post.price} +'원 (1일 기준)'">${post.price}]]원 (1일 기준) <small th:text="${post.date}">작성 일자</small></h4>
     </div>
 
     <div class="content-info" style="white-space: pre-line">
         <br>
-        <p>[[${post.content}]]</p>
+        <p th:text="${post.content}">게시물 내용</p>
     </div>
-    {#지도, 로드뷰 띄우기 #}
+    <!--지도, 로드뷰 띄우기-->
     <div class="map" id="mapping">
-        <div id="map" class="local" style="width:400px;height:350px;"></div> <!-- 지도를 표시할 div 입니다 -->
+        <!-- 지도를 표시할 div 입니다 -->
+        <div id="map" class="local" style="width:400px;height:350px;"></div>
+        <!-- 로드뷰를 표시할 div 입니다 -->
         <div id="roadview" class="road is-hidden"
-             style="width:400px;height:350px;margin: 40px auto 40px auto"></div> <!-- 로드뷰를 표시할 div 입니다 -->
+             style="width:400px;height:350px;margin: 40px auto 40px auto"></div>
     </div>
     <button id="map_btn" class="button is-dark" style="display:block; margin: auto; width: 150px;" onclick="roadview()">
         로드뷰 보기
@@ -249,7 +240,7 @@
 </div>
 
 <div class="popup" id="frame" data-popup="popup-1" style="visibility:hidden; overflow-x:hidden;overflow-y:hidden">
-    <iframe src="/post/[[${post.postId}]]/chat" width="300" height="468"></iframe>
+    <iframe th:href="@{/post/{postId}/chat(postId=${post.postId})}" width="300" height="468"></iframe>
 </div>
 </body>
 </html>
