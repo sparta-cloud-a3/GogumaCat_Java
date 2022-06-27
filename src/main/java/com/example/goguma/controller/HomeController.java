@@ -12,6 +12,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("nickname", userDetails.getNickname());
+        model.addAttribute("username", userDetails.getUsername());
         return "index";
     }
 
@@ -25,5 +26,11 @@ public class HomeController {
         model.addAttribute("address", userDetails.getAddress());
         model.addAttribute("profileInfo", userDetails.getProfileInfo());
         return "user";
+    }
+
+    @GetMapping("/posting/{username}")
+    public String posting(@PathVariable String username, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("username", userDetails.getUsername());
+        return "posting";
     }
 }
