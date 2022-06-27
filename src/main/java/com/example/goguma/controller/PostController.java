@@ -1,16 +1,15 @@
 package com.example.goguma.controller;
 
+import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.model.Post;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,4 +39,12 @@ public class PostController {
         return "post";
     }
 
+
+    @PostMapping(value = "/user_post", consumes = {"multipart/form-data"})
+    @ResponseBody
+    public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        Post temp = postService.registerPost(postRequestDto);
+
+        return temp;
+    }
 }

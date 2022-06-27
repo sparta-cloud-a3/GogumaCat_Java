@@ -1,5 +1,6 @@
 package com.example.goguma.model;
 
+import com.example.goguma.dto.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class Post extends Timestamped {
+
     @Id // ID 값, Primary Key로 사용하겠다는 뜻입니다.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -30,20 +32,34 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int likeCount;
 
+
     @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
-    private boolean is_sold;
+    private String date;
 
-    public Post(User user, String title, int price, String content, int likeCount, String address, boolean is_sold) {
+    @Column(nullable = false)
+    private boolean isSold;
+
+    public Post(User user, String title, int price, String content, int likeCount, String address, boolean isSold) {
         this.user = user;
         this.title = title;
         this.price = price;
         this.content = content;
         this.likeCount = likeCount;
         this.address = address;
-        this.is_sold = is_sold;
+        this.isSold = isSold;
+    }
+
+    public Post(String title, int price, String content, int likeCount, String address, String date,boolean isSold) {
+        this.title = title;
+        this.price = price;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.address = address;
+        this.date = date;
+        this.isSold = isSold;
     }
 
     @Override
@@ -56,7 +72,7 @@ public class Post extends Timestamped {
                 ", content='" + content + '\'' +
                 ", likeCount=" + likeCount +
                 ", address='" + address + '\'' +
-                ", is_sold=" + is_sold +
+                ", isSold=" + isSold +
                 '}';
     }
 }

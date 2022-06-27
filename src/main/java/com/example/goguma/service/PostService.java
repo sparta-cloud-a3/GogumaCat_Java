@@ -1,19 +1,18 @@
 package com.example.goguma.service;
 
 import com.example.goguma.dto.PostImgResponseDto;
+import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
-import com.example.goguma.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,5 +63,18 @@ public class PostService {
         }
 
         return postResponseDto;
+    }
+
+    public Post registerPost(PostRequestDto postRequestDto) {
+        String title = postRequestDto.getTitle();
+        int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));
+        String date = postRequestDto.getDate();
+        String content = postRequestDto.getContent();
+        String address = postRequestDto.getAddress();
+        Post post = new Post(title, price, content, 0, address, date, false);
+
+        postRepository.save(post);
+
+        return post;
     }
 }
