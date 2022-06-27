@@ -4,13 +4,16 @@ import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
+import com.example.goguma.model.User;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
+import com.example.goguma.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +43,26 @@ public class PostService {
         }
 
         return posts;
+    }
+
+    public PostResponseDto getOnePost(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
+        );
+
+        User user = post.getUser();
+
+        PostResponseDto postResponseDto = new PostResponseDto(
+                post.getId(), post.getTitle(), post.getPrice(), post.getAddress(), post.getLikeCount(),
+                post.getContent(), user.getId(), user.getNickname(), post.getCreatedAt()
+        );
+
+        List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);
+
+        for (PostImg findPostImg : findPostImgs) {
+            postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
+        }
+
+        return postResponseDto;
     }
 }

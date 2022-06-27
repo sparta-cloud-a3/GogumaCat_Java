@@ -57,10 +57,12 @@ public class initDB {
             PostImg postImg1 = new PostImg("https://opgg-com-image.akamaized.net/attach/images/20200415055358.1141863.jpg", post1);
             PostImg postImg2 = new PostImg("http://50.76.59.227/files/testing_image.jpg", post1);
             PostImg postImg3 = new PostImg("https://helpx.adobe.com/content/dam/help/en/photoshop/how-to/compositing/jcr%3acontent/main-pars/image/compositing_1408x792.jpg", post2);
+            PostImg postImg4 = new PostImg("https://helpx.adobe.com/content/dam/help/en/photoshop/how-to/compositing/jcr%3acontent/main-pars/image/compositing_1408x792.jpg", post3);
 
             em.persist(postImg1);
             em.persist(postImg2);
             em.persist(postImg3);
+            em.persist(postImg4);
 
             em.flush();
             em.clear();

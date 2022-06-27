@@ -44,9 +44,9 @@ function make_post(post, type) {
     let temp_html = `<div class="col" style="cursor: pointer">
                                 <div class="card h-100" id="card-${post['postId']}">
                                     <!--사진 수정-->
-                                    <img src="${post['postImgs'][0]['imgUrl']}" class="card-img-top image" onclick="location.href='/posts/${post["postId"]}'">
+                                    <img src="${post['postImgs'][0]['imgUrl']}" class="card-img-top image" onclick="location.href='/post/${post["postId"]}'">
                                     <div class="card-body">
-                                        <h5 class="card-title" onclick="location.href='/posts/${post['postId']}'">${post['title']}</h5>
+                                        <h5 class="card-title" onclick="location.href='/post/${post['postId']}'">${post['title']}</h5>
                                         <p class="card-text" style="font-weight: bold;">${post['price']}원</p>
                                         <p class="address-text">${post['address']}</p>
                                         <p class="card-text small-text">관심 ${post['likeCount']}</p>
