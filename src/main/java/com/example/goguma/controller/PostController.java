@@ -40,12 +40,4 @@ public class PostController {
         return "post";
     }
 
-    //걍 테스트 지워야 됨
-    @GetMapping("/user/{postId}/test")
-    @ResponseBody
-    public PostResponseDto getOnePostTest(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.getOnePost(postId);
-    }
-
-
 }
