@@ -119,12 +119,12 @@ function posting() {
     let file = $('#img')[0].files[0]
     //form 데이터 넣기
     let form_data = new FormData()
-    form_data.append("title_give", title)
-    form_data.append("file_give", file)
-    form_data.append("date_give", date)
-    form_data.append("price_give", price)
-    form_data.append("content_give", content)
-    form_data.append("address_give", address)
+    form_data.append("title", title)
+    form_data.append("file", file)
+    form_data.append("date", date)
+    form_data.append("price", price)
+    form_data.append("content", content)
+    form_data.append("address", address)
     //동작 조건 만들기
     if (title == "") {
         alert("제목,물품명을 입력해주세요")
@@ -145,17 +145,16 @@ function posting() {
             url: "/user_post",
             data: form_data,
             cache: false,
-            contentType: false,
             processData: false,
+            contentType : false,
             enctype: "multipart/form-data",
             success: function (response) {
-                if (response["result"] == "success") {
-                    alert(response["msg"])
-                    console.log(response)
-                    window.location.href = '/'
-                } else {
-                    alert("내용을 다시 확인해 주세요")
-                }
+                alert("등록되었습니다")
+                console.log(response)
+                window.location.href = '/'
+            },
+            error: function (xhr, status, error){
+                alert("내용을 다시 확인해 주세요")
             }
         })
     }
