@@ -11,4 +11,11 @@ public class PostImgResponseDto {
     public PostImgResponseDto(String imgUrl) {
         this.imgUrl = imgUrl;
     }
+
+    @Override
+    public String toString() {
+        return "PostImgResponseDto{" +
+                "imgUrl='" + imgUrl + '\'' +
+                '}';
+    }
 }

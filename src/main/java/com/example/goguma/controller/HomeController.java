@@ -11,21 +11,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class HomeController {
     @GetMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("id",userDetails.getId());
         model.addAttribute("nickname", userDetails.getNickname());
         return "index";
     }
 
 
-    @GetMapping("/profileinfo/{nickname}")
-    public String info(@PathVariable String nickname, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-
+    @GetMapping("/profileinfo/{id}")
+    public String info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("id",userDetails.getId());
         model.addAttribute("nickname", userDetails.getNickname());
         model.addAttribute("username", userDetails.getUsername());
         model.addAttribute("profilePic", userDetails.getProfilePic());
         model.addAttribute("kakaoId", userDetails.getKakaoId());
         model.addAttribute("address", userDetails.getAddress());
         model.addAttribute("profileInfo", userDetails.getProfileInfo());
-        model.addAttribute("userId", userDetails.getUserId());
         return "user";
     }
+    // 닉네임이 바뀌면 해당 닉네임의 프로필페이지로 이동 구현 해야합니다. 지금은 {nickname}부분을 바꿔도 계속 본인 페이지에 남아있어요 ㅠ
 }

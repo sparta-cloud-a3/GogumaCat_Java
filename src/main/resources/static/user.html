@@ -35,10 +35,112 @@
 
     <!-- css 분리-->
     <link rel="stylesheet" type="text/css" href="/css/user.css"/>
+    <script th:inline="javascript">
+        function check_pw() {
+            let nickname = [[${nickname}]]
+            let pw = $("#input-check-pw").val();
 
+            if (pw == "") {
+                $("#help-check-password").text("비밀번호를 입력해주세요.")
+                $("#input-check-pw").focus()
+                return
+            } else {
+                $("#input-check-pw").val("")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/profileinfo/check",
+                data: {
+                    'password': pw,
+                    'nickname': nickname
+                },
+                success: function (result) {
+                    console.log(result)
+                    if (result) {
+                        $("#help-check-password").removeClass("is-danger")
+                        $("#help-check-password").text("비밀번호를 입력해주세요.")
+                        $("#modal-check-pw").removeClass("is-active")
+                        $("#modal-edit").addClass("is-active")
+                    } else {
+                        $("#help-check-password").text("비밀번호가 틀렸습니다.")
+                        $("#help-check-password").addClass("is-danger")
+                        $("#input-check-pw").val("")
+                    }
+                }
+            });
+        }
+        function update_profile(old_nickname) {
+            let id = [[${id}]]
+            let name = $('#input-nickname').val()
+            // let file = $('#input-pic')[0].files[0]
+            let file = $('#input-pic').val()
+            let about = $("#textarea-about").val()
+            let password = $('#input-password').val()
+            let password2 = $("#input-password2").val()
+            let address = $('#input-address').val()
+
+            if (name == old_nickname) {
+                console.log(old_nickname)
+            } else if ($("#help-nickname").hasClass("is-danger")) {
+                alert("닉네임을 다시 확인해주세요.")
+                return;
+            } else if (!$("#help-nickname").hasClass("is-success")) {
+                alert("닉네임 중복확인을 해주세요.")
+                return;
+            }
+
+            if (password == "") {
+                $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+            } else if (!is_password(password)) {
+                $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
+                $("#input-password").focus()
+            } else {
+                $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
+            }
+
+            if (password2 == "") {
+                $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else if (password2 != password) {
+                $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
+                $("#input-password2").focus()
+                return;
+            } else {
+                $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
+            }
+
+            if (address == "") {
+                $("#help-address").text("주소를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
+                $("#input-address").focus()
+                return;
+            }
+            let data = {
+                'nickname': name,
+                'password': password,
+                'address': address,
+                'profilePic': file,
+                'profileInfo': about
+            }
+            $.ajax({
+                type: "PUT",
+                url: `/update_profile/${id}`,
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response) {
+                        alert('변경 완료')
+                        window.location.reload()
+                    }
+                }
+            });
+        }
+    </script>
     <script>
         $(document).ready(function () {
-            get_posts('[[${userId}]]');
+            get_posts('[[${id}]]');
             let tabsWithContent = (function () {
                 let tabs = document.querySelectorAll('.tabs li');
                 let tabsContent = document.querySelectorAll('.tab-content');
@@ -102,7 +204,7 @@
             <div class="media-content">
                 <div class="content">
                     <p>
-                        <strong>[[${nickname}]]</strong> <small>@[[${username}]]</small>
+                        <strong>[[${nickname}]]</strong> <small>[[${username}]]</small>
                         <br>
                         [[${profileInfo}]]
                         <div th:if="${not #strings.isEmpty(kakaoId)}">
@@ -138,7 +240,7 @@
                                     <p>
                                         <input id="input-check-pw" class="input" type="password"
                                                value="" style="width: 520px">
-                                        <button class="button is-light" style="float: right" onclick="check_pw()">확인
+                                        <button class="button is-light" style="float: right" th:onclick="check_pw()">확인
                                         </button>
                                     <p id="help-check-password" class="help">비밀번호를 입력해주세요.</p>
                                 </div>
@@ -224,7 +326,7 @@
                                     <div class="level-right">
                                         <div class="level-item">
                                             <a class="button is-sparta"
-                                               onclick="update_profile('{{ user_info.nickname }}')">업데이트</a>
+                                               th:onclick="update_profile('{{ user_info.nickname }}')">업데이트</a>
                                         </div>
                                         <div class="level-item">
                                             <a class="button is-sparta is-outlined"

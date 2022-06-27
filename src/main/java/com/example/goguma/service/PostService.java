@@ -26,17 +26,17 @@ public class PostService {
         List<Post> findPosts = postRepository.findAll();
         List<PostResponseDto> posts = new ArrayList<>();
         List<PostImg> findPostImgs;
-        List<PostImgResponseDto> postImgs = new ArrayList<>();
+        PostResponseDto postResponseDto = null;
         for (Post findPost : findPosts) {
+             postResponseDto = new PostResponseDto(
+                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount()
+            );
             findPostImgs = postImgRepository.findByPostId(findPost.getId());
             //post의 사진 추가
             for (PostImg findPostImg : findPostImgs) {
-                postImgs.add(new PostImgResponseDto(findPostImg.getImg_url()));
+                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
             }
-            posts.add(new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount(), postImgs
-            ));
-            postImgs.clear();
+            posts.add(postResponseDto);
         }
 
         return posts;

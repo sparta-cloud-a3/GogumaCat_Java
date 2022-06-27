@@ -26,4 +26,18 @@ public class PostImg {
     public PostImg(String img_url) {
         this.img_url = img_url;
     }
+
+    public PostImg(String img_url, Post post) {
+        this.img_url = img_url;
+        this.post = post;
+    }
+
+    @Override
+    public String toString() {
+        return "PostImg{" +
+                "id=" + id +
+                ", img_url='" + img_url + '\'' +
+                ", post=" + post +
+                '}';
+    }
 }

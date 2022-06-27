@@ -1,9 +1,9 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.dto.PasswordCheckDto;
+import com.example.goguma.dto.ProfileUpdateDto;
 import com.example.goguma.service.PwService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class ProfileinfoController {
@@ -15,12 +15,14 @@ public class ProfileinfoController {
     }
 
     @PostMapping("/profileinfo/check")
-    public int password(PasswordCheckDto passwordCheckDto){
-        int result = pwService.checkPw(passwordCheckDto);
+    public boolean password(PasswordCheckDto passwordCheckDto){
+        boolean result = pwService.checkPw(passwordCheckDto);
         return result;
-        // 비밀번호가 encode되어서 그냥 입력하면 찾지 못함. 따로 encoder를 돌려도 안됨...
-        // DB에서 암호화되서 저장된 비밀번호를 붙여넣으면 정상작동.
-        // 남의 비밀번호를 찍어도 수정창이 뜸;
+    }
+    @PutMapping("/update_profile/{id}")
+    public Long updateProfile(@PathVariable Long id, @RequestBody ProfileUpdateDto profileUpdateDto){
+        pwService.update(id, profileUpdateDto);
+        return id;
     }
 
 }

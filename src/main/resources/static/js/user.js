@@ -42,14 +42,14 @@ function get_posts(user_id) {
 
 function make_post(post, type) {
     let temp_html = `<div class="col" style="cursor: pointer">
-                                <div class="card h-100" id="card-${post['idx']}">
+                                <div class="card h-100" id="card-${post['postId']}">
                                     <!--사진 수정-->
-                                    <img src="${post['file']}" class="card-img-top image" onclick="location.href='/posts/${post['idx']}'">
+                                    <img src="${post['postImgs'][0]['imgUrl']}" class="card-img-top image" onclick="location.href='/posts/${post["postId"]}'">
                                     <div class="card-body">
-                                        <h5 class="card-title" onclick="location.href='/posts/${post['idx']}'">${post['title']}</h5>
+                                        <h5 class="card-title" onclick="location.href='/posts/${post['postId']}'">${post['title']}</h5>
                                         <p class="card-text" style="font-weight: bold;">${post['price']}원</p>
                                         <p class="address-text">${post['address']}</p>
-                                        <p class="card-text small-text">관심 ${post['like_count']}</p>
+                                        <p class="card-text small-text">관심 ${post['likeCount']}</p>
                                     </div>
                                 </div>
                             </div>`
@@ -57,75 +57,7 @@ function make_post(post, type) {
 }
 
 
-function update_profile(old_nickname) {
-    let name = $('#input-nickname').val()
-    let file = $('#input-pic')[0].files[0]
-    let about = $("#textarea-about").val()
-    let password = $('#input-password').val()
-    let password2 = $("#input-password2").val()
-    let address = $('#input-address').val()
 
-    if (name == old_nickname) {
-        console.log(old_nickname)
-    } else if ($("#help-nickname").hasClass("is-danger")) {
-        alert("닉네임을 다시 확인해주세요.")
-        return;
-    } else if (!$("#help-nickname").hasClass("is-success")) {
-        alert("닉네임 중복확인을 해주세요.")
-        return;
-    }
-
-    if (password == "") {
-        $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-password").focus()
-    } else if (!is_password(password)) {
-        $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
-        $("#input-password").focus()
-    } else {
-        $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
-    }
-
-    if (password2 == "") {
-        $("#help-password2").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-password2").focus()
-        return;
-    } else if (password2 != password) {
-        $("#help-password2").text("비밀번호가 일치하지 않습니다.").removeClass("is-safe").addClass("is-danger")
-        $("#input-password2").focus()
-        return;
-    } else {
-        $("#help-password2").text("비밀번호가 일치합니다.").removeClass("is-danger").addClass("is-success")
-    }
-
-    if (address == "") {
-        $("#help-address").text("주소를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-address").focus()
-        return;
-    }
-
-
-    let form_data = new FormData()
-    form_data.append("file_give", file)
-    form_data.append("name_give", name)
-    form_data.append("about_give", about)
-    form_data.append("address_give", address)
-    form_data.append("password_give", password)
-
-    $.ajax({
-        type: "POST",
-        url: "/update_profile",
-        data: form_data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            if (response["result"] == "success") {
-                alert(response["msg"])
-                window.location.reload()
-            }
-        }
-    });
-}
 
 function is_password(asValue) {
     var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
@@ -159,38 +91,7 @@ function check_dup_nick() {
     });
 }
 
-function check_pw() {
-    let pw = $("#input-check-pw").val();
 
-    if (pw == "") {
-        $("#help-check-password").text("비밀번호를 입력해주세요.")
-        $("#input-check-pw").focus()
-        return
-    } else {
-        $("#input-check-pw").val("")
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/profileinfo/check",
-        data: {
-            'password': pw
-        },
-        success: function (response) {
-            console.log(response)
-            if (response == 1) {
-                $("#help-check-password").removeClass("is-danger")
-                $("#help-check-password").text("비밀번호를 입력해주세요.")
-                $("#modal-check-pw").removeClass("is-active")
-                $("#modal-edit").addClass("is-active")
-            } else {
-                $("#help-check-password").text("비밀번호가 틀렸습니다.")
-                $("#help-check-password").addClass("is-danger")
-                $("#input-check-pw").val("")
-            }
-        }
-    });
-}
 
 function juso() {
     new daum.Postcode({

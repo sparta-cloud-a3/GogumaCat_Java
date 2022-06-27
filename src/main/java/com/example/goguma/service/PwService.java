@@ -1,11 +1,14 @@
 package com.example.goguma.service;
 
 import com.example.goguma.dto.PasswordCheckDto;
+import com.example.goguma.dto.ProfileUpdateDto;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -18,17 +21,23 @@ public class PwService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public int checkPw(PasswordCheckDto passwordCheckDto){
+    public boolean checkPw(PasswordCheckDto passwordCheckDto){
+        String nickname = passwordCheckDto.getNickname();
         String pw = passwordCheckDto.getPassword();
-//        String encoderPw = passwordEncoder.encode(pw);
-        Optional<User> found = userRepository.findByPassword(pw);
+        Optional<User> found = userRepository.findByNickname(nickname);
+        String dbPw = found.get().getPassword();
+        boolean result = passwordEncoder.matches(pw, dbPw);
+        return result;
+    }
 
-        int count = 0;
-        if (found.isPresent()) {
-            count += 1;
-        } else {
-            count = 0;
-        }
-        return count;
+    @Transactional
+    public Long update(Long id, ProfileUpdateDto profileUpdateDto){
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("ID가 존재하지 않습니다.")
+        );
+        String password = passwordEncoder.encode(profileUpdateDto.getPassword());
+
+        user.update(profileUpdateDto,password);
+        return id;
     }
 }

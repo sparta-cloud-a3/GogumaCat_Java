@@ -37,12 +37,12 @@
 
     <script th:inline="javascript">
         function profileinfo(){
-            let nickname = [[${nickname}]];
+            let id = [[${id}]];
             $.ajax({
                 type : "GET",
-                url : `/profileinfo/${nickname}`,
+                url : `/profileinfo/${id}`,
                 success: function (response){
-                    window.location.href = `/profileinfo/${nickname}`;
+                    window.location.href = `/profileinfo/${id}`;
                 }
             });
         }
