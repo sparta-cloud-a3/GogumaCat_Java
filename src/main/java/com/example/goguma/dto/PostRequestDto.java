@@ -15,4 +15,16 @@ public class PostRequestDto {
     private String date;
     private String content;
     private String address;
+
+    @Override
+    public String toString() {
+        return "PostRequestDto{" +
+                "file=" + file +
+                ", title='" + title + '\'' +
+                ", price='" + price + '\'' +
+                ", date='" + date + '\'' +
+                ", content='" + content + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

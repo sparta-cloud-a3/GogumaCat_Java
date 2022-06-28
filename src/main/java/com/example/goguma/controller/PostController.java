@@ -31,7 +31,7 @@ public class PostController {
      * @param userDetails // 로그인 계정 정보
      * @return post.html
      */
-    @GetMapping("/post/{postId}")
+    @RequestMapping("/post/{postId}")
     public String getOnePost(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("post", postService.getOnePost(postId));
         model.addAttribute("nickname", userDetails.getNickname());
@@ -52,5 +52,18 @@ public class PostController {
     public String deletePost(@PathVariable Long postId){
         postService.deletePost(postId);
         return "redirect:/";
+    }
+
+    @RequestMapping("/posting_update/{postId}")
+    public String updatePostPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("post", postService.getOnePost(postId));
+        return "posting_update";
+    }
+
+    @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
+    public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto) {
+        System.out.println("postRequestDto = " + postRequestDto);
+        postService.updatePost(postId, postRequestDto);
+        return "redirect:/post/" + postId;
     }
 }

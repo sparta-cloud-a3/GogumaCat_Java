@@ -91,4 +91,14 @@ public class PostService {
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
+
+    @Transactional
+    public void updatePost(Long postId, PostRequestDto postRequestDto) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+        );
+//        List<PostImg> postImgs = postImgRepository.findByPostId(postId);
+
+        post.update(postRequestDto);
+    }
 }

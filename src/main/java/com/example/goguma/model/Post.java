@@ -76,4 +76,22 @@ public class Post extends Timestamped {
                 ", isSold=" + isSold +
                 '}';
     }
+
+    public void update(PostRequestDto postRequestDto) {
+        if(postRequestDto.getTitle() != null) {
+            this.title = postRequestDto.getTitle();
+        }
+        if(postRequestDto.getPrice() != null) {
+            this.price = Integer.parseInt(postRequestDto.getPrice().replace(",",""));
+        }
+        if(postRequestDto.getDate() != null) {
+            this.date = postRequestDto.getDate();
+        }
+        if(postRequestDto.getContent() != null) {
+            this.content = postRequestDto.getContent();
+        }
+        if(postRequestDto.getAddress() != null) {
+            this.address = postRequestDto.getAddress();
+        }
+    }
 }

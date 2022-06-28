@@ -190,7 +190,7 @@
             <i class="fa-solid fa-ellipsis-vertical fa-2x dropbtn" onclick="myFunction()"
                style="float:right; margin: auto 20px 0px auto; "></i>
             <div id="myDropdown" class="dropdown-content">
-                <a th:href="@{/posting_update/{userId}/{postId}(userId=${post.writeUserId}, postId=${post.postId})}">수정하기<i
+                <a th:href="@{/posting_update/{postId}(postId=${post.postId})}" methods="patch">수정하기<i
                         class="fa-solid fa-pencil" style="margin-left: 8px"></i></a>
                 <a th:onclick="|javascript:deletePost('${post.postId}')|">삭제하기<i class="fa-solid fa-trash-can" style="color: red; margin-left: 8px"></i></a>
             </div>
