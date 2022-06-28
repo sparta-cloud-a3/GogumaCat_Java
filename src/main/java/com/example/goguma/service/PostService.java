@@ -6,6 +6,7 @@ import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
+import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
@@ -24,6 +25,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final UserRepository userRepository;
+    private final LikeRepository likeRepository;
 
     /**
      * 전체 게시물 가져오기
@@ -92,6 +94,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long postId) {
+        likeRepository.deleteByPostId(postId);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
