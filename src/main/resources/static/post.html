@@ -203,7 +203,7 @@
 
         <hr>
         <div class="like-box">
-            <a class="heart-icon" id="heart_a" aria-label="like" onclick="toggle_like({{ post.idx }})"
+            <a class="heart-icon" id="heart_a" aria-label="like" th:onclick="|javascript:toggle_like('${post.postId}')|"
                style="float:right; margin: 40px 20px 0px 0px">
                     <span class="icon is-small">
                         <i th:if="${likeByMe}" id="heart" class="fa-solid fa-heart fa-3x" aria-hidden="true"></i>

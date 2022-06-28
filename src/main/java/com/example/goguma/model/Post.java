@@ -32,7 +32,6 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int likeCount;
 
-
     @Column(nullable = false)
     private String address;
 
@@ -92,6 +91,14 @@ public class Post extends Timestamped {
         }
         if(postRequestDto.getAddress() != null) {
             this.address = postRequestDto.getAddress();
+        }
+    }
+
+    public void updateLikeCount(String action) {
+        if (action.equals("like")) {
+            likeCount++;
+        } else {
+            likeCount--;
         }
     }
 }
