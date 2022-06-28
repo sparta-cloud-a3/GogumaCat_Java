@@ -45,6 +45,5 @@ public class PwService {
         String password = passwordEncoder.encode(profileUpdateDto.getPassword());
 
         user.update(profileUpdateDto,password);
-        userRepository.save(user);
     }
 }
