@@ -5,11 +5,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class PostRequestDto {
     private MultipartFile file;
+    private Object files;
     private String title;
     private String price;
     private String date;
@@ -20,6 +23,7 @@ public class PostRequestDto {
     public String toString() {
         return "PostRequestDto{" +
                 "file=" + file +
+                ", files=" + files +
                 ", title='" + title + '\'' +
                 ", price='" + price + '\'' +
                 ", date='" + date + '\'' +
