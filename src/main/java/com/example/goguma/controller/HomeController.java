@@ -5,11 +5,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class HomeController {
-    @GetMapping("/")
+    @RequestMapping("/")
     public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("id",userDetails.getId());
         model.addAttribute("nickname", userDetails.getNickname());

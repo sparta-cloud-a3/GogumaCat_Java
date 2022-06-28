@@ -45,9 +45,8 @@
     <link rel="stylesheet" type="text/css" href="/css/post.css"/>
 
     <script>
-        //jinja2 사용 함수만 남겨놨습니다. 나머지는 like.js 로 옮겼습니다!
         $(document).ready(function () {
-            map();
+            map('[[${post.address}]]');
             var floatPosition = parseInt($(".sideBanner").css('top'))
 
             $(window).scroll(function () {
@@ -77,8 +76,8 @@
         })
 
         //맵 생성하기
-        function map() {
-            var local = `[[${post.address}]]`
+        function map(address) {
+            var local = `${address}`
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div
                 mapCenter = new kakao.maps.LatLng(33.5563, 126.7958), // 지도의 중심좌표
                 mapOption = {
@@ -96,7 +95,7 @@
             content += '    <a><strong>여기서 만나요!</strong></a>';
             content += '    <div class="desc">';
             content += '        <img src="/img/info_image.png" style="object-fit: fill" >';
-            content += '        <span class="address" th:text="${post.address}">거래할 주소 입니다.</span>';
+            content += `        <span class="address">${address}</span>`;
             content += '    </div>';
             content += '</div>';
 
@@ -140,20 +139,16 @@
 
         }
 
-        function deletePost() {
+        function deletePost(postId) {
             let result = confirm("정말로 삭제하시겠습니까?");
-            let idx_give = '[[${post.postId}]]'
-            console.log(idx_give)
             if (result) {
                 $.ajax({
-                    type: "POST",
-                    url: '/post/delete',
-                    data: {postId: idx_give},
-                    success: function (response) { // 성공하면
-                        if (response["result"] == "success") {
-                            alert("삭제 되었습니다!");
-                            window.location.href = '/'
-                        }
+                    type: "DELETE",
+                    url: `/post/delete/${postId}`,
+                    data: {},
+                    success: function (response) {
+                        alert('삭제에 성공하였습니다.');
+                        window.location.replace("/")
                     }
                 })
             }
@@ -197,7 +192,7 @@
             <div id="myDropdown" class="dropdown-content">
                 <a th:href="@{/posting_update/{userId}/{postId}(userId=${post.writeUserId}, postId=${post.postId})}">수정하기<i
                         class="fa-solid fa-pencil" style="margin-left: 8px"></i></a>
-                <a href="javascript:deletePost()">삭제하기<i class="fa-solid fa-trash-can" style="color: red; margin-left: 8px"></i></a>
+                <a th:onclick="|javascript:deletePost('${post.postId}')|">삭제하기<i class="fa-solid fa-trash-can" style="color: red; margin-left: 8px"></i></a>
             </div>
         </div>
 
@@ -219,7 +214,8 @@
     </div>
     <div class=content-name;>
         <h1 th:text="${post.title}">글제목</h1>
-        <h4 th:text="${post.price} +'원 (1일 기준)'">${post.price}]]원 (1일 기준) <small th:text="${post.date}">작성 일자</small></h4>
+        <h4 th:text="${post.price} +'원 (1일 기준)'">0원 (1일 기준)</h4>
+        <h5 th:text="${post.date}">작성 일자</h5>
     </div>
 
     <div class="content-info" style="white-space: pre-line">

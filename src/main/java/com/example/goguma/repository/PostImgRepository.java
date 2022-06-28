@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PostImgRepository extends JpaRepository<PostImg, Long> {
     List<PostImg> findByPostId(Long postId);
+    void deleteAllByPostId(Long postId);
 }
