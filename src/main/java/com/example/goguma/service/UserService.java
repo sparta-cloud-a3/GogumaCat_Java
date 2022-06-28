@@ -143,4 +143,10 @@ public class UserService {
 
         return posts;
     }
+
+    public User profile(Long id){
+        return userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+        );
+    }
 }
