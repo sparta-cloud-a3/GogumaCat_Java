@@ -117,4 +117,9 @@ public class UserService {
         return count;
     }
 
+    public Optional<User> profile(Long id){
+        Optional<User> found = userRepository.findById(id);
+        return found;
+    }
+
 }
