@@ -62,7 +62,6 @@ public class PostController {
 
     @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
     public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto) {
-        System.out.println("postRequestDto = " + postRequestDto);
         postService.updatePost(postId, postRequestDto);
         return "redirect:/post/" + postId;
     }

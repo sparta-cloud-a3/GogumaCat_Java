@@ -12,6 +12,7 @@ import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,9 @@ public class PostService {
         Post post = new Post(user, title, price, content, 0, address, date, false);
 
         postRepository.save(post);
+        if (postRequestDto.getFile() != null) {
+            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+        }
 
         return post;
     }
@@ -94,11 +98,17 @@ public class PostService {
 
     @Transactional
     public void updatePost(Long postId, PostRequestDto postRequestDto) {
+        //사진 외에 post field 변경
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
         );
-//        List<PostImg> postImgs = postImgRepository.findByPostId(postId);
 
         post.update(postRequestDto);
+
+        //사진 변경(사진 한 장만 가능)
+        if (postRequestDto.getFile() != null) {
+            postImgRepository.deleteAllByPostId(postId);
+            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+        }
     }
 }
