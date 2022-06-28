@@ -3,7 +3,9 @@ package com.example.goguma.controller;
 import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.model.Post;
+import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.security.UserDetailsImpl;
+import com.example.goguma.service.LikeService;
 import com.example.goguma.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final LikeRepository likeRepository;
 
     @GetMapping("/all")
     @ResponseBody
@@ -36,6 +39,7 @@ public class PostController {
         model.addAttribute("post", postService.getOnePost(postId));
         model.addAttribute("nickname", userDetails.getNickname());
         model.addAttribute("userId", userDetails.getId());
+        model.addAttribute("likeByMe", likeRepository.existsByuserIdAndPostId(userDetails.getId(), postId));
         return "post";
     }
 
