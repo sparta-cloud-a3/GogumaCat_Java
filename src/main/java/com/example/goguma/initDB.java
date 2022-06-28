@@ -43,9 +43,9 @@ public class initDB {
             em.clear();
 
 
-            Post post1 = new Post(user1, "title1", 1000, "content1", 1, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
-            Post post2 = new Post(user1, "title2", 2000, "content2", 2, "서울 강남구 신사동 537-5","2022-6-30 ~2022-7-4", false);
-            Post post3 = new Post(user2, "title3", 2000, "content2", 2, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
+            Post post1 = new Post(user1, "title1", 1000, "content1", 0, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
+            Post post2 = new Post(user1, "title2", 2000, "content2", 0, "서울 강남구 신사동 537-5","2022-6-30 ~2022-7-4", false);
+            Post post3 = new Post(user2, "title3", 2000, "content2", 0, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
 
             em.persist(post1);
             em.persist(post2);
