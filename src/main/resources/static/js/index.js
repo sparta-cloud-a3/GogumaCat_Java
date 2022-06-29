@@ -106,7 +106,6 @@ function pagination(last_page_num, page, type) {
     $("#pagination-list").append(temp_html)
 }
 
-<<<<<<< HEAD
 function click_sort_btn(order_type) {
     if ($("#query-text-box").hasClass("is-hidden") && $("#juso-search-btn").hasClass("is-hidden")) {
         listing(order_type)
