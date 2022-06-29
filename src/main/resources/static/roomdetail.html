@@ -43,11 +43,11 @@
 <body>
 <div class="container" id="app" v-cloak>
     <div class="content">
-        <ul class="list-group">
-            <li class="list-group-item" v-for="message in messages.slice().reverse()" v-if = "message.sender != '사용자'" style="background-color: #ba55d3">
+        <ul class="list-group"  v-for="message in messages.slice().reverse()">
+            <li v-if = "message.sender != '사용자'" class="list-group-item" style="background-color: #ba55d3">
                 {{message.sender}} : {{message.message}}
             </li>
-            <li class="list-group-item" v-for="message in messages.slice().reverse()" v-if = "message.sender == '사용자'" style="text-align: right; float: right; background-color: #ffec42">
+            <li v-else class="list-group-item" style="text-align: right; float: right; background-color: #ffec42">
                 {{message.sender}} : {{message.message}}
             </li>
         </ul>
