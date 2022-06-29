@@ -22,7 +22,7 @@ public class ChatRoom {
     private Post post;
 
     @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name= "user_id") //일대일관계의 경우 fk가 어디있어도 상관없지만 활용 빈도가 높은곳에 많이 넣음.
+    @JoinColumn(name= "user_id")
     private User user;
 
     public static ChatRoom create(String name) {
@@ -30,6 +30,10 @@ public class ChatRoom {
         room.roomId = UUID.randomUUID().toString();
         room.roomName = name;
         return room;
+    }
+
+    public void addPost(Post post) {
+        this.post = post;
     }
 
     public void addUser(User user) {

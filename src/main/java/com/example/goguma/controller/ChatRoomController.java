@@ -60,7 +60,7 @@ public class ChatRoomController {
         return "/roomdetail";
     }
 
-//    // 채팅방 입장 화면 -userId 추가
+    // 채팅방 입장 화면 -userId 추가
 //    @GetMapping("/room/enter/{roomId}")
 //    public String roomDetail(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model, HttpServletResponse response) throws IOException {
 //        boolean isOpened = chatService.enterRoom(roomId, userDetails.getId());
