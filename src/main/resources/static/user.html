@@ -140,7 +140,7 @@
     </script>
     <script>
         $(document).ready(function () {
-            get_write_posts('[[${id}]]');
+            get_write_posts('[[${pageUserId}]]');
             let tabsWithContent = (function () {
                 let tabs = document.querySelectorAll('.tabs li');
                 let tabsContent = document.querySelectorAll('.tab-content');
@@ -349,7 +349,7 @@
     <div class="tabs is-boxed">
         <ul>
             <li>
-                <a th:onclick="|javascript:get_write_posts('${id}')|">
+                <a th:onclick="|javascript:get_write_posts('${pageUserId}')|">
                     <span class="icon is-small"><i class="fas fa-pencil"></i></span>
                     <span>작성한 글</span>
                 </a>
@@ -367,7 +367,7 @@
                 </a>
             </li>
             <li>
-                <a th:onclick="|javascript:get_like_posts('${id}')|">
+                <a th:onclick="|javascript:get_like_posts('${pageUserId}')|">
                     <span class="icon is-small"><i class="fas fa-heart"></i></span>
                     <span>관심상품</span>
                 </a>
