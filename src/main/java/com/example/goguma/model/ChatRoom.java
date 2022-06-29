@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ChatRoom {
+public class ChatRoom extends Timestamped{
 
     @Id
     private String roomId;

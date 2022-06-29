@@ -63,15 +63,8 @@
             }).scroll();
 
             $(".sideBanner").click(function () {
-                console.log(document.getElementById("frame").style.visibility)
-                if (document.getElementById("frame").style.visibility == "hidden") {
-                    document.getElementById("frame").style.visibility = "visible"
-                    $("#frame").toggleClass("emphasized");
-
-                } else {
-                    document.getElementById("frame").style.visibility = "hidden"
-                    window.location.href = "/post/[[${post.postId}]]"
-                }
+                document.getElementById("frame").style.visibility = "hidden"
+                window.location.href = "/chat/room"
             });
         })
 
@@ -236,7 +229,7 @@
 </div>
 
 <div class="popup" id="frame" data-popup="popup-1" style="visibility:hidden; overflow-x:hidden;overflow-y:hidden">
-    <iframe th:href="@{/post/{postId}/chat(postId=${post.postId})}" width="300" height="468"></iframe>
+    <a th:href="@{room/chat}" width="300" height="468"></a>
 </div>
 </body>
 </html>

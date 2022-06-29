@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Websocket ChatRoom</title>
     <!-- Required meta tags -->
@@ -44,7 +44,7 @@
 <div class="container" id="app" v-cloak>
     <div class="content">
         <ul class="list-group"  v-for="message in messages.slice().reverse()">
-            <li v-if = "message.sender != '사용자'" class="list-group-item" style="background-color: #ba55d3">
+            <li v-if = "message.sender != nickname" class="list-group-item" style="background-color: #ba55d3">
                 {{message.sender}} : {{message.message}}
             </li>
             <li v-else class="list-group-item" style="text-align: right; float: right; background-color: #ffec42">
@@ -85,7 +85,8 @@
             room: {},
             sender: '',
             message: '',
-            messages: []
+            messages: [],
+            nickname: '[[${nickname}]]'
         },
         created() {
             this.roomId = localStorage.getItem('wschat.roomId');

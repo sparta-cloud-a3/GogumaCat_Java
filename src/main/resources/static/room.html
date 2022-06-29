@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Websocket Chat</title>
     <meta charset="utf-8">
@@ -37,7 +37,7 @@
 <!-- JavaScript -->
 <script src="/webjars/vue/2.5.16/dist/vue.min.js"></script>
 <script src="/webjars/axios/0.17.1/dist/axios.min.js"></script>
-<script>
+<script th:inline="javascript">
     var vm = new Vue({
         el: '#app',
         data: {
@@ -71,7 +71,7 @@
                 }
             },
             enterRoom: function(roomId) {
-                var sender = prompt('대화명을 입력해 주세요.');
+                var sender = [[${nickname}]];
                 if(sender !== "") {
                     localStorage.setItem('wschat.sender',sender);
                     localStorage.setItem('wschat.roomId',roomId);
