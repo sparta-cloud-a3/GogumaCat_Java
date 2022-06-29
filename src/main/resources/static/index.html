@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>고구마캣</title>
+
+    <!-- font awesome -->
+    <script src="https://kit.fontawesome.com/b8cc3ce1fa.js" crossorigin="anonymous"></script>
+
+    <!-- bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+    <!--지도 api-->
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9600c7eddf2d8ec432aa9d8791d1e471&libraries=services,clusterer,drawing"></script>
+
+    <!--javascript 분리-->
+    <script src="/js/geolocation.js"></script>
+    <script src="/js/index.js"></script>
+
+    <!-- css 분리-->
+    <link rel="stylesheet" type="text/css" href="/css/index.css"/>
+
+    <script th:inline="javascript">
+        function profileinfo(){
+            let id = [[${id}]];
+            $.ajax({
+                type : "GET",
+                url : `/profileinfo/${id}`,
+                success: function (response){
+                    window.location.href = `/profileinfo/${id}`;
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+<section class="float-right login-btn" th:onclick="profileinfo()" style='cursor:pointer;'>
+    <i class="fa-solid fa-cat fa-lg"></i>
+    <span style="font-weight: bold" th:text="${nickname}">&nbsp;&nbsp;</span>님 환영합니다.
+</section>
+</section>
+<div class="home-img" onclick="window.location.href='/'">
+    <video autoplay="autoplay" muted="muted" loop="loop" preload="auto">
+        <source src="/img/main_banner_gogumacat.mp4" type="video/mp4">
+    </video>
+</div>
+<section class="write-btn">
+    <button class="button is-dark" th:onclick="|location.href='@{posting/{userId}(userId=${id})}'|">
+        <span class="icon is-small">
+            <i class="fa-solid fa-pencil fab"></i>
+        </span>
+        <span>상품 등록하러 가기</span>
+    </button>
+</section>
+
+<div class="search">
+    <input type="text" class="search-input" id="search-box" name="query" placeholder="검색어 입력"
+           onkeyup="if(window.event.keyCode==13){searching()}">
+    <img class="search-img" onclick="searching('latest',1)"
+         src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+</div>
+
+<section class="float-right">
+    <div class="select">
+        <select id="si-select" onchange="get_gu(this.options[this.selectedIndex].value)">
+            <option>지역을 선택하세요</option>
+            {% for si in si_s %}
+            <option value="{{si}}">{{si}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="select is-hidden" id="gu-box">
+        <select id="gu-select" onchange="get_dong(this.options[this.selectedIndex].value)">
+        </select>
+    </div>
+    <div class="select is-hidden" id="dong-box">
+        <select id="dong-select" onchange="$('#juso-search-btn').removeClass('is-hidden')">
+        </select>
+    </div>
+    <button class="button is-hidden" id="juso-search-btn" onclick="search_by_address(order,1)">검색</button>
+</section>
+<section>
+    <a onclick="click_sort_btn('latest', 1)"><span class="tag is-medium is-dark" id="latest-tag">최신순</span></a>
+    <a onclick="click_sort_btn('like', 1)"><span class="tag is-medium" id="like-tag">관심순</span></a>
+    <a onclick="find_location()"><span class="tag is-medium" id="address-tag">현재 위치!</span></a>
+</section>
+
+<section class="text-box is-hidden" id="query-text-box">
+</section>
+
+<div class="card-columns card-box" id="card-box" style="margin: 50px auto;">
+
+</div>
+
+<nav id="page-box" class="pagination is-centered" role="navigation" aria-label="pagination" style="margin-top: 30px;">
+    <ul class="pagination-list" id="pagination-list"></ul>
+</nav>
+</body>
+<footer class="footer">
+    <div class="content">
+        <p style="color: black;">
+            <strong>고구마캣</strong> by <a href="https://github.com/sparta-cloud-a3/gogumacat" target="_blank">승호, 우남, 호인, 홍서</a>
+        </p>
+    </div>
+</footer>
+</html>
