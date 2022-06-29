@@ -1,12 +1,14 @@
 $(document).ready(function () {
-    listing();
+    listing("latest");
 });
 
-function listing() {
+function listing(order_type) {
     $.ajax({
         type: "GET",
         url: "/all",
-        data: {},
+        data: {
+            'orderType': order_type
+        },
         success: function (response) {
             $("#card-box").empty();
 
@@ -104,13 +106,13 @@ function pagination(last_page_num, page, type) {
     $("#pagination-list").append(temp_html)
 }
 
-function click_sort_btn(order_type, page) {
+function click_sort_btn(order_type) {
     if ($("#query-text-box").hasClass("is-hidden") && $("#juso-search-btn").hasClass("is-hidden")) {
-        listing(order_type, page)
+        listing(order_type)
     } else if ($("#query-text-box").hasClass("is-hidden")) {
-        search_by_address(order_type, page)
+        search_by_address(order_type)
     } else {
-        searching(order_type, page)
+        searching(order_type)
     }
 
     if (order_type == "latest") {

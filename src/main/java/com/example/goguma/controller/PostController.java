@@ -23,8 +23,8 @@ public class PostController {
 
     @GetMapping("/all")
     @ResponseBody
-    public List<PostResponseDto> getAllPosts() {
-        return postService.getAllPosts();
+    public List<PostResponseDto> getAllPosts(@RequestParam String orderType) {
+        return postService.getAllPosts(orderType);
     }
 
     /**

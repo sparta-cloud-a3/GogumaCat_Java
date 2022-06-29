@@ -11,6 +11,7 @@ import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,8 +32,13 @@ public class PostService {
      * 전체 게시물 가져오기
      * @return List<PostResponseDto> posts: 전체 게시물
      */
-    public List<PostResponseDto> getAllPosts() {
-        List<Post> findPosts = postRepository.findAll();
+    public List<PostResponseDto> getAllPosts(String orderType) {
+        List<Post> findPosts = null;
+        if (orderType.equals("latest")) {
+             findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        } else {
+            findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
+        }
         List<PostResponseDto> posts = new ArrayList<>();
         List<PostImg> findPostImgs;
         PostResponseDto postResponseDto = null;
