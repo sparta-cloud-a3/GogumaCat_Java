@@ -77,8 +77,14 @@ public class UserController {
     }
 
     @ResponseBody
-    @GetMapping("/user/get_posts/{userId}")
+    @GetMapping("/user/get_write_posts/{userId}")
     public List<PostResponseDto> getMyPosts(@PathVariable Long userId) {
         return userService.getMyPosts(userId);
+    }
+
+    @ResponseBody
+    @GetMapping("/user/get_like_posts/{userId}")
+    public List<PostResponseDto> getLikePosts(@PathVariable Long userId) {
+        return userService.getLikePosts(userId);
     }
 }

@@ -1,11 +1,8 @@
 package com.example.goguma.dto;
 
-import com.example.goguma.model.PostImg;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +19,7 @@ public class PostResponseDto {
 
     private Long writeUserId;
     private String writerNickname;
+    private String writerProfile;
 
     private String date;
 
@@ -33,7 +31,7 @@ public class PostResponseDto {
         this.likeCount = likeCount;
     }
 
-    public PostResponseDto(Long postId, String title, int price, String address, int likeCount, String content, Long writeUserId, String writerNickname, LocalDateTime date) {
+    public PostResponseDto(Long postId, String title, int price, String address, int likeCount, String content, Long writeUserId, String writerNickname, String writerProfile, String date) {
         this.postId = postId;
         this.title = title;
         this.price = price;
@@ -42,6 +40,7 @@ public class PostResponseDto {
         this.content = content;
         this.writeUserId = writeUserId;
         this.writerNickname = writerNickname;
-        this.date = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.writerProfile = writerProfile;
+        this.date = date;
     }
 }

@@ -1,12 +1,11 @@
-function toggle_like(idx) {
-
+function toggle_like(postId) {
     if ($("#heart").hasClass("fa-solid")) {
         $.ajax({
             type: "POST",
             url: "/update_like",
             data: {
-                idx_give: idx,
-                action_give: "unlike"
+                postId: postId,
+                action: "unlike"
             },
             success: function (response) {
                 console.log("unlike")
@@ -19,8 +18,8 @@ function toggle_like(idx) {
             type: "POST",
             url: "/update_like",
             data: {
-                idx_give: idx,
-                action_give: "like"
+                postId: postId,
+                action: "like"
             },
             success: function (response) {
                 console.log("like")

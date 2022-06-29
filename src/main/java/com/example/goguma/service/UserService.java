@@ -2,10 +2,12 @@ package com.example.goguma.service;
 
 import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.dto.CheckRequestDto;
+import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
@@ -35,6 +37,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
+    private final LikeRepository likeRepository;
 
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -131,6 +134,33 @@ public class UserService {
         List<PostImg> findPostImgs;
         PostResponseDto postResponseDto = null;
         for (Post findPost : findPosts) {
+            postResponseDto = new PostResponseDto(
+                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
+            findPostImgs = postImgRepository.findByPostId(findPost.getId());
+            //post의 사진 추가
+            for (PostImg findPostImg : findPostImgs) {
+                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
+            }
+            posts.add(postResponseDto);
+        }
+
+        return posts;
+    }
+
+    public User profile(Long id){
+        return userRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+        );
+    }
+
+    public List<PostResponseDto> getLikePosts(Long userId) {
+        List<Like> findLikes = likeRepository.findByUserId(userId);
+        List<PostResponseDto> posts = new ArrayList<>();
+        List<PostImg> findPostImgs;
+        Post findPost;
+        PostResponseDto postResponseDto = null;
+        for (Like findLike : findLikes) {
+            findPost = findLike.getPost();
             postResponseDto = new PostResponseDto(
                     findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
             findPostImgs = postImgRepository.findByPostId(findPost.getId());

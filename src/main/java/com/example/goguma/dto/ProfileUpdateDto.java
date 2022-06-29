@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProfileUpdateDto {
+    private String username;
     private String nickname;
     private String password;
     private String address;

@@ -32,8 +32,8 @@ public class initDB {
         private final PasswordEncoder passwordEncoder;
 
         public void dbInit1() {
-            String pw = passwordEncoder.encode("1234");
-            User user1 = new User("user1", pw, "nickname1", "서울시 중구 뭐동");
+            String pw = passwordEncoder.encode("aaaa");
+            User user1 = new User("aaaa", pw, "nickname1", "서울시 중구 뭐동");
             User user2 = new User("user2", pw, "nickname2", "서울시 중구 뭐동");
 
             em.persist(user1);
@@ -43,9 +43,9 @@ public class initDB {
             em.clear();
 
 
-            Post post1 = new Post(user1, "title1", 1000, "content1", 1, "서울시 중구 띵동", "2022-6-30 ~2022-7-4", false);
-            Post post2 = new Post(user1, "title2", 2000, "content2", 2, "서울시 중구 띵동","2022-6-30 ~2022-7-4", false);
-            Post post3 = new Post(user2, "title3", 2000, "content2", 2, "서울시 중구 띵동", "2022-6-30 ~2022-7-4", false);
+            Post post1 = new Post(user1, "title1", 1000, "content1", 0, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
+            Post post2 = new Post(user1, "title2", 2000, "content2", 0, "서울 강남구 신사동 537-5","2022-6-30 ~2022-7-4", false);
+            Post post3 = new Post(user2, "title3", 2000, "content2", 0, "서울 강남구 신사동 537-5", "2022-6-30 ~2022-7-4", false);
 
             em.persist(post1);
             em.persist(post2);

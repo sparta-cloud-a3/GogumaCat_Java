@@ -3,7 +3,9 @@ package com.example.goguma.controller;
 import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.model.Post;
+import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.security.UserDetailsImpl;
+import com.example.goguma.service.LikeService;
 import com.example.goguma.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,11 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
+    private final LikeRepository likeRepository;
 
     @GetMapping("/all")
     @ResponseBody
-    public List<PostResponseDto> getAllPosts() {
-        return postService.getAllPosts();
+    public List<PostResponseDto> getAllPosts(@RequestParam String orderType) {
+        return postService.getAllPosts(orderType);
     }
 
     /**
@@ -31,11 +34,12 @@ public class PostController {
      * @param userDetails // 로그인 계정 정보
      * @return post.html
      */
-    @GetMapping("/post/{postId}")
+    @RequestMapping("/post/{postId}")
     public String getOnePost(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("post", postService.getOnePost(postId));
         model.addAttribute("nickname", userDetails.getNickname());
         model.addAttribute("userId", userDetails.getId());
+        model.addAttribute("likeByMe", likeRepository.existsByuserIdAndPostId(userDetails.getId(), postId));
         return "post";
     }
 
@@ -46,5 +50,23 @@ public class PostController {
         Post temp = postService.registerPost(postRequestDto, userDetails.getId());
 
         return temp;
+    }
+
+    @DeleteMapping("post/delete/{postId}")
+    public String deletePost(@PathVariable Long postId){
+        postService.deletePost(postId);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/posting_update/{postId}")
+    public String updatePostPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        model.addAttribute("post", postService.getOnePost(postId));
+        return "posting_update";
+    }
+
+    @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
+    public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto) {
+        postService.updatePost(postId, postRequestDto);
+        return "redirect:/post/" + postId;
     }
 }
