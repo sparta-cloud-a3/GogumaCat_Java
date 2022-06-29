@@ -1,8 +1,10 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.model.ChatRoom;
+import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,6 +59,20 @@ public class ChatRoomController {
         model.addAttribute("roomId", roomId);
         return "/roomdetail";
     }
+
+    // 채팅방 입장 화면 -userId 추가
+    @GetMapping("/room/enter/{roomId}")
+    public String roomDetail(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails, Model model, HttpServletResponse response) throws IOException {
+        boolean isOpened = chatService.enterRoom(roomId, userDetails.getId());
+        if(!isOpened){
+            response.setContentType("text/html; charset=utf-8");
+            response.getWriter().print("<script>alert('최대 2명 들어올 수 있습니다.');history.back();</script>");
+            return "/room";
+        }
+        model.addAttribute("roomId", roomId);
+        return "/roomdetail";
+    }
+
     // 특정 채팅방 조회
     @GetMapping("/room/{roomId}")
     @ResponseBody
