@@ -215,7 +215,7 @@
                 </div>
             </div>
         </article>
-        {% if status %}
+        <div th:if="${id}==${id2}">
             <nav id="btns-me" class="level is-mobile" style="margin-top:2rem">
                 <a class="button level-item has-text-centered is-sparta" aria-label="edit"
                    onclick='$("#modal-check-pw").addClass("is-active")'>
@@ -341,7 +341,7 @@
                 <button class="modal-close is-large" aria-label="close"
                         onclick='$("#modal-edit").removeClass("is-active")'></button>
             </div>
-        {% endif %}
+        </div>
     </div>
 </section>
 <section id="tabs-with-content">

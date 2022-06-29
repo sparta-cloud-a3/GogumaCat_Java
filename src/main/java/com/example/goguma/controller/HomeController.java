@@ -29,6 +29,7 @@ public class HomeController {
     public String info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         model.addAttribute("id",userDetails.getId());
         User info = userService.profile(id);
+        model.addAttribute("id2", info.getId());
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("username", info.getUsername());
         model.addAttribute("profilePic", info.getProfilePic());
