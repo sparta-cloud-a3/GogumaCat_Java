@@ -15,7 +15,6 @@ import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
 import com.example.goguma.security.kakao.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +32,17 @@ public class PostService {
      * @return List<PostResponseDto> posts: 전체 게시물
      */
     public List<PostResponseDto> getAllPosts(String orderType) {
+
         List<Post> findPosts = null;
         if (orderType.equals("latest")) {
              findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         } else {
             findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
         }
+
         List<PostResponseDto> posts = new ArrayList<>();
         List<PostImg> findPostImgs;
+
         PostResponseDto postResponseDto = null;
         for (Post findPost : findPosts) {
              postResponseDto = new PostResponseDto(
@@ -54,6 +56,26 @@ public class PostService {
             posts.add(postResponseDto);
         }
 
+        return posts;
+    }
+
+    //제목, 내용으로 검색하는 부분.
+    public List<PostResponseDto> getTitlePosts(String keyword) {
+        List<Post> titleList = postRepository.findByTitleContainingOrContentContaining(keyword,keyword);
+        List<PostResponseDto> posts = new ArrayList<>();
+        List<PostImg> findPostImgs;
+        PostResponseDto postResponseDto = null;
+        for (Post findPost : titleList) {
+            postResponseDto = new PostResponseDto(
+                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount()
+            );
+            findPostImgs = postImgRepository.findByPostId(findPost.getId());
+            //post의 사진 추가
+            for (PostImg findPostImg : findPostImgs) {
+                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
+            }
+            posts.add(postResponseDto);
+        }
         return posts;
     }
 

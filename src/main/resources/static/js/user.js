@@ -21,17 +21,14 @@ function get_write_posts(user_id) {
         data: {},
         success: function (response) {
             $("#card-box-post").empty();
+
             for (let i = 0; i < response.length; i++) {
                 make_post(response[i], "post");
             }
 //            let comments = response["comments"];
 //            let reviews = response["reviews"];
-//            let likes = response["likes"];
 //            for (let i = 0; i < comments.length; i++) {
 //                make_post(comments[i], "comment");
-//            }
-//            for (let i = 0; i < likes.length; i++) {
-//                make_post(likes[i], "like");
 //            }
         }
     });
@@ -65,9 +62,6 @@ function make_post(post, type) {
                             </div>`
     $(`#card-box-${type}`).append(temp_html)
 }
-
-
-
 
 function is_password(asValue) {
     var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
