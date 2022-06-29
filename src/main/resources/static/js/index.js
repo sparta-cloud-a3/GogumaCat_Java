@@ -1,5 +1,4 @@
 $(document).ready(function () {
-<<<<<<< HEAD
     listing("latest");
 });
 
@@ -10,16 +9,6 @@ function listing(order_type) {
         data: {
             'orderType': order_type
         },
-=======
-    listing();
-});
-
-function listing() {
-    $.ajax({
-        type: "GET",
-        url: "/all",
-        data: {},
->>>>>>> a160766af61078d733db5d278c7068b06353e659
         success: function (response) {
             $("#card-box").empty();
 
@@ -125,16 +114,7 @@ function click_sort_btn(order_type) {
         search_by_address(order_type)
     } else {
         searching(order_type)
-=======
-function click_sort_btn(order_type, page) {
-    if ($("#query-text-box").hasClass("is-hidden") && $("#juso-search-btn").hasClass("is-hidden")) {
-        listing(order_type, page)
-    } else if ($("#query-text-box").hasClass("is-hidden")) {
-        search_by_address(order_type, page)
-    } else {
-        searching(order_type, page)
->>>>>>> a160766af61078d733db5d278c7068b06353e659
-    }
+     }
 
     if (order_type == "latest") {
         $('#latest-tag').addClass("is-dark")
