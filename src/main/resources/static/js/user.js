@@ -14,16 +14,13 @@ function fileupload() {
     }
 }
 
-function get_posts(user_id) {
+function get_write_posts(user_id) {
     $.ajax({
         type: "GET",
-        url: `/user/get_posts/${user_id}`,
+        url: `/user/get_write_posts/${user_id}`,
         data: {},
         success: function (response) {
             $("#card-box-post").empty();
-            $("#card-box-comment").empty();
-            $("#card-box-review").empty();
-            $("#card-box-like").empty();
             for (let i = 0; i < response.length; i++) {
                 make_post(response[i], "post");
             }
@@ -40,10 +37,23 @@ function get_posts(user_id) {
     });
 }
 
+function get_like_posts(user_id) {
+    $.ajax({
+        type: "GET",
+        url: `/user/get_like_posts/${user_id}`,
+        data: {},
+        success: function (response) {
+            $("#card-box-like").empty();
+            for (let i = 0; i < response.length; i++) {
+                make_post(response[i], "like");
+            }
+        }
+    });
+}
+
 function make_post(post, type) {
     let temp_html = `<div class="col" style="cursor: pointer">
                                 <div class="card h-100" id="card-${post['postId']}">
-                                    <!--사진 수정-->
                                     <img src="${post['postImgs'][0]['imgUrl']}" class="card-img-top image" onclick="location.href='/post/${post["postId"]}'">
                                     <div class="card-body">
                                         <h5 class="card-title" onclick="location.href='/post/${post['postId']}'">${post['title']}</h5>
