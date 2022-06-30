@@ -26,7 +26,7 @@ public class PostService {
     private final PostImgRepository postImgRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
-    private final S3Service s3Service;
+//    private final S3Service s3Service;
 
     /**
      * 전체 게시물 가져오기
@@ -127,7 +127,7 @@ public class PostService {
     public void deletePost(Long postId) {
         likeRepository.deleteByPostId(postId);
         List<PostImg> temp = postImgRepository.findByPostId(postId);
-        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
 //        s3Service.delete(spliturl[1]);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
@@ -147,7 +147,7 @@ public class PostService {
         //사진 변경(사진 한 장만 가능)
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
-            String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//            String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
 //            s3Service.delete(spliturl[1]);
 //            String name = s3Service.uploadToAWS(postRequestDto.getFile());
 //            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
