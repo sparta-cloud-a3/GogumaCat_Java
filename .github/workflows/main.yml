@@ -30,14 +30,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
-
-      - name: Start MySQL for test
-        uses: samin/mysql-action@v1.3
-        with:
-          character set server: 'utf8'
-          mysql database: 'gogumacat'
-          mysql user: 'MSG'
-          mysql password: ${{ secrets.MYSQL_PASSWORD }} # github Secret 탭에서 설정하세요!
       
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
@@ -64,7 +56,6 @@ jobs:
           cp -r .platform deploy/.platform
           cd deploy && zip -r deploy.zip . # Procfile, .ebextensions, .playform 포함하여 zip 생성
 
-
       # Beanstalk Deploy 플러그인 사용
       - name: Beanstalk Deploy
         uses: einaregilsson/beanstalk-deploy@v20
@@ -72,7 +63,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }} # github secrets로 등록한 값 사용
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # github secrets로 등록한 값 사용
           application_name: gogumacat # EB application 이름
-          environment_name: Gogumacat-env-1 # EB environment 이름
+          environment_name: Gogumacat-env-2 # EB environment 이름
           version_label: Github Action-${{steps.current-time.outputs.formattedTime}} # 배포 버전은 타임스탬프를 이용하여 구분
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip

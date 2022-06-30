@@ -26,6 +26,7 @@ public class PostService {
     private final PostImgRepository postImgRepository;
     private final UserRepository userRepository;
     private final LikeRepository likeRepository;
+//    private final S3Service s3Service;
 
     /**
      * 전체 게시물 가져오기
@@ -114,7 +115,9 @@ public class PostService {
 
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
-            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+//            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+//            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+//            postImgRepository.save(new PostImg(postname,post));
         }
 
         return post;
@@ -123,6 +126,9 @@ public class PostService {
     @Transactional
     public void deletePost(Long postId) {
         likeRepository.deleteByPostId(postId);
+        List<PostImg> temp = postImgRepository.findByPostId(postId);
+//        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//        s3Service.delete(spliturl[1]);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
@@ -134,12 +140,18 @@ public class PostService {
                 () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
         );
 
+        List<PostImg> temp = postImgRepository.findByPostId(postId);
+
         post.update(postRequestDto);
 
         //사진 변경(사진 한 장만 가능)
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
-            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+//            String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//            s3Service.delete(spliturl[1]);
+//            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+//            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+//            postImgRepository.save(new PostImg(postname,post));
         }
     }
 }
