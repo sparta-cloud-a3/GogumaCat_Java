@@ -115,9 +115,9 @@ public class PostService {
 
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
-            String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
-            postImgRepository.save(new PostImg(postname,post));
+//            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+//            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+//            postImgRepository.save(new PostImg(postname,post));
         }
 
         return post;
@@ -128,7 +128,7 @@ public class PostService {
         likeRepository.deleteByPostId(postId);
         List<PostImg> temp = postImgRepository.findByPostId(postId);
         String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
-        s3Service.delete(spliturl[1]);
+//        s3Service.delete(spliturl[1]);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
@@ -148,10 +148,10 @@ public class PostService {
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
             String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
-            s3Service.delete(spliturl[1]);
-            String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
-            postImgRepository.save(new PostImg(postname,post));
+//            s3Service.delete(spliturl[1]);
+//            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+//            String postname = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+//            postImgRepository.save(new PostImg(postname,post));
         }
     }
 }
