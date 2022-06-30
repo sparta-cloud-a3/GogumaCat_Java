@@ -64,7 +64,7 @@
 
             $(".sideBanner").click(function () {
                 document.getElementById("frame").style.visibility = "hidden"
-                window.location.href = "/chat/room"
+                window.location.href = "/chat/room/enter/[[${post.postId}]]"
             });
         })
 
@@ -137,7 +137,7 @@
             if (result) {
                 $.ajax({
                     type: "DELETE",
-                    url: `/post/delete/${postId}`,
+                    url: `/post/delete/${post.postId}`,
                     data: {},
                     success: function (response) {
                         alert('삭제에 성공하였습니다.');

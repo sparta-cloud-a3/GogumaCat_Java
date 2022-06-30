@@ -81,7 +81,7 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            roomId: '',
+            roomId: '[[${roomId}]]',
             room: {},
             sender: '',
             message: '',
@@ -89,13 +89,13 @@
             nickname: '[[${nickname}]]'
         },
         created() {
-            this.roomId = localStorage.getItem('wschat.roomId');
+            this.roomId = '[[${roomId}]]';
             this.sender = localStorage.getItem('wschat.sender');
             this.findRoom();
         },
         methods: {
             findRoom: function() {
-                axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; });
+                axios.get('/chat/room/'+this.roomId).then(response => { this.room = response.data; console.log(response.data);});
             },
             sendMessage: function() {
                 if(this.message==''){
