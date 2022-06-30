@@ -50,6 +50,12 @@ dependencies {
     implementation 'org.webjars.bower:vue:2.5.16'
     implementation 'org.webjars.bower:axios:0.17.1'
     implementation 'com.google.code.gson:gson:2.8.0'
+
+    // aws s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.11.475'
+    implementation 'com.amazonaws:aws-java-sdk-secretsmanager:1.11.339'
+    implementation 'com.amazonaws:aws-encryption-sdk-java:1.6.0'
+
 }
 
 tasks.named('test') {
