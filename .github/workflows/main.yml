@@ -30,6 +30,14 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 11
+
+      - name: Start MySQL for test
+        uses: samin/mysql-action@v1.3
+        with:
+          character set server: 'utf8'
+          mysql database: 'gogumacat'
+          mysql user: 'MSG'
+          mysql password: ${{ secrets.MYSQL_PASSWORD }} # github Secret 탭에서 설정하세요!
       
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
