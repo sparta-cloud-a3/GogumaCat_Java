@@ -64,7 +64,7 @@
 
             $(".sideBanner").click(function () {
                 document.getElementById("frame").style.visibility = "hidden"
-                window.location.href = "/chat/room"
+                window.location.href = "/chat/room/enter/[[${post.postId}]]"
             });
         })
 
@@ -137,7 +137,7 @@
             if (result) {
                 $.ajax({
                     type: "DELETE",
-                    url: `/post/delete/${postId}`,
+                    url: `/post/delete/${post.postId}`,
                     data: {},
                     success: function (response) {
                         alert('삭제에 성공하였습니다.');
@@ -176,8 +176,8 @@
         </div>
     </div>
     <div class="user-info" id="user_information">
-        <img th:if="${profile_pic}==''" th:src="/img/profile_image.png" id=user_profile>
-        <img th:unless="${profile_pic}==''" th:src="${post.writerProfile}" id=user_profile>
+        <img th:if="${#strings.isEmpty(post.writerProfile)}" src="/img/profile_image.png" id=user_profile>
+        <img th:if="${not #strings.isEmpty(post.writerProfile)}" th:src="${post.writerProfile}" id=user_profile>
         <!--자신의 게시물이면 수정 삭제 가능한 버튼 추가-->
         <div class="menu dropdown" style="float: right;" th:if="${nickname}==${post.writerNickname}">
             <i class="fa-solid fa-ellipsis-vertical fa-2x dropbtn" onclick="myFunction()"
