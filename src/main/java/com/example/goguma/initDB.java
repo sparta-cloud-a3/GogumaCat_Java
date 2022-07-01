@@ -33,8 +33,9 @@ public class initDB {
 
         public void dbInit1() {
             String pw = passwordEncoder.encode("aaaa");
-            User user1 = new User("aaaa", pw, "nickname1", "서울시 중구 뭐동");
-            User user2 = new User("user2", pw, "nickname2", "서울시 중구 뭐동");
+            User user1 = new User("user1", pw, "호구마", "서울시 중구 뭐동");
+            User user2 = new User("user2", pw, "고냥이", "서울시 중구 뭐동");
+            User user3 = new User("user3", pw, "스마일", "서울시 중구 뭐동");
 
             em.persist(user1);
             em.persist(user2);
