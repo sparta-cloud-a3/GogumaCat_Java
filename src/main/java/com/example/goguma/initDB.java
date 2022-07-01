@@ -13,7 +13,7 @@
 //
 //@Component
 //@RequiredArgsConstructor
-//public class initDB {
+//public cla                          ss initDB {
 //    private final EntityManager em;
 //
 //    private final InitService initService;
