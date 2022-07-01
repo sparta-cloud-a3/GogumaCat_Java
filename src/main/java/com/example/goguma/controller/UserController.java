@@ -4,6 +4,7 @@ import com.example.goguma.dto.CheckRequestDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,14 +14,10 @@ import java.util.List;
 
 
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     // 회원 로그인 페이지
     @GetMapping("/user/login")
