@@ -78,7 +78,6 @@ public class KakaoOAuth2 {
         String nickname = body.getJSONObject("properties").getString("nickname");
         String profilePic = body.getJSONObject("properties").getString("thumbnail_image");
 
-
         return new KakaoUserInfo(id, email, nickname,profilePic);
     }
 }

@@ -73,12 +73,22 @@ public class UserController {
         return result;
     }
 
+    /**
+     * user가 작성한 게시물 리스팅
+     * @param userId
+     * @return 작성한 게시물 리스트
+     */
     @ResponseBody
     @GetMapping("/user/get_write_posts/{userId}")
     public List<PostResponseDto> getMyPosts(@PathVariable Long userId) {
         return userService.getMyPosts(userId);
     }
 
+    /**
+     * user의 관심 상품 리스팅
+     * @param userId
+     * @return 관심 상품 리스트
+     */
     @ResponseBody
     @GetMapping("/user/get_like_posts/{userId}")
     public List<PostResponseDto> getLikePosts(@PathVariable Long userId) {
