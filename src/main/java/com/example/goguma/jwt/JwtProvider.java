@@ -110,9 +110,11 @@ public class JwtProvider {
     public String resolveToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String token = null;
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("mytoken")) {
-                token = cookie.getValue();
+        if(cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("mytoken")) {
+                    token = cookie.getValue();
+                }
             }
         }
         return token;
