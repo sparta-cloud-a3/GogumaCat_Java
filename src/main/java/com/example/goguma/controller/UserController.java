@@ -1,15 +1,16 @@
 package com.example.goguma.controller;
 
-import com.example.goguma.dto.CheckRequestDto;
-import com.example.goguma.dto.PostResponseDto;
-import com.example.goguma.dto.SignupRequestDto;
+import com.example.goguma.dto.*;
+import com.example.goguma.service.AuthService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -18,6 +19,14 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AuthService authService;
+
+    //회원 로그인
+    @PostMapping("user/login")
+    @ResponseBody
+    public String login(@RequestBody @Valid UserRequestDto.LoginDto loginDto) { //@Valid는 LoginDto에 모든 칸이 채워졌는지 검사
+        return authService.login(loginDto);
+    }
 
     // 회원 로그인 페이지
     @GetMapping("/user/login")

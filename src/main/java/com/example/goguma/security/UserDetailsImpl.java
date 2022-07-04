@@ -14,13 +14,9 @@ public class UserDetailsImpl implements UserDetails {
         this.user = user;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public String getUsername() {
+        return user.getUsername();
     }
 
     @Override
@@ -29,8 +25,12 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    public String getUsername() {
-        return user.getUsername();
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     //닉네임 가져오기 추가. UserDetails 자체에 getNickname()이 없어서 Override가 아닌 그냥 작성인 듯!
