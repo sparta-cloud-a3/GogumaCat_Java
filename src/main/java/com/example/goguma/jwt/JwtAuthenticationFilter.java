@@ -31,7 +31,6 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         chain.doFilter(request, response);
     }
 }

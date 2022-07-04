@@ -1,6 +1,8 @@
 package com.example.goguma.jwt;
 
 import com.example.goguma.dto.UserRequestDto;
+import com.example.goguma.model.User;
+import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +31,7 @@ public class JwtProvider {
     // refresh token 유효 시간 -> access token 의 유효시간보다 길게 준다.
     private final long refreshExpireTime = (60 * 60 * 1000L) * 10; // 10시간 후
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
     public String createAccessToken(UserRequestDto.LoginDto loginDto) {
         Map<String, Object> headers = new HashMap<>();
@@ -84,19 +88,34 @@ public class JwtProvider {
     }
 
     public String getUserInfo(String token) {
-        // token 데이터를 시크릿 키를 이용하여 파싱하여 payload 안에 있는 companyId를 가져옴
-        return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().get("usernmae");
+        // token 데이터를 시크릿 키를 이용하여 파싱하여 payload 안에 있는 username 가져옴
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return (String) body.get("username");
+    }
+
+    public User getUser(String token) {
+        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        String username = (String) body.get("username");
+        return userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+        );
     }
 
     public Authentication getAuthentication(String token) {
-        // 위의 메소드를 이용하여 id 를 가져오고, 이 아이디를 5번에서 만들었던 서비스로 넘겨 사용자를 받아옴
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserInfo(token));
         // 받아온 사용자 정보와 역할 목록을 이용하여 authentication 을 만들어서 넘겨줌(우린 역할 목록 사용하지않음)
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String resolveToken(HttpServletRequest request) {
-        return request.getHeader("token");
+        Cookie[] cookies = request.getCookies();
+        String token = null;
+        for (Cookie cookie : cookies) {
+            if(cookie.getName().equals("mytoken")) {
+                token = cookie.getValue();
+            }
+        }
+        return token;
     }
 
     public boolean validateJwtToken(ServletRequest request, String authToken) {

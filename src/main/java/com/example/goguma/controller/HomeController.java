@@ -1,5 +1,6 @@
 package com.example.goguma.controller;
 
+import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.UserService;
@@ -14,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 
     private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @RequestMapping("/")
-    public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("id",userDetails.getId());
-        User info = userService.profile(userDetails.getId());
+    public String home(Model model, @CookieValue(name = "mytoken") String token) {
+        User info = jwtProvider.getUser(token);
+        model.addAttribute("id",info.getId());
         model.addAttribute("nickname", info.getNickname());
         return "index";
     }

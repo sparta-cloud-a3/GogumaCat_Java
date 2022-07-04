@@ -21,11 +21,13 @@ function sign_in() {
     $.ajax({
         type: "POST",
         url: "/user/login",
-        data: {
+        data: JSON.stringify ({
             'username': username,
             'password': password
-        },
+        }),
+        contentType: 'application/json',
         success: function (response) {
+            $.cookie('mytoken', response, {path: '/'});
             window.location.replace("/")
         }
     });
