@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Setter
 @Getter // get 함수를 일괄적으로 만들어줍니다.
@@ -40,6 +41,16 @@ public class User extends Timestamped {
         this.profileInfo = profileUpdateDto.getProfileInfo();
     }
 
+    public void accessToken(String accessToken){
+        this.accessToken = accessToken;
+        System.out.println("this.accessToken : "+this.accessToken);
+    }
+
+    public void refreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
+        System.out.println("this.refreshToken : "+this.refreshToken);
+    }
+
     // ID가 자동으로 생성 및 증가합니다.
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -67,5 +78,11 @@ public class User extends Timestamped {
 
     @Column(nullable = true)
     private String profileInfo;
+
+    @Column(nullable = true)
+    private String accessToken;
+
+    @Column(nullable = true)
+    private String refreshToken;
 }
 

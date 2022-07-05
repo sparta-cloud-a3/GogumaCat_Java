@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class AuthService {
     private final AuthenticationManager authenticationManager;
@@ -27,6 +27,7 @@ public class AuthService {
         } catch (Exception e) {
             throw new IllegalArgumentException("요청받은 아이디 또는 비밀번호가 올바르지 않습니다.");
         }
+        jwtProvider.createRefreshToken(loginDto);
 
         return jwtProvider.createAccessToken(loginDto);
     }
