@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class JwtProvider {
     private final UserDetailsServiceImpl userDetailsService;
     private final UserRepository userRepository;
 
+    @Transactional
     public String createAccessToken(UserRequestDto.LoginDto loginDto) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
@@ -56,11 +58,15 @@ public class JwtProvider {
                 .setExpiration(expiration)    // 토큰 만료 시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+        User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
+                () -> new NullPointerException("Username이 존재하지 않습니다."));
+        user.accessToken(jwt);
+        System.out.println("여기는 AccessToken : "+jwt);
 
         System.out.println("jwt = " + jwt);
         return jwt;
     }
-
+    @Transactional
     public Map<String, String> createRefreshToken(UserRequestDto.LoginDto loginDto) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
@@ -81,7 +87,10 @@ public class JwtProvider {
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-
+        User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
+                () -> new NullPointerException("Username이 존재하지 않습니다."));
+        user.refreshToken(jwt);
+        System.out.println("여기가 리프레쉬 토큰 : " +jwt);
         Map<String, String> result = new HashMap<>();
         result.put("refreshToken", jwt);
         result.put("refreshTokenExpirationAt", refreshTokenExpirationAt);

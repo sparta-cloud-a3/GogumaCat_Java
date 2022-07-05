@@ -26,8 +26,9 @@ public class HomeController {
     }
 
     @GetMapping("/profileinfo/{id}")
-    public String info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("id",userDetails.getId());
+    public String info(@PathVariable Long id, Model model, @CookieValue(name = "mytoken") String token) {
+        User tokenInfo = jwtProvider.getUser(token);
+        model.addAttribute("id",tokenInfo.getId());
         User info = userService.profile(id);
         model.addAttribute("pageUserId", info.getId());
         model.addAttribute("nickname", info.getNickname());
@@ -40,8 +41,9 @@ public class HomeController {
     }
 
     @GetMapping("/posting/{username}")
-    public String posting(@PathVariable String username, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        model.addAttribute("username", userDetails.getUsername());
+    public String posting(@PathVariable String username, Model model, @CookieValue(name = "mytoken") String token) {
+        User info = jwtProvider.getUser(token);
+        model.addAttribute("username", info.getUsername());
         return "posting";
     }
 }
