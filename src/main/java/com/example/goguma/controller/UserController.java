@@ -22,7 +22,7 @@ public class UserController {
     private final AuthService authService;
 
     //회원 로그인
-    @PostMapping("user/login")
+    @PostMapping("user/login1")
     @ResponseBody
     public String login(@RequestBody @Valid UserRequestDto.LoginDto loginDto) { //@Valid는 LoginDto에 모든 칸이 채워졌는지 검사
         return authService.login(loginDto);

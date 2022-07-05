@@ -20,7 +20,7 @@ function sign_in() {
     }
     $.ajax({
         type: "POST",
-        url: "/user/login",
+        url: "/user/login1",
         data: JSON.stringify ({
             'username': username,
             'password': password

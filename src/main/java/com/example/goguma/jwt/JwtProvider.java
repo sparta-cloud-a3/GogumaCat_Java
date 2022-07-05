@@ -57,6 +57,7 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
+        System.out.println("jwt = " + jwt);
         return jwt;
     }
 
