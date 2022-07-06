@@ -2,6 +2,7 @@ package com.example.goguma.service;
 
 import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
@@ -37,6 +38,7 @@ public class UserService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final LikeRepository likeRepository;
+    private final JwtProvider jwtProvider;
 
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -90,6 +92,8 @@ public class UserService {
             kakaoUser = new User(username, encodedPassword, nickname, kakaoId, profilePic);
             userRepository.save(kakaoUser);
         }
+        jwtProvider.createKakaoAccessToken(username,password);
+        jwtProvider.createKakaoRefreshToken(username,password);
 
         // 로그인 처리
         Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(username, password);

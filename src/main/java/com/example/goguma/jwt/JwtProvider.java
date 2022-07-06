@@ -4,6 +4,7 @@ import com.example.goguma.dto.UserRequestDto;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.UserDetailsServiceImpl;
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -151,5 +152,68 @@ public class JwtProvider {
             request.setAttribute("exception", "IllegalArgumentException");
         }
         return false;
+    }
+
+    @Transactional
+    public String createKakaoAccessToken(String username, String password) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("type", "token");
+
+        Map<String, Object> payloads = new HashMap<>();
+        // login 시 들어오는 데이터 중 회사 아이디를 받아 payload 부분에 추가
+        // payloads.put("지정할_키_값", loginDTO.get으로 가져올 데이터());
+        payloads.put("username", username);
+
+        // 토큰을 생성하는 현재 시간을 받아옴
+        Date expiration = new Date();
+        // 현재 시간에 위에서 지정한 access token 만료 시간을 더해서 토큰 유효 시간을 지정
+        expiration.setTime(expiration.getTime() + accessExpireTime);
+
+        // 위에서 만든 header와 payload 를 가지고 jwt 생성
+        String jwt = Jwts
+                .builder()
+                .setHeader(headers)           // header
+                .setClaims(payloads)          // payload
+                .setSubject("user")           // token 용도
+                .setExpiration(expiration)    // 토큰 만료 시간
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new NullPointerException("Username이 존재하지 않습니다."));
+        user.accessToken(jwt);
+        System.out.println("여기는 AccessToken : "+jwt);
+
+        return jwt;
+    }
+
+    @Transactional
+    public Map<String, String> createKakaoRefreshToken(String username, String password) {
+        Map<String, Object> headers = new HashMap<>();
+        headers.put("type", "token");
+
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put("username", username);
+
+        Date expiration = new Date();
+        expiration.setTime(expiration.getTime() + refreshExpireTime);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.KOREA);
+        String refreshTokenExpirationAt = simpleDateFormat.format(expiration);
+
+        String jwt = Jwts
+                .builder()
+                .setHeader(headers)
+                .setClaims(payloads)
+                .setSubject("user")
+                .setExpiration(expiration)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new NullPointerException("Username이 존재하지 않습니다."));
+        user.refreshToken(jwt);
+        System.out.println("여기가 리프레쉬 토큰 : " +jwt);
+        Map<String, String> result = new HashMap<>();
+        result.put("refreshToken", jwt);
+        result.put("refreshTokenExpirationAt", refreshTokenExpirationAt);
+        return result;
     }
 }
