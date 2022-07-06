@@ -64,7 +64,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void kakaoLogin(String authorizedCode) {
+    public String kakaoLogin(String authorizedCode) {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
         Long kakaoId = userInfo.getId();
@@ -92,13 +92,15 @@ public class UserService {
             kakaoUser = new User(username, encodedPassword, nickname, kakaoId, profilePic);
             userRepository.save(kakaoUser);
         }
-        jwtProvider.createKakaoAccessToken(username,password);
+        String jwt = jwtProvider.createKakaoAccessToken(username,password);
         jwtProvider.createKakaoRefreshToken(username,password);
 
         // 로그인 처리
         Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwt;
     }
 
     //아이디, 닉네임 중복 체크

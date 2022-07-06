@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -59,9 +61,14 @@ public class UserController {
     }
 
     @GetMapping("/user/kakao/callback")
-    public String kakaoLogin(String code) {
+    public String kakaoLogin(String code, HttpServletResponse httpServletResponse) {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
-        userService.kakaoLogin(code);
+        String jwt = userService.kakaoLogin(code);
+        //카카오 로그인 시 발급 받은 토큰으로 쿠키 만들어서 클라이언트로 넘겨주는 코드
+        Cookie cookie = new Cookie("mytoken",jwt);
+        cookie.setMaxAge(60*60*12); //토큰 12시간 지속
+        cookie.setPath("/");
+        httpServletResponse.addCookie(cookie);
 
         return "redirect:/";
     }
