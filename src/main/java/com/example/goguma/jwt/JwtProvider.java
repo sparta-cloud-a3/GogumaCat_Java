@@ -4,7 +4,6 @@ import com.example.goguma.dto.UserRequestDto;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.UserDetailsServiceImpl;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
