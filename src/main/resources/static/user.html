@@ -207,7 +207,7 @@
                         <strong>[[${nickname}]]</strong> <small>[[${username}]]</small>
                         <br>
                         [[${profileInfo}]]
-                        <div th:if="${not #strings.isEmpty(kakaoId)}">
+                        <div th:if="${not #strings.isEmpty(kakaoId)} and ${id}==${pageUserId}">
                             <span class="help" onclick="kakao_pw_check()" style="cursor:pointer;">
                                 <i class="fa fa-lock"></i> 초기 비밀번호</span>
                         </div>
