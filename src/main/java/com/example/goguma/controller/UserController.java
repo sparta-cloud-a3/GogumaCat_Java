@@ -121,7 +121,6 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public Long deleteUser(@PathVariable Long id){
-       //delete 할 때 initDB 에서 에러가 나길래 initDB 주석 처리 했습니다. cascade 넣고 나서 에러가 뜨는 것 같아요 ㅠ
        likeService.deleteLike(id);
        postService.deleteAllPost(id);
        userService.delete(id);
