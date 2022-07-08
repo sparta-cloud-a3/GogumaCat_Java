@@ -2,6 +2,8 @@ package com.example.goguma.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -17,10 +19,12 @@ public class Like extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public Like(Post post, User user) {

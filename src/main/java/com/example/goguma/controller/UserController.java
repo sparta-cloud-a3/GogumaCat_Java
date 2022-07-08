@@ -4,6 +4,8 @@ import com.example.goguma.dto.*;
 import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostRepository;
 import com.example.goguma.service.AuthService;
+import com.example.goguma.service.LikeService;
+import com.example.goguma.service.PostService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,8 @@ public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
-    private final LikeRepository likeRepository;
-    private final PostRepository postRepository;
+    private final LikeService likeService;
+    private final PostService postService;
 
     //회원 로그인
     @PostMapping("/user/login1")
@@ -119,10 +121,10 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public Long deleteUser(@PathVariable Long id){
-       userService.delete(id);
        //delete 할 때 initDB 에서 에러가 나길래 initDB 주석 처리 했습니다. cascade 넣고 나서 에러가 뜨는 것 같아요 ㅠ
-//       likeRepository.deleteByUserId(id);
-//       postRepository.deleteByUserId(id);
+       likeService.deleteLike(id);
+       postService.deleteAllPost(id);
+       userService.delete(id);
        return id;
 
     }

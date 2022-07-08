@@ -124,13 +124,28 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId) {
+    public void  deletePost(Long postId) {
         likeRepository.deleteByPostId(postId);
-        List<PostImg> temp = postImgRepository.findByPostId(postId);
-        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
-        s3Service.delete(spliturl[1]);
+//        List<PostImg> temp = postImgRepository.findByPostId(postId);
+//        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//        s3Service.delete(spliturl[1]);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
+    }
+
+    @Transactional
+    public void deleteAllPost(Long userId) {
+        likeRepository.deleteByUserId(userId);
+//        List<PostImg> temp = postImgRepository.findByPostId(postId);
+//        String[] spliturl = temp.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+//        s3Service.delete(spliturl[1]);
+        List<Post> post = postRepository.findByUserId(userId);
+        for(int i=0; i<post.size();i++){
+            Long postId =post.get(i).getId();
+            postImgRepository.deleteAllByPostId(postId);
+        }
+
+        postRepository.deleteByUserId(userId);
     }
 
     @Transactional
