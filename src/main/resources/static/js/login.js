@@ -29,6 +29,15 @@ function sign_in() {
         success: function (response) {
             $.cookie('mytoken', response, {path: '/'});
             window.location.replace("/")
+        },
+        error : function (response){
+            alert("ID와 PW를 확인해 주세요.")
+            $("#input-username").focus()
+            $("#input-username").val("")
+            $("#input-password").val("")
+
+
+
         }
     });
 }
