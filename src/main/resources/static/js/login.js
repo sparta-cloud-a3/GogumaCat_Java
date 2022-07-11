@@ -36,8 +36,6 @@ function sign_in() {
             $("#input-username").val("")
             $("#input-password").val("")
 
-
-
         }
     });
 }

@@ -34,7 +34,7 @@
                 canvas : document.querySelector('.main-canvas'),
                 context : document.querySelector('.main-canvas').getContext('2d'),
                 image_path : [
-                    '/static/img/logo-image.jpg'
+                    '/img/logo-image.jpg'
                 ],
                 image : []
             } ,
