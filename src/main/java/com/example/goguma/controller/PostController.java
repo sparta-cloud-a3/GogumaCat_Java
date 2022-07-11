@@ -6,9 +6,11 @@ import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 
 import com.example.goguma.repository.LikeRepository;
+import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
 import com.example.goguma.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +34,11 @@ public class PostController {
      * 회원이 게시물을 선택하면 상세페이지를 보여준다.
      * @param postId
      * @param model // response: 게시물 정보
-     * @param token // 로그인 계정 정보
      * @return post.html
      */
     @RequestMapping("/post/{postId}")
-    public String getOnePost(@PathVariable Long postId, Model model, @CookieValue(name = "mytoken") String token) {
-        User info = jwtProvider.getUser(token);
+    public String getOnePost(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User info = userDetails.getUser();
         model.addAttribute("post", postService.getOnePost(postId));
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("userId", info.getId());
@@ -48,8 +49,8 @@ public class PostController {
 
     @PostMapping(value = "/user_post", consumes = {"multipart/form-data"})
     @ResponseBody
-    public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @CookieValue(name = "mytoken") String token){
-        User info = jwtProvider.getUser(token);
+    public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User info = userDetails.getUser();
         return postService.registerPost(postRequestDto, info.getId());
     }
 
