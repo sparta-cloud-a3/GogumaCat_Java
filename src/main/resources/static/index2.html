@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>GOGUMAKET</title>
+    <!-- 구글 폰트-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;900&display=swap" rel="stylesheet">
+    <!-- 폰트어썸아이콘 -->
+    <script src="https://kit.fontawesome.com/ceef4dd32d.js" crossorigin="anonymous"></script>
+    <!--css연결-->
+    <link rel="stylesheet" href="/static/css/default.css">
+    <link rel="stylesheet" href="/static/css/index2.css">
+</head>
+<body>
+<div class="container"> <!--전체 컨테이너-->
+    <div id="loding"><!-- 첫 로딩 박스-->
+        <div id="box">
+            <p class="loding-logo">GOGUMACAT</p>
+        </div>
+        <div id="white-box"></div>
+    </div>
+    <div class="logo-container">
+        <div class="logo-nav">
+            <a href="/" id="logo"><img src="/static/img/logo.png"></a>
+            <nav class="main-nav">
+                <!--상단 메뉴바-->
+                <div class="main-nav-list">
+                    <a href="#" class="nav-tag" style="color: #c786a4;">중고대여</a>
+                    <a href="#" class="nav-tag">재능기부</a>
+                </div>
+            </nav>
+            <div class="search-bar">
+                <input type="text" class="search" placeholder="물품이나 동네를 검색해보세요">
+                <button class="search-bt" type="submit"><i class="fa fa-duotone fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <section class="scroll-section" id="section-0" style="height: 100vh;"><!--첫번째 섹션(동적, 그림과 메인 타잍르)-->
+        <canvas class="main-canvas"></canvas>
+        <div class="main-message">
+            <p class="a">사지말고 빌려보세요<br>팔지말고 빌려주세요.</p>
+            <h1 class="b">GOGU MAKET</h1>
+        </div>
+    </section>
+
+    <section class="scroll-section" id="section-1"><!--2번째 섹션 (정적, 텍스트만)-->
+        <p class="introduce">
+            팔기는 아까운데 쓸 일은 없고 사기엔 고민되는 물건!<br>
+            지금 대여해 보세요!<br><br>
+            프로는 아니지만 자랑스러운 자신의 재능<br>
+            필요한 사람에게 제공해주세요!<br>
+            적절한 부수입과 흥미로운 취미생활 <br>고구마캣이 함께합니다.
+        </p>
+    </section>
+
+    <section class="scroll-section" id="section-2"><!--3번째 섹션(동적, opacity,transform활용)-->
+        <div class="section-2-inner">
+            <div class="desc-0">
+                <p class="desc-0-small"><small>중고대여</small></p>
+                <p class="desc-0-p">
+                    우리 동네에서 대여하기<br>
+                    동네를 등록하고<br>
+                    대여를 시작해보세요<br>
+                </p>
+            </div>
+            <div class="desc-img">
+                <img class="desc-img-a" src="/static/img/desc-img1.png">
+            </div>
+            <div class="desc-img-2">
+                <img class="desc-img-b" src="/static/img/desc-img2.png">
+            </div>
+            <div class="desc-0-a">
+                <p>마켓거래로 <br>
+                    파손,도난 걱정없이<br>
+                    거래하세요</p>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="scroll-section" id="section-3"><!--4번째 섹션 (동적, 작은이미지가 확대,글은 3번재 섹션 효과와 동일)-->
+        <div class="section-3-inner">
+            <div class="desc-1">
+                <p class="desc-1-small"><small>재능 기부</small></p>
+                <p class="desc-1-p">
+                    프로만큼은 <br> 아니지만
+                </p>
+            </div>
+            <div class="desc-1-img">
+                <img src="/static/img/section3-0.jpg">
+            </div>
+            <div class="desc-2-img">
+                <img src="/static/img/section3-1.jpg">
+            </div>
+            <div class="desc-2">
+                <p class="desc-2-p">전문가의 손길만큼도 <br> 아니지만</p>
+            </div>
+            <div class="desc-3">
+                <p class="desc-3-p">당신의 재능을 <br>필요로 합니다</p>
+            </div>
+            <div class="desc-3-img">
+                <img src="/static/img/section3-2.jpg" alt="">
+            </div>
+        </div>
+
+    </section>
+
+    <section class="scroll-section" id="section-4"><!--5번째 섹션 ( 정적 , 목록 리스트의 사진, 글 제목 등 불러오기)-->
+        <div class="product-list">
+            <h2>인기 대여 목록</h2>
+            <div class="card-wrap">
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마캣</p>
+                            <p class="card-price">3,000원</p>
+                            <p class="card-address">서울</p>
+                            <p class="card-text">관심 5</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마캣</p>
+                            <p class="card-price">3,000원</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마캣</p>
+                            <p class="card-price">3,000원</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마캣</p>
+                            <p class="card-price">3,000원</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+
+            </div>
+        </div>
+        <div class="gift-list">
+            <h2>인기 재능 기부</h2>
+            <div class="gift-wrap">
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마 잘먹음</p>
+                            <p class="card-price">무료</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마 잘먹음</p>
+                            <p class="card-price">무료</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마 잘먹음</p>
+                            <p class="card-price">무료</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+                <article class="card">
+                    <a href="#" class="crad-link">
+                        <div class="card-img">
+                            <img src="/static/img/backgrond.png" alt="title">
+                        </div>
+                        <div class="card-desc">
+                            <p class="card-title">고구마 잘먹음</p>
+                            <p class="card-price">무료</p>
+                            <p class="card-address">서울</p>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer"><!--마지막 바닥글(정적,저작권이나 연락처 등 적게되는 요소) -->
+        <div class="footer-container">
+            <div class="footer-logo">
+                <img src="/static/img/logo.png" class="end-logo">
+            </div>
+            <ul>
+                <li><a href="#">신뢰있는 대여 사이트</a></li>
+                <li><a href="#">신고하기</a></li>
+            </ul>
+            <ul>
+                <li><a href="#">고객센터</a></li>
+                <li><a href="#">이용약관</a></li>
+            </ul>
+
+            <p>내일배움캠프 A-3팀 MSG<br>
+                손홍서(팀장),김우남,황승호,이호인</p>
+
+        </div>
+    </footer>
+</div>
+
+<script src="/static/js/index2.js"></script>
+<!--<script src="/static/js/index3.js"></script>-->
+</body>
+</html>
