@@ -20,7 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
@@ -76,7 +75,6 @@ public class PostService {
         return postResponseDto;
     }
 
-    @Transactional
     public Post registerPost(PostRequestDto postRequestDto, Long userId) {
         String title = postRequestDto.getTitle();
         int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));

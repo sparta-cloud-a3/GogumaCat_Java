@@ -42,7 +42,6 @@ public class ChatRoomController {
      * if 작성자가 아니라면(소비자라면) -> 채팅을 보낼 수 있도록 채팅방을 열러줌
      * @param postId
      * @param model
-     * @param userDetails
      * @return 각자에 맞는 view를 리턴
      */
     @GetMapping("/room/enter/{postId}")
@@ -53,6 +52,7 @@ public class ChatRoomController {
             if (chatService.isCustomer(info, postId)) { //만약 소비자라면 -> 새로운 방을 생성
                 model.addAttribute("nickname", info.getNickname());
                 model.addAttribute("roomId", chatService.createRoom(info, postId));
+                model.addAttribute("isSeller", false);
                 return "/roomdetail";
             } else { // 만약 판매자라면 -> 연락온 리스트를 리턴
                 model.addAttribute("nickname", info.getNickname());
@@ -62,6 +62,7 @@ public class ChatRoomController {
         } else {//이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
             model.addAttribute("nickname", info.getNickname());
             model.addAttribute("roomId", existsRoom.getRoomId());
+            model.addAttribute("isSeller", false);
             return "/roomdetail";
         }
     }

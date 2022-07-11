@@ -12,12 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ChatRepository chatRepository;
-
 
     public String order(String roomId) {
         ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
@@ -25,14 +23,20 @@ public class OrderService {
         );
 
         Post post = chatRoom.getPost();
+
+        //판매완료
+        post.sold(true);
+
         String[] dateSplit = post.getDate().split("~");
         String startDate = dateSplit[0].trim();
         String endDate = dateSplit[1].trim();
+
         int price = post.getPrice();
         User customer = chatRoom.getUser();
 
-
         orderRepository.save(new Order(startDate, endDate, price, post, customer));
+
+        //구매자한테 알림
 
         return customer.getNickname() + "님과 거래가 되었습니다!";
     }
