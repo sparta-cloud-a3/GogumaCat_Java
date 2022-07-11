@@ -96,11 +96,6 @@ public class UserService {
         String jwt = jwtProvider.createKakaoAccessToken(username,password);
         jwtProvider.createKakaoRefreshToken(username,password);
 
-        // 로그인 처리
-        Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
         return jwt;
     }
 
