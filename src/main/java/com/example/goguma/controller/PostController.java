@@ -2,6 +2,7 @@ package com.example.goguma.controller;
 
 import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 
 import com.example.goguma.repository.LikeRepository;
@@ -23,7 +24,7 @@ import java.util.List;
 public class PostController {
     private final PostService postService;
     private final LikeRepository likeRepository;
-    private final UserService userService;
+    private final JwtProvider jwtProvider;
 
     @GetMapping("/all")
     @ResponseBody
@@ -35,13 +36,13 @@ public class PostController {
      * 회원이 게시물을 선택하면 상세페이지를 보여준다.
      * @param postId
      * @param model // response: 게시물 정보
-     * @param userDetails // 로그인 계정 정보
+     * @param token // 로그인 계정 정보
      * @return post.html
      */
     @RequestMapping("/post/{postId}")
-    public String getOnePost(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String getOnePost(@PathVariable Long postId, Model model, @CookieValue(name = "mytoken") String token) {
+        User info = jwtProvider.getUser(token);
         model.addAttribute("post", postService.getOnePost(postId));
-        User info = userService.profile(userDetails.getId());
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("userId", info.getId());
         model.addAttribute("likeByMe", likeRepository.existsByuserIdAndPostId(info.getId(), postId));
@@ -51,8 +52,9 @@ public class PostController {
 
     @PostMapping(value = "/user_post", consumes = {"multipart/form-data"})
     @ResponseBody
-    public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return postService.registerPost(postRequestDto, userDetails.getId());
+    public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @CookieValue(name = "mytoken") String token){
+        User info = jwtProvider.getUser(token);
+        return postService.registerPost(postRequestDto, info.getId());
     }
 
     @DeleteMapping("post/delete/{postId}")
@@ -62,7 +64,7 @@ public class PostController {
     }
 
     @RequestMapping("/posting_update/{postId}")
-    public String updatePostPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String updatePostPage(@PathVariable Long postId, Model model) {
         model.addAttribute("post", postService.getOnePost(postId));
         return "posting_update";
     }
