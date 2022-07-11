@@ -1,6 +1,5 @@
 package com.example.goguma.service;
 
-import com.example.goguma.dto.TokenDto;
 import com.example.goguma.dto.UserRequestDto;
 import com.example.goguma.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @Transactional

@@ -5,10 +5,8 @@ import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.ChatRepository;
 import com.example.goguma.repository.PostRepository;
-import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +19,6 @@ import java.util.*;
 public class ChatService {
 
     private final ChatRepository chatRepository;
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
 
     /**
