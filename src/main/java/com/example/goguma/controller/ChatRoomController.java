@@ -96,7 +96,6 @@ public class ChatRoomController {
      * @param model
      * @param roomId
      * @param response
-     * @param userDetails
      * @return
      * @throws IOException
      */
