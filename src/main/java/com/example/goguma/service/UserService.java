@@ -75,8 +75,8 @@ public class UserService {
             kakaoUser = new User(username, encodedPassword, nickname, kakaoId, profilePic);
             userRepository.save(kakaoUser);
         }
-        String jwt = jwtProvider.createKakaoAccessToken(username,password);
-        jwtProvider.createKakaoRefreshToken(username,password);
+        String jwt = jwtProvider.createKakaoAccessToken(username);
+        jwtProvider.createKakaoRefreshToken(username);
 
         return jwt;
     }
