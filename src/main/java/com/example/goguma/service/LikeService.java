@@ -33,4 +33,9 @@ public class LikeService {
     public void updateLikeCount(Post post, String action){
         post.updateLikeCount(action);
     }
+
+    @Transactional
+    public void deleteLike(Long userId){
+        likeRepository.deleteByUserId(userId);
+    }
 }

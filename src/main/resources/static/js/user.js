@@ -1,5 +1,6 @@
 function sign_out() {
     alert('다음에 또 뵙겠습니다. ^^')
+    $.removeCookie('mytoken',{path:'/'})
     window.location.href = "/user/logout"
 }
 

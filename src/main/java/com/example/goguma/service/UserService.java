@@ -2,6 +2,7 @@ package com.example.goguma.service;
 
 import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,7 @@ public class UserService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final LikeRepository likeRepository;
+    private final JwtProvider jwtProvider;
 
     public void registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
@@ -62,7 +65,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void kakaoLogin(String authorizedCode) {
+    public String kakaoLogin(String authorizedCode) {
         // 카카오 OAuth2 를 통해 카카오 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuth2.getUserInfo(authorizedCode);
         Long kakaoId = userInfo.getId();
@@ -90,11 +93,15 @@ public class UserService {
             kakaoUser = new User(username, encodedPassword, nickname, kakaoId, profilePic);
             userRepository.save(kakaoUser);
         }
+        String jwt = jwtProvider.createKakaoAccessToken(username,password);
+        jwtProvider.createKakaoRefreshToken(username,password);
 
         // 로그인 처리
         Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return jwt;
     }
 
     //아이디, 닉네임 중복 체크
@@ -171,5 +178,11 @@ public class UserService {
         }
 
         return posts;
+    }
+
+    @Transactional
+    public Long delete(Long id){
+        userRepository.deleteById(id);
+        return id;
     }
 }

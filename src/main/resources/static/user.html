@@ -70,6 +70,58 @@
                 }
             });
         }
+
+        function check_delete() {
+            let nickname = [[${nickname}]]
+            let pw = $("#input-check-pw-delete").val();
+
+            if (pw == "") {
+                $("#help-check-password").text("비밀번호를 입력해주세요.")
+                $("#input-check-pw-delete").focus()
+                return
+            } else {
+                $("#input-check-pw-delete").val("")
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/profileinfo/check",
+                data: {
+                    'password': pw,
+                    'nickname': nickname
+                },
+                success: function (result) {
+                    console.log(result)
+                    if (result) {
+                        $("#help-check-password-delete").removeClass("is-danger")
+                        $("#help-check-password-delete").text("비밀번호를 입력해주세요.")
+                        $("#modal-check-pw-delete").removeClass("is-active")
+                        $("#modal-edit-delete").addClass("is-active")
+                    } else {
+                        $("#help-check-password-delete").text("비밀번호가 틀렸습니다.")
+                        $("#help-check-password-delete").addClass("is-danger")
+                        $("#input-check-pw-delete").val("")
+                    }
+                }
+            });
+        }
+
+        function userdelete() {
+            let id = [[${id}]]
+            $.ajax({
+                type: "DELETE",
+                url: `/delete/${id}`,
+                data: {'id': id},
+                success: function (response){
+                    alert("이용해 주셔서 감사합니다.")
+                    $.removeCookie('mytoken',{path:'/'})
+                    window.location.href = "/user/login"
+                }
+
+            })
+
+        }
+
         function update_profile(old_nickname) {
             let id = [[${id}]]
             let name = $('#input-nickname').val()
@@ -207,7 +259,7 @@
                         <strong>[[${nickname}]]</strong> <small>[[${username}]]</small>
                         <br>
                         [[${profileInfo}]]
-                        <div th:if="${not #strings.isEmpty(kakaoId)}">
+                        <div th:if="${not #strings.isEmpty(kakaoId)} and ${id}==${pageUserId}">
                             <span class="help" onclick="kakao_pw_check()" style="cursor:pointer;">
                                 <i class="fa fa-lock"></i> 초기 비밀번호</span>
                         </div>
@@ -227,6 +279,7 @@
                     로그아웃&nbsp;&nbsp;&nbsp;<span class="icon is-small"><i class="fa fa-sign-out" aria-hidden="true"></i></span>
                 </a>
             </nav>
+            <small class="help" style="cursor:pointer;" onclick='$("#modal-check-pw-delete").addClass("is-active")'>회원탈퇴</small>
             <!--정보수정 전에 비밀번호를 통해 확인하는 모달-->
             <div class="modal" id="modal-check-pw">
                 <div class="modal-background" onclick='$("#modal-check-pw").removeClass("is-active")'></div>
@@ -250,6 +303,52 @@
                 <button class="modal-close is-large" aria-label="close"
                         onclick='$("#modal-check-pw").removeClass("is-active")'></button>
             </div>
+            <!-- 회원탈퇴 전 비밀번호 확인-->
+            <div class="modal" id="modal-check-pw-delete">
+                <div class="modal-background" onclick='$("#modal-check-pw-delete").removeClass("is-active")'></div>
+                <div class="modal-content">
+                    <div class="box">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="field">
+                                    <label class="label" for="input-check-pw">비밀번호</label>
+                                    <p>
+                                        <input id="input-check-pw-delete" class="input" type="password"
+                                               value="" style="width: 520px">
+                                        <button class="button is-light" style="float: right" th:onclick="check_delete()">확인
+                                        </button>
+                                    <p id="help-check-password-delete" class="help">회원탈퇴를 위해 비밀번호를 입력해주세요.</p>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"
+                        onclick='$("#modal-check-pw-delete").removeClass("is-active")'></button>
+            </div>
+            <!--회원탈퇴 최종 확인-->
+            <div class="modal" id="modal-edit-delete">
+                <div class="modal-background" onclick='$("#modal-edit-delete").removeClass("is-active")'></div>
+                <div class="modal-content">
+                    <div class="box">
+                        <article class="media">
+                            <div class="media-content">
+                                <div class="field">
+                                    <label class="label" for="input-check-pw">탈퇴하시겠습니까?</label>
+                                    <div style="float: right">
+                                        <button class="button is-light" th:onclick="userdelete()">확인
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick='$("#modal-edit-delete").removeClass("is-active")'>취소</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <button class="modal-close is-large" aria-label="close"
+                        onclick='$("#modal-edit-delete").removeClass("is-active")'></button>
+            </div>
+
             <!--정보수정 전에 비밀번호를 통해 확인하는 모달-->
             <div class="modal" id="modal-edit">
                 <div class="modal-background" onclick='$("#modal-edit").removeClass("is-active")'></div>
