@@ -17,6 +17,8 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ChatRepository chatRepository;
+
+
     public String order(String roomId) {
         ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
