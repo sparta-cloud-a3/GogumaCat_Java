@@ -29,18 +29,6 @@ public class UserDetailsImpl implements UserDetails {
         return null;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    //닉네임 가져오기 추가. UserDetails 자체에 getNickname()이 없어서 Override가 아닌 그냥 작성인 듯!
-    public Long getId() { return  user.getId();}
-    public String getNickname() { return user.getNickname(); }
-    public String getProfilePic() { return user.getProfilePic(); }
-    public String getProfileInfo() { return user.getProfileInfo(); }
-    public String getAddress() { return user.getAddress(); }
-    public Long getKakaoId() { return user.getKakaoId();}
-
     @Override
     public boolean isAccountNonExpired() {
         return true;

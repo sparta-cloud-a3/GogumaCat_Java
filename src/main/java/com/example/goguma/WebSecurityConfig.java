@@ -53,20 +53,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-//                .anyRequest().authenticated()
-//                .and()
-//                .formLogin()
-//                .loginPage("/user/login")
-//                .loginProcessingUrl("/user/login")
-//                .defaultSuccessUrl("/")
-//                .permitAll()
-//                .and()
-//                .logout()
-//                .logoutUrl("/user/logout")
-//                .permitAll()
-//                .and()
-//                .exceptionHandling()
-//                .accessDeniedPage("/user/forbidden");
     }
 
     @Bean

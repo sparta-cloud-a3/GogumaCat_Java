@@ -7,7 +7,6 @@ import com.example.goguma.model.Post;
 
 import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.service.PostService;
-
 import com.example.goguma.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

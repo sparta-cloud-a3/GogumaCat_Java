@@ -154,7 +154,7 @@ public class JwtProvider {
     }
 
     @Transactional
-    public String createKakaoAccessToken(String username, String password) {
+    public String createKakaoAccessToken(String username) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
 
@@ -186,7 +186,7 @@ public class JwtProvider {
     }
 
     @Transactional
-    public Map<String, String> createKakaoRefreshToken(String username, String password) {
+    public Map<String, String> createKakaoRefreshToken(String username) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("type", "token");
 

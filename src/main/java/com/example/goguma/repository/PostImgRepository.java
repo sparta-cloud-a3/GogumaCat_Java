@@ -1,6 +1,5 @@
 package com.example.goguma.repository;
 
-import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import org.springframework.data.jpa.repository.JpaRepository;
 
