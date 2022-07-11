@@ -34,8 +34,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
-    private final AuthenticationManager authenticationManager;
-    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final LikeRepository likeRepository;
@@ -45,21 +43,9 @@ public class UserService {
         String username = requestDto.getUsername();
         String nickname = requestDto.getNickname();
 
-        // 회원 ID 중복 확인
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
-        }
-        //닉네임 중복 확인
-        Optional<User> foundNick = userRepository.findByNickname(nickname);
-        if (foundNick.isPresent()) {
-            throw new IllegalArgumentException("현재 닉네임이 존재합니다.");
-        }
-
         // 패스워드 인코딩
         String password = passwordEncoder.encode(requestDto.getPassword());
         String address = requestDto.getAddress();
-
 
         User user = new User(username, password, nickname, address);
         userRepository.save(user);
