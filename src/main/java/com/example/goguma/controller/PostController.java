@@ -6,13 +6,9 @@ import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 
 import com.example.goguma.repository.LikeRepository;
-import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
-
 import com.example.goguma.model.User;
-import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
