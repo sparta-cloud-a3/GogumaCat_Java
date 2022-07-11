@@ -42,7 +42,7 @@
 </head>
 <body>
 <div class="container" id="app" v-cloak>
-    <button v-if = "" onclick="order()" style="background-color: #ba55d3">이 사람과 거래하기</button>
+    <button v-if = "isSeller == 'true'" onclick="order()" style="background-color: #ba55d3">이 사람과 거래하기</button>
     <div class="content">
         <ul class="list-group"  v-for="message in messages.slice().reverse()">
             <li v-if = "message.sender != nickname" class="list-group-item" style="background-color: #ba55d3">

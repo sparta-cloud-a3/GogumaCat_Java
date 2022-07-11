@@ -47,23 +47,25 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{postId}")
     public String rooms(@PathVariable Long postId, Model model, @CookieValue(name = "mytoken") String token) {
         User info = jwtProvider.getUser(token);
+
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
-        if ( existsRoom == null) { //생성된 방이 아니라면
-            if (chatService.isCustomer(info, postId)) { //만약 소비자라면 -> 새로운 방을 생성
+        if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
+            if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
                 model.addAttribute("nickname", info.getNickname());
                 model.addAttribute("roomId", chatService.createRoom(info, postId));
                 model.addAttribute("isSeller", false);
                 return "/roomdetail";
-            } else { // 만약 판매자라면 -> 연락온 리스트를 리턴
+            } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
                 model.addAttribute("nickname", info.getNickname());
-                model.addAttribute("postId", postId);
-                return "/room";
+                model.addAttribute("roomId", existsRoom.getRoomId());
+                model.addAttribute("isSeller", false);
+                return "/roomdetail";
             }
-        } else {//이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
+        } else {
+            // 만약 판매자라면 -> 연락온 리스트를 리턴
             model.addAttribute("nickname", info.getNickname());
-            model.addAttribute("roomId", existsRoom.getRoomId());
-            model.addAttribute("isSeller", false);
-            return "/roomdetail";
+            model.addAttribute("postId", postId);
+            return "/room";
         }
     }
 
@@ -116,6 +118,7 @@ public class ChatRoomController {
         User info = jwtProvider.getUser(token);
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("roomId", roomId);
+        model.addAttribute("isSeller", chatService.isSeller(info, roomId));
         return "/roomdetail";
     }
 
