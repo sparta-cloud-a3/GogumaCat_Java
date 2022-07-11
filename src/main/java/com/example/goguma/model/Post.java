@@ -104,4 +104,8 @@ public class Post extends Timestamped {
             likeCount--;
         }
     }
+
+    public void sold(boolean isSold) {
+        this.isSold = isSold;
+    }
 }

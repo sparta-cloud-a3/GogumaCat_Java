@@ -16,7 +16,7 @@ public class OrderController {
 
     @ResponseBody
     @PostMapping("/order")
-    public String updateLike(@RequestParam String roomId) {
+    public String order(@RequestParam String roomId) {
         return orderService.order(roomId);
     }
 }
