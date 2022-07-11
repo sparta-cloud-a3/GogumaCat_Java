@@ -50,11 +50,6 @@ public class UserController {
         return "redirect:/";
     }
 
-    @GetMapping("/user/forbidden")
-    public String forbidden() {
-        return "forbidden";
-    }
-
     @GetMapping("/user/kakao/callback")
     public String kakaoLogin(String code, HttpServletResponse httpServletResponse) {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
