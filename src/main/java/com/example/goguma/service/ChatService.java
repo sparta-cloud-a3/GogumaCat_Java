@@ -98,6 +98,14 @@ public class ChatService {
         return chatRepository.findByPostId(postId);
     }
 
+    public boolean isSeller(User user, String roomId) {
+        ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+        );
+
+        return chatRoom.getPost().getUser().equals(user);
+    }
+
 //    //채팅방 전체 불러오기
 //    public List<ChatRoom> findAllRoom() {
 //        return chatRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId"));

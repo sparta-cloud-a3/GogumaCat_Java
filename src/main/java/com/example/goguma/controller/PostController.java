@@ -6,13 +6,10 @@ import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 
 import com.example.goguma.repository.LikeRepository;
-import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
 
 import com.example.goguma.model.User;
-import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -79,10 +76,10 @@ public class PostController {
     //order, page는 ajax에 있길래 일단 가져오긴 했는데 페이지랑 최신순,관심순 정렬하는 부분인가요?
     @ResponseBody
     @GetMapping("/search")
-    public List<PostResponseDto> Titlesearch(@RequestParam(value = "query") String query,
+    public List<PostResponseDto> search(@RequestParam(value = "query") String query,
                                              @RequestParam(value = "order") String order, @RequestParam(value = "page") String page){
 
-        return postService.getTitlePosts(query);
+        return postService.getSearchPosts(query);
     }
 
 }
