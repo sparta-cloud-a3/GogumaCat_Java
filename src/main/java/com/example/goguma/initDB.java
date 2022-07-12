@@ -40,6 +40,7 @@ public class initDB {
 
             em.persist(user1);
             em.persist(user2);
+            em.persist(user3);
 
             em.flush();
             em.clear();
