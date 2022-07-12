@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
 
-    @Transactional
     public void updateLike(Long postId, String action, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
@@ -29,12 +28,10 @@ public class LikeService {
         updateLikeCount(post, action);
     }
 
-    @Transactional
     public void updateLikeCount(Post post, String action){
         post.updateLikeCount(action);
     }
 
-    @Transactional
     public void deleteLike(Long userId){
         likeRepository.deleteByUserId(userId);
     }

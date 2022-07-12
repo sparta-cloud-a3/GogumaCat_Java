@@ -9,6 +9,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUserId(Long userId);
 
     List<Post> findByTitleContainingOrContentContaining(String title, String content);
-
-    void deleteByUserId(Long userId);
 }

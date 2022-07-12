@@ -4,12 +4,6 @@ import com.example.goguma.dto.PasswordCheckDto;
 import com.example.goguma.dto.ProfileUpdateDto;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +14,6 @@ import java.util.Optional;
 public class PwService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     public PwService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -44,6 +36,6 @@ public class PwService {
         );
         String password = passwordEncoder.encode(profileUpdateDto.getPassword());
 
-        user.update(profileUpdateDto,password);
+        user.update(profileUpdateDto, password);
     }
 }

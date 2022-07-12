@@ -1,17 +1,12 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.dto.*;
-import com.example.goguma.repository.LikeRepository;
-import com.example.goguma.repository.PostRepository;
 import com.example.goguma.service.AuthService;
 import com.example.goguma.service.LikeService;
 import com.example.goguma.service.PostService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -42,12 +37,6 @@ public class UserController {
         return "login";
     }
 
-    @GetMapping("/user/login/error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login";
-    }
-
     // 회원 가입 페이지
     @GetMapping("/user/signup")
     public String signup() {
@@ -59,11 +48,6 @@ public class UserController {
     public String registerUser(SignupRequestDto requestDto) {
         userService.registerUser(requestDto);
         return "redirect:/";
-    }
-
-    @GetMapping("/user/forbidden")
-    public String forbidden() {
-        return "forbidden";
     }
 
     @GetMapping("/user/kakao/callback")
@@ -83,7 +67,6 @@ public class UserController {
     @PostMapping ("/user/sign_up/check_dup")
     public int checkUser(CheckRequestDto requestDto){
         int result = userService.checkUser(requestDto);
-        System.out.println(result);
         return result;
     }
 
@@ -91,7 +74,6 @@ public class UserController {
     @PostMapping("/user/sign_up/check_dup_nick")
     public int checkNickname (CheckRequestDto requestDto){
         int result = userService.checkNickname(requestDto);
-        System.out.println(result);
         return result;
     }
 

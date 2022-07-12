@@ -29,4 +29,18 @@ public class Order extends Timestamped{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private User user;
+
+    public Order(String startDate, String endDate, int price) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.price = price;
+    }
+
+    public void addCustomer(User user) {
+        this.user = user;
+    }
+
+    public void addPost(Post post) {
+        this.post = post;
+    }
 }

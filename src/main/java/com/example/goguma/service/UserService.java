@@ -16,10 +16,6 @@ import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
 import com.example.goguma.security.kakao.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +30,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
-    private final AuthenticationManager authenticationManager;
-    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final LikeRepository likeRepository;
@@ -45,21 +39,9 @@ public class UserService {
         String username = requestDto.getUsername();
         String nickname = requestDto.getNickname();
 
-        // 회원 ID 중복 확인
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 ID 가 존재합니다.");
-        }
-        //닉네임 중복 확인
-        Optional<User> foundNick = userRepository.findByNickname(nickname);
-        if (foundNick.isPresent()) {
-            throw new IllegalArgumentException("현재 닉네임이 존재합니다.");
-        }
-
         // 패스워드 인코딩
         String password = passwordEncoder.encode(requestDto.getPassword());
         String address = requestDto.getAddress();
-
 
         User user = new User(username, password, nickname, address);
         userRepository.save(user);
@@ -93,13 +75,8 @@ public class UserService {
             kakaoUser = new User(username, encodedPassword, nickname, kakaoId, profilePic);
             userRepository.save(kakaoUser);
         }
-        String jwt = jwtProvider.createKakaoAccessToken(username,password);
-        jwtProvider.createKakaoRefreshToken(username,password);
-
-        // 로그인 처리
-        Authentication kakaoUsernamePassword = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authenticationManager.authenticate(kakaoUsernamePassword);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtProvider.createKakaoAccessToken(username);
+        jwtProvider.createKakaoRefreshToken(username);
 
         return jwt;
     }

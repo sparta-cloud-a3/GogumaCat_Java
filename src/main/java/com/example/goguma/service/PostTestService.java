@@ -20,7 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PostTestService {
     private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
@@ -100,7 +99,6 @@ public class PostTestService {
         return postResponseDto;
     }
 
-    @Transactional
     public Post registerPost(PostRequestDto postRequestDto, Long userId) {
         String title = postRequestDto.getTitle();
         int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));
@@ -110,11 +108,15 @@ public class PostTestService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
         );
-        Post post = new Post(user, title, price, content, 0, address, date, false);
+
+        Post post = new Post(title, price, content, address, date);
+        post.addUser(user);
 
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
-            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+            PostImg postImg = new PostImg(postRequestDto.getFile().getName());
+            postImg.addPost(post);
+            postImgRepository.save(postImg);
         }
 
         return post;
@@ -139,7 +141,9 @@ public class PostTestService {
         //사진 변경(사진 한 장만 가능)
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
-            postImgRepository.save(new PostImg(postRequestDto.getFile().getName(),post));
+            PostImg postImg = new PostImg(postRequestDto.getFile().getName());
+            postImg.addPost(post);
+            postImgRepository.save(postImg);
         }
     }
 }

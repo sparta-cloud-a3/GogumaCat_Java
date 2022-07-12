@@ -42,6 +42,7 @@
 </head>
 <body>
 <div class="container" id="app" v-cloak>
+    <button v-if = "isSeller == 'true'" onclick="order()" style="background-color: #ba55d3">이 사람과 거래하기</button>
     <div class="content">
         <ul class="list-group"  v-for="message in messages.slice().reverse()">
             <li v-if = "message.sender != nickname" class="list-group-item" style="background-color: #ba55d3">
@@ -86,7 +87,8 @@
             sender: '',
             message: '',
             messages: [],
-            nickname: '[[${nickname}]]'
+            nickname: '[[${nickname}]]',
+            isSeller: '[[${isSeller}]]'
         },
         created() {
             this.roomId = '[[${roomId}]]';
@@ -132,6 +134,14 @@
         });
     }
     connect();
+
+    function order() {
+        roomId = String(vm.$data.roomId)
+        console.log(roomId)
+        axios.post('/order?roomId='+roomId).then(function(response) {
+            alert(response.data);
+        })
+    }
 </script>
 </body>
 </html>
