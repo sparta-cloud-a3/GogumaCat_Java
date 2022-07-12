@@ -33,11 +33,11 @@ public class User extends Timestamped {
         this.profilePic = profilePic;
         this.profileInfo = null;
     }
-    public void update(ProfileUpdateDto profileUpdateDto,String password){
+    public void update(ProfileUpdateDto profileUpdateDto,String password,String profilePic){
         this.nickname = profileUpdateDto.getNickname();
         this.password = password;
         this.address = profileUpdateDto.getAddress();
-        this.profilePic = profileUpdateDto.getProfilePic();
+        this.profilePic = profilePic;
         this.profileInfo = profileUpdateDto.getProfileInfo();
     }
 

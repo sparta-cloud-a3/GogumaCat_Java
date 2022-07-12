@@ -16,8 +16,8 @@ public class ProfileinfoController {
     public boolean password(PasswordCheckDto passwordCheckDto){
         return pwService.checkPw(passwordCheckDto);
     }
-    @PutMapping("/update_profile/{id}")
-    public Long updateProfile(@PathVariable Long id, @RequestBody ProfileUpdateDto profileUpdateDto){
+    @PutMapping(value = "/update_profile/{id}", consumes = {"multipart/form-data"})
+    public Long updateProfile(@PathVariable Long id, ProfileUpdateDto profileUpdateDto){
         pwService.update(id, profileUpdateDto);
         return id;
     }
