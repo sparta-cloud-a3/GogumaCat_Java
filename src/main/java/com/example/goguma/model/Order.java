@@ -30,11 +30,17 @@ public class Order extends Timestamped{
     @JoinColumn(name="user_id")
     private User user;
 
-    public Order(String startDate, String endDate, int price, Post post, User user) {
+    public Order(String startDate, String endDate, int price) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
-        this.post = post;
+    }
+
+    public void addCustomer(User user) {
         this.user = user;
+    }
+
+    public void addPost(Post post) {
+        this.post = post;
     }
 }

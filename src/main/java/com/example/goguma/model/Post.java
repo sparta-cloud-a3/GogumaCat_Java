@@ -44,25 +44,18 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private boolean isSold;
 
-    public Post(User user, String title, int price, String content, int likeCount, String address, String date, boolean isSold) {
-        this.user = user;
+    public Post(String title, int price, String content, String address, String date) {
         this.title = title;
         this.price = price;
         this.content = content;
-        this.likeCount = likeCount;
         this.address = address;
         this.date = date;
-        this.isSold = isSold;
+        this.likeCount = 0;
+        this.isSold = false;
     }
 
-    public Post(String title, int price, String content, int likeCount, String address, String date,boolean isSold) {
-        this.title = title;
-        this.price = price;
-        this.content = content;
-        this.likeCount = likeCount;
-        this.address = address;
-        this.date = date;
-        this.isSold = isSold;
+    public void addUser(User user) {
+        this.user = user;
     }
 
     @Override

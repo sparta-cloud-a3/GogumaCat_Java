@@ -84,7 +84,9 @@ public class PostService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
         );
-        Post post = new Post(user, title, price, content, 0, address, date, false);
+
+        Post post = new Post(title, price, content, address, date);
+        post.addUser(user);
 
         postRepository.save(post);
 
@@ -157,6 +159,9 @@ public class PostService {
     private void uploadImg(PostRequestDto postRequestDto, Post post) {
         String name = s3Service.uploadToAWS(postRequestDto.getFile());
         String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
-        postImgRepository.save(new PostImg(imgUrl, post));
+
+        PostImg postImg = new PostImg(imgUrl);
+        postImg.addPost(post);
+        postImgRepository.save(postImg);
     }
 }
