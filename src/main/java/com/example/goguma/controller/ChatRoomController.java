@@ -1,11 +1,9 @@
 package com.example.goguma.controller;
 
-import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
-import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,8 +21,6 @@ import java.util.Map;
 @RequestMapping("/chat")
 public class ChatRoomController {
     private final ChatService chatService;
-    private final UserService userService;
-    private final JwtProvider jwtProvider;
     private Map<String,Integer> map = new HashMap<String, Integer>();
 
     // 채팅 리스트 화면
@@ -46,8 +42,8 @@ public class ChatRoomController {
      * @return 각자에 맞는 view를 리턴
      */
     @GetMapping("/room/enter/{postId}")
-    public String rooms(@PathVariable Long postId, Model model, @CookieValue(name = "mytoken") String token) {
-        User info = jwtProvider.getUser(token);
+    public String rooms(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User info = userDetails.getUser();
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
         if ( existsRoom == null) { //생성된 방이 아니라면
             if (chatService.isCustomer(info, postId)) { //만약 소비자라면 -> 새로운 방을 생성
@@ -101,7 +97,7 @@ public class ChatRoomController {
      * @throws IOException
      */
     @GetMapping("/mypostroom/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response,@CookieValue(name = "mytoken") String token) throws IOException {
+    public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
 //        if(map.containsKey(roomId) == false){ //postId로 필터링된 리스트에서 판매자가 선택하는 구조니깐 어차피 두명만 가능
 //            map.put(roomId,1);
 //        }else{
@@ -113,7 +109,7 @@ public class ChatRoomController {
 //                return "/room";
 //            }
 //        }
-        User info = jwtProvider.getUser(token);
+        User info = userDetails.getUser();
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("roomId", roomId);
         return "/roomdetail";
