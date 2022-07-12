@@ -30,8 +30,7 @@ public class PostImg {
         this.img_url = img_url;
     }
 
-    public PostImg(String img_url, Post post) {
-        this.img_url = img_url;
+    public void addPost(Post post) {
         this.post = post;
     }
 

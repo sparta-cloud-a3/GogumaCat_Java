@@ -36,6 +36,6 @@ public class PwService {
         );
         String password = passwordEncoder.encode(profileUpdateDto.getPassword());
 
-        user.update(profileUpdateDto,password);
+        user.update(profileUpdateDto, password);
     }
 }

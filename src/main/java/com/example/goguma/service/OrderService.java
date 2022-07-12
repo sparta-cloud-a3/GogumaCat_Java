@@ -33,7 +33,11 @@ public class OrderService {
         int price = post.getPrice();
         User customer = chatRoom.getUser();
 
-        orderRepository.save(new Order(startDate, endDate, price, post, customer));
+        //주문 저장
+        Order order = new Order(startDate, endDate, price);
+        order.addCustomer(customer);
+        order.addPost(post);
+        orderRepository.save(order);
 
         //구매자한테 알림
 
