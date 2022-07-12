@@ -18,10 +18,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -59,7 +56,7 @@ public class JwtProvider {
                 .setClaims(payloads)          // payload
                 .setSubject("user")           // token 용도
                 .setExpiration(expiration)    // 토큰 만료 시간
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("Username이 존재하지 않습니다."));
@@ -87,7 +84,7 @@ public class JwtProvider {
                 .setClaims(payloads)
                 .setSubject("user")
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("Username이 존재하지 않습니다."));
@@ -101,16 +98,8 @@ public class JwtProvider {
 
     public String getUserInfo(String token) {
         // token 데이터를 시크릿 키를 이용하여 파싱하여 payload 안에 있는 username 가져옴
-        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        Claims body = Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(token).getBody();
         return (String) body.get("username");
-    }
-
-    public User getUser(String token) {
-        Claims body = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
-        String username = (String) body.get("username");
-        return userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
-        );
     }
 
     public Authentication getAuthentication(String token) {
@@ -134,7 +123,7 @@ public class JwtProvider {
 
     public boolean validateJwtToken(ServletRequest request, String authToken) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(authToken);
+            Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(authToken);
             return true;
         } catch (MalformedJwtException e) {
             // 잘못된 JWT 구조
@@ -178,7 +167,7 @@ public class JwtProvider {
                 .setClaims(payloads)          // payload
                 .setSubject("user")           // token 용도
                 .setExpiration(expiration)    // 토큰 만료 시간
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new NullPointerException("Username이 존재하지 않습니다."));
@@ -207,7 +196,7 @@ public class JwtProvider {
                 .setClaims(payloads)
                 .setSubject("user")
                 .setExpiration(expiration)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new NullPointerException("Username이 존재하지 않습니다."));
