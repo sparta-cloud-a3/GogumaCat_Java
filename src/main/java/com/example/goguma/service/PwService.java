@@ -32,6 +32,10 @@ public class PwService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("ID가 존재하지 않습니다.")
         );
+        if (!user.getProfilePic().isEmpty()){
+            String[] spliturl = user.getProfilePic().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
+            s3Service.delete(spliturl[1]);
+        }
         String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
         String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
         String password = passwordEncoder.encode(profileUpdateDto.getPassword());
