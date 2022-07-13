@@ -32,7 +32,7 @@ public class PwService {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("ID가 존재하지 않습니다.")
         );
-        if (!user.getProfilePic().isEmpty()){
+        if (user.getProfilePic() != null){
             String[] spliturl = user.getProfilePic().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
             s3Service.delete(spliturl[1]);
         }
