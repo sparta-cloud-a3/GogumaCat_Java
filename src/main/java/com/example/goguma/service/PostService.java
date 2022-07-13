@@ -114,7 +114,7 @@ public class PostService {
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
             String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             PostImg postImg = new PostImg(imgUrl);
 
             post.addPostImg(postImg);
@@ -126,7 +126,7 @@ public class PostService {
     @Transactional
     public void  deletePost(Long postId) {
         List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);
-        String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+        String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
         s3Service.delete(spliturl[1]);
         likeRepository.deleteByPostId(postId);
         postImgRepository.deleteAllByPostId(postId);
@@ -155,11 +155,11 @@ public class PostService {
         //사진 변경(사진 한 장만 가능)
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
-            String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+            String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
             s3Service.delete(spliturl[1]);
 
             String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             PostImg postImg = new PostImg(imgUrl);
             post.addPostImg(postImg);
         }

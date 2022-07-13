@@ -33,7 +33,7 @@ public class PwService {
                 () -> new NullPointerException("ID가 존재하지 않습니다.")
         );
         String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
-        String profilePic = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+        String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
         String password = passwordEncoder.encode(profileUpdateDto.getPassword());
 
         user.update(profileUpdateDto, password,profilePic);
