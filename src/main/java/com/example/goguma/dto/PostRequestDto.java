@@ -1,5 +1,6 @@
 package com.example.goguma.dto;
 
+import com.example.goguma.model.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,16 +19,13 @@ public class PostRequestDto {
     private String content;
     private String address;
 
-    @Override
-    public String toString() {
-        return "PostRequestDto{" +
-                "file=" + file +
-                ", files=" + files +
-                ", title='" + title + '\'' +
-                ", price='" + price + '\'' +
-                ", date='" + date + '\'' +
-                ", content='" + content + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+    public Post toEntity() {
+        String title = this.getTitle();
+        int price = Integer.parseInt(this.getPrice().replace(",", ""));
+        String date = this.getDate();
+        String content = this.getContent();
+        String address = this.getAddress();
+
+        return new Post(title, price, content, address, date);
     }
 }
