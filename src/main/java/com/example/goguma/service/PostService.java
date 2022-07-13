@@ -110,7 +110,7 @@ public class PostService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
         );
-        post.addUser(user);
+        user.addPost(post);
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
             String name = s3Service.uploadToAWS(postRequestDto.getFile());
@@ -131,14 +131,6 @@ public class PostService {
         likeRepository.deleteByPostId(postId);
         postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
-    }
-
-    public void deleteAllPost(Long userId) {
-        List<Post> post = postRepository.findByUserId(userId);
-        for(int i=0; i<post.size();i++){
-            Long postId =post.get(i).getId();
-            deletePost(postId);
-        }
     }
 
     @Transactional

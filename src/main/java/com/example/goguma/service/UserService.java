@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
-    private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
     private final LikeRepository likeRepository;
     private final JwtProvider jwtProvider;
@@ -112,19 +112,24 @@ public class UserService {
      * @return List<PostResponseDto> posts: 작성한 게시물
      */
     public List<PostResponseDto> getMyPosts(Long userId) {
-        List<Post> findPosts = postRepository.findByUserId(userId);
-        List<PostResponseDto> posts = new ArrayList<>();
-        List<PostImg> findPostImgs;
-        PostResponseDto postResponseDto = null;
-        for (Post findPost : findPosts) {
-            postResponseDto = new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
-            findPostImgs = postImgRepository.findByPostId(findPost.getId());
-            //post의 사진 추가
-            for (PostImg findPostImg : findPostImgs) {
-                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-            }
-            posts.add(postResponseDto);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
+        );
+
+        List<PostResponseDto> posts = user.getPosts().stream().map(
+                p -> {
+                    return new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    );
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
         }
 
         return posts;

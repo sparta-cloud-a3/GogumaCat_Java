@@ -104,9 +104,7 @@ public class UserController {
     @ResponseBody
     public Long deleteUser(@PathVariable Long id){
        likeService.deleteLike(id);
-       postService.deleteAllPost(id);
        userService.delete(id);
        return id;
-
     }
 }
