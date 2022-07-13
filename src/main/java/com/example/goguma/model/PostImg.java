@@ -1,6 +1,5 @@
 package com.example.goguma.model;
 
-import com.example.goguma.model.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;

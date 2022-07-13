@@ -51,7 +51,7 @@ public class PostController {
     @ResponseBody
     public Post createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User info = userDetails.getUser();
-        return postService.registerPost(postRequestDto, info.getId());
+        return postService.createPost(postRequestDto, info.getId());
     }
 
     @DeleteMapping("post/delete/{postId}")

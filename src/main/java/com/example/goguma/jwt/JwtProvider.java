@@ -23,8 +23,7 @@ import java.util.*;
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {
-    // jwt token 생성 및 복호화 할 때 사용할 secret key
-    @Value("${secret.jwt_secret_key}")
+    @Value("${service.secretKey}")
     private String secretKey;
 
     // access token 유효 시간

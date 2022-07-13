@@ -1,12 +1,18 @@
 package com.example.goguma.model;
 
 import com.example.goguma.dto.PostRequestDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.apache.commons.fileupload.util.LimitedInputStream;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
@@ -44,6 +50,10 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private boolean isSold;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<PostImg> postImgs = new ArrayList<>();
+
     public Post(String title, int price, String content, String address, String date) {
         this.title = title;
         this.price = price;
@@ -58,18 +68,9 @@ public class Post extends Timestamped {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", user=" + user +
-                ", title='" + title + '\'' +
-                ", price=" + price +
-                ", content='" + content + '\'' +
-                ", likeCount=" + likeCount +
-                ", address='" + address + '\'' +
-                ", isSold=" + isSold +
-                '}';
+    public void addPostImg(PostImg postImg) {
+        postImg.addPost(this);
+        postImgs.add(postImg);
     }
 
     public void update(PostRequestDto postRequestDto) {
@@ -101,4 +102,19 @@ public class Post extends Timestamped {
     public void sold(boolean isSold) {
         this.isSold = isSold;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Post)) return false;
+        Post post = (Post) o;
+        return getPrice() == post.getPrice() && getLikeCount() == post.getLikeCount() && isSold() == post.isSold() && Objects.equals(getId(), post.getId()) && Objects.equals(getUser(), post.getUser()) && Objects.equals(getTitle(), post.getTitle()) && Objects.equals(getContent(), post.getContent()) && Objects.equals(getAddress(), post.getAddress()) && Objects.equals(getDate(), post.getDate()) && Objects.equals(getPostImgs(), post.getPostImgs());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUser(), getTitle(), getPrice(), getContent(), getLikeCount(), getAddress(), getDate(), isSold(), getPostImgs());
+    }
+
+
 }

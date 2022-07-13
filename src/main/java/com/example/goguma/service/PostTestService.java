@@ -99,7 +99,7 @@ public class PostTestService {
         return postResponseDto;
     }
 
-    public Post registerPost(PostRequestDto postRequestDto, Long userId) {
+    public Post createPost(PostRequestDto postRequestDto, Long userId) {
         String title = postRequestDto.getTitle();
         int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));
         String date = postRequestDto.getDate();

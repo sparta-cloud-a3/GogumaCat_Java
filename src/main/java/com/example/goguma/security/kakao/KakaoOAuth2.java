@@ -1,6 +1,7 @@
 package com.example.goguma.security.kakao;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -10,8 +11,14 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.validation.Valid;
+
 @Component
 public class KakaoOAuth2 {
+    @Value("${kakao.restApikey}")
+    private String restApi;
+    @Value("${kakao.callbacUri}")
+    private String callbackUri;
     public KakaoUserInfo getUserInfo(String authorizedCode) {
         // 1. 인가코드 -> 액세스 토큰
         String accessToken = getAccessToken(authorizedCode);
@@ -29,8 +36,8 @@ public class KakaoOAuth2 {
         // HttpBody 오브젝트 생성
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
-        params.add("client_id", "1cc8b1fcd1283d896e04d323749f5c38");
-        params.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
+        params.add("client_id", restApi);
+        params.add("redirect_uri", callbackUri);
         params.add("code", authorizedCode);
 
         // HttpHeader와 HttpBody를 하나의 오브젝트에 담기
