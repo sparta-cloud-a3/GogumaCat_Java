@@ -9,6 +9,8 @@ import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
 import com.example.goguma.model.User;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,17 +35,22 @@ public class PostController {
     /**
      * 회원이 게시물을 선택하면 상세페이지를 보여준다.
      * @param postId
-     * @param model // response: 게시물 정보
      * @return post.html
      */
+    @ResponseBody
     @RequestMapping("/post/{postId}")
-    public String getOnePost(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        model.addAttribute("post", postService.getOnePost(postId));
-        model.addAttribute("nickname", info.getNickname());
-        model.addAttribute("userId", info.getId());
-        model.addAttribute("likeByMe", likeRepository.existsByuserIdAndPostId(info.getId(), postId));
-        return "post";
+
+        JsonObject json = new JsonObject();
+        Gson gson = new Gson();
+
+        json.addProperty("post", gson.toJson(postService.getOnePost(postId)));
+        json.addProperty("nickname", info.getNickname());
+        json.addProperty("userId", info.getId());
+        json.addProperty("likeByMe", likeRepository.existsByuserIdAndPostId(info.getId(), postId));
+
+        return json.toString();
     }
 
 
@@ -61,9 +68,12 @@ public class PostController {
     }
 
     @RequestMapping("/posting_update/{postId}")
-    public String updatePostPage(@PathVariable Long postId, Model model) {
-        model.addAttribute("post", postService.getOnePost(postId));
-        return "posting_update";
+    public String updatePostPage(@PathVariable Long postId) {
+        JsonObject json = new JsonObject();
+        Gson gson = new Gson();
+
+        json.addProperty("post", gson.toJson(postService.getOnePost(postId)));
+        return json.toString();
     }
 
     @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
