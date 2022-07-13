@@ -32,8 +32,16 @@ jobs:
         uses: josStorer/get-current-time@v2.0.0
         id: current-time
         with:
-          format: YYYY-MM-DDTHH-mm-ss # 다른 포맷으로 변경 가능
+          format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00" ## 한국시간에 맞추기 위함
+
+      - name: AWS Secrets Manager Action
+        uses: abhilash1in/aws-secrets-manager-action@v2.1.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+
       
       # Gradle build를 통해 만들어진 JAR를 beanstalk에 배포하기 위한 ZIP 파일로 만드는 것
       - name: Generate deployment package
