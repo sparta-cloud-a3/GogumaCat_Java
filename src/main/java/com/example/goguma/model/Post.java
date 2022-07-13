@@ -53,6 +53,10 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImg> postImgs = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
+
     public Post(String title, int price, String content, String address, String date) {
         this.title = title;
         this.price = price;
@@ -70,6 +74,11 @@ public class Post extends Timestamped {
     public void addPostImg(PostImg postImg) {
         postImg.addPost(this);
         postImgs.add(postImg);
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.addPost(this);
     }
 
     public void update(PostRequestDto postRequestDto) {

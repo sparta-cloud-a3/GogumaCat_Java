@@ -43,4 +43,19 @@ public class Order extends Timestamped{
     public void addPost(Post post) {
         this.post = post;
     }
+
+    public static Order makeOrder(Post post) {
+        //판매완료
+        post.sold(true);
+
+        //날짜 필터링 - startDate, endDate
+        String[] dateSplit = post.getDate().split("~");
+        String startDate = dateSplit[0].trim();
+        String endDate = dateSplit[1].trim();
+
+        //가격
+        int price = post.getPrice();
+
+        return new Order(startDate, endDate, price);
+    }
 }

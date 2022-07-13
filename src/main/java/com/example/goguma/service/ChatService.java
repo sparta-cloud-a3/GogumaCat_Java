@@ -92,11 +92,11 @@ public class ChatService {
         return chatRepository.findByPostId(postId);
     }
 
-    public boolean isSeller(User user, String roomId) {
+    public boolean isSeller(String username, String roomId) {
         ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
         );
-
-        return chatRoom.getPost().getUser().equals(user);
+        String seller = chatRoom.getPost().getUser().getUsername();
+        return seller.equals(username);
     }
 }

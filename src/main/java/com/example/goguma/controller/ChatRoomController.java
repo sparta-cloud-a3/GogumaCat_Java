@@ -80,7 +80,7 @@ public class ChatRoomController {
         User info = userDetails.getUser();
         model.addAttribute("nickname", info.getNickname());
         model.addAttribute("roomId", roomId);
-        model.addAttribute("isSeller", chatService.isSeller(info, roomId));
+        model.addAttribute("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
         return "/roomdetail";
     }
 
