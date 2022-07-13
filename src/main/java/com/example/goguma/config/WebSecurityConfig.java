@@ -1,4 +1,4 @@
-package com.example.goguma;
+package com.example.goguma.config;
 
 import com.example.goguma.jwt.JwtAuthenticationFilter;
 import com.example.goguma.jwt.JwtProvider;
