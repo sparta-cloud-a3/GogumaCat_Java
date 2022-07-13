@@ -24,18 +24,27 @@ public class HomeController {
     }
 
     @GetMapping("/profileinfo/{id}")
-    public String info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @ResponseBody
+    public User info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User tokenInfo = userDetails.getUser();
-        model.addAttribute("id",tokenInfo.getId());
+//        model.addAttribute("id",tokenInfo.getId());
         User info = userService.profile(id);
-        model.addAttribute("pageUserId", info.getId());
-        model.addAttribute("nickname", info.getNickname());
-        model.addAttribute("username", info.getUsername());
-        model.addAttribute("profilePic", info.getProfilePic());
-        model.addAttribute("kakaoId", info.getKakaoId());
-        model.addAttribute("address", info.getAddress());
-        model.addAttribute("profileInfo", info.getProfileInfo());
-        return "user";
+//        model.addAttribute("pageUserId", info.getId());
+//        model.addAttribute("nickname", info.getNickname());
+//        model.addAttribute("username", info.getUsername());
+//        model.addAttribute("profilePic", info.getProfilePic());
+//        model.addAttribute("kakaoId", info.getKakaoId());
+//        model.addAttribute("address", info.getAddress());
+//        model.addAttribute("profileInfo", info.getProfileInfo());
+        User user = new User();
+        user.setId(tokenInfo.getId());
+        user.setNickname(info.getNickname());
+        user.setUsername(info.getUsername());
+        user.setProfilePic(info.getProfilePic());
+        user.setKakaoId(info.getKakaoId());
+        user.setAddress(info.getAddress());
+        user.setProfileInfo(info.getProfileInfo());
+        return user;
     }
 
     @GetMapping("/posting/{username}")
