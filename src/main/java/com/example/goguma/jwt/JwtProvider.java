@@ -6,6 +6,7 @@ import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +28,8 @@ import java.util.Map;
 public class JwtProvider {
     // jwt token 생성 및 복호화 할 때 사용할 secret key
     // 암호화 필요!
-    private final String secretKey ="CATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMACATGOGUMA";//256비트 이상이여야 한다.
+    @Value("${service.secretKey}")
+    private String secretKey;//256비트 이상이여야 한다.
     // access token 유효 시간
     private long accessExpireTime = (60 * 60 * 1000L) * 4; // 4시간 후
     // refresh token 유효 시간 -> access token 의 유효시간보다 길게 준다.
