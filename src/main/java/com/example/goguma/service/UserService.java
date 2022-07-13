@@ -142,28 +142,32 @@ public class UserService {
     }
 
     public List<PostResponseDto> getLikePosts(Long userId) {
-        List<Like> findLikes = likeRepository.findByUserId(userId);
-        List<PostResponseDto> posts = new ArrayList<>();
-        List<PostImg> findPostImgs;
-        Post findPost;
-        PostResponseDto postResponseDto = null;
-        for (Like findLike : findLikes) {
-            findPost = findLike.getPost();
-            postResponseDto = new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
-            findPostImgs = postImgRepository.findByPostId(findPost.getId());
-            //post의 사진 추가
-            for (PostImg findPostImg : findPostImgs) {
-                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-            }
-            posts.add(postResponseDto);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+        );
+
+        List<PostResponseDto> posts = user.getLikes().stream().map(
+                l -> {
+                    Post p = l.getPost();
+                    return new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    );
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
         }
 
         return posts;
     }
 
     @Transactional
-    public Long delete(Long id){
+    public Long deleteUser(Long id){
         userRepository.deleteById(id);
         return id;
     }

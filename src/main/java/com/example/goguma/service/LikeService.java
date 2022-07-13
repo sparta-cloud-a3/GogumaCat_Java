@@ -5,6 +5,7 @@ import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostRepository;
+import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,24 +16,27 @@ import org.springframework.transaction.annotation.Transactional;
 public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public void updateLike(Long postId, String action, User user) {
+    public void updateLike(Long postId, String action, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원입니다.")
+        );
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
         );
         if (action.equals("like")) {
-            likeRepository.save(new Like(post, user));
+            Like like = new Like(post, user);
+            user.addLike(like);
+            likeRepository.save(like);
         } else {
             likeRepository.deleteByUserIdAndPostId(user.getId(), postId);
         }
+
         updateLikeCount(post, action);
     }
 
     public void updateLikeCount(Post post, String action){
         post.updateLikeCount(action);
-    }
-
-    public void deleteLike(Long userId){
-        likeRepository.deleteByUserId(userId);
     }
 }

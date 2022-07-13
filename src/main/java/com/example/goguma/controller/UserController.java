@@ -103,8 +103,6 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     public Long deleteUser(@PathVariable Long id){
-       likeService.deleteLike(id);
-       userService.delete(id);
-       return id;
+       return userService.deleteUser(id);
     }
 }

@@ -129,7 +129,6 @@ public class PostService {
         String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
         s3Service.delete(spliturl[1]);
         likeRepository.deleteByPostId(postId);
-        postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
     }
 

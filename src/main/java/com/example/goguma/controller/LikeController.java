@@ -17,8 +17,7 @@ public class LikeController {
 
     @PostMapping("/update_like")
     public String updateLike(@RequestParam String postId, @RequestParam String action, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User info = userDetails.getUser();
-        likeService.updateLike(Long.parseLong(postId), action, info);
+        likeService.updateLike(Long.parseLong(postId), action, userDetails.getUsername());
         return "redirect:/post/" + postId;
     }
 
