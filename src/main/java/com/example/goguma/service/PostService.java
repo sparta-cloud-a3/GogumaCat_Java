@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,16 +33,35 @@ public class PostService {
      * @return List<PostResponseDto> posts: 전체 게시물
      */
     public List<PostResponseDto> getAllPosts(String orderType) {
+        List<PostResponseDto> posts;
 
-        List<Post> findPosts = null;
-
-        if (orderType.equals("latest")) {
-             findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        } else {
-            findPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount"));
+        if (orderType.equals("latest")) { //최신순
+             posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(
+                     p -> {
+                         return new PostResponseDto(
+                                 p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                         );
+                     }
+             ).collect(Collectors.toList());
+        } else { //인기순
+            posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount")).stream().map(
+                    p -> {
+                        return new PostResponseDto(
+                                p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                        );
+                    }
+            ).collect(Collectors.toList());;
         }
 
-        return getPostResponseDtos(findPosts);
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
+        }
+
+        return posts;
     }
 
     /**
@@ -50,48 +70,54 @@ public class PostService {
      * @return 검색결과에 맞는 리스트
      */
     public List<PostResponseDto> getSearchPosts(String keyword) {
-        List<Post> findPosts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword);
-        return getPostResponseDtos(findPosts);
+        List<PostResponseDto> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword).stream().map(
+                p -> {
+                    return new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    );
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
+        }
+
+        return posts;
     }
 
     public PostResponseDto getOnePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
         );
+        PostResponseDto postResponseDto = PostResponseDto.toDto(post);
 
-        User user = post.getUser();
-
-        PostResponseDto postResponseDto = new PostResponseDto(
-                post.getId(), post.getTitle(), post.getPrice(), post.getAddress(), post.getLikeCount(),
-                post.getContent(), user.getId(), user.getNickname(), user.getProfilePic(), post.getDate()
+        postImgRepository.findByPostId(postId).stream().forEach(
+                pi -> {
+                    postResponseDto.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                }
         );
-
-        List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);
-
-        for (PostImg findPostImg : findPostImgs) {
-            postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-        }
 
         return postResponseDto;
     }
 
-    public Post registerPost(PostRequestDto postRequestDto, Long userId) {
-        String title = postRequestDto.getTitle();
-        int price = Integer.parseInt(postRequestDto.getPrice().replace(",", ""));
-        String date = postRequestDto.getDate();
-        String content = postRequestDto.getContent();
-        String address = postRequestDto.getAddress();
+    @Transactional
+    public Post createPost(PostRequestDto postRequestDto, Long userId) {
+        Post post = postRequestDto.toEntity();
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
         );
-
-        Post post = new Post(title, price, content, address, date);
         post.addUser(user);
-
         postRepository.save(post);
-
         if (postRequestDto.getFile() != null) {
-            uploadImg(postRequestDto, post);
+            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            PostImg postImg = new PostImg(imgUrl);
+
+            post.addPostImg(postImg);
         }
 
         return post;
@@ -131,37 +157,11 @@ public class PostService {
             postImgRepository.deleteAllByPostId(postId);
             String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
             s3Service.delete(spliturl[1]);
-            uploadImg(postRequestDto, post);
+
+            String name = s3Service.uploadToAWS(postRequestDto.getFile());
+            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            PostImg postImg = new PostImg(imgUrl);
+            post.addPostImg(postImg);
         }
-    }
-
-    private List<PostResponseDto> getPostResponseDtos(List<Post> findPosts) {
-        List<PostResponseDto> posts = new ArrayList<>();
-
-        List<PostImg> findPostImgs;
-
-        PostResponseDto postResponseDto = null;
-
-        for (Post findPost : findPosts) {
-            postResponseDto = new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount()
-            );
-            findPostImgs = postImgRepository.findByPostId(findPost.getId());
-            //post의 사진 추가
-            for (PostImg findPostImg : findPostImgs) {
-                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-            }
-            posts.add(postResponseDto);
-        }
-        return posts;
-    }
-
-    private void uploadImg(PostRequestDto postRequestDto, Post post) {
-        String name = s3Service.uploadToAWS(postRequestDto.getFile());
-        String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
-
-        PostImg postImg = new PostImg(imgUrl);
-        postImg.addPost(post);
-        postImgRepository.save(postImg);
     }
 }

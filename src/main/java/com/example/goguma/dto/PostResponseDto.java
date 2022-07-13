@@ -1,5 +1,7 @@
 package com.example.goguma.dto;
 
+import com.example.goguma.model.Post;
+import com.example.goguma.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -42,5 +44,13 @@ public class PostResponseDto {
         this.writerNickname = writerNickname;
         this.writerProfile = writerProfile;
         this.date = date;
+    }
+
+    public static PostResponseDto toDto(Post post) {
+        User user = post.getUser();
+        return new PostResponseDto(
+                post.getId(), post.getTitle(), post.getPrice(), post.getAddress(), post.getLikeCount(),
+                post.getContent(), user.getId(), user.getNickname(), user.getProfilePic(), post.getDate()
+        );
     }
 }
