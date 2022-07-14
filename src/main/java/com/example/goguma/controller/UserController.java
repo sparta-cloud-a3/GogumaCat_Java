@@ -2,8 +2,6 @@ package com.example.goguma.controller;
 
 import com.example.goguma.dto.*;
 import com.example.goguma.service.AuthService;
-import com.example.goguma.service.LikeService;
-import com.example.goguma.service.PostService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,8 +19,6 @@ public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
-    private final LikeService likeService;
-    private final PostService postService;
 
     //회원 로그인
     @PostMapping("/user/login1")
