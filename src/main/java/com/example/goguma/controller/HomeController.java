@@ -4,6 +4,7 @@ import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.UserService;
 import com.google.gson.JsonObject;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,21 +25,40 @@ public class HomeController {
     }
 
     @GetMapping("/profileinfo/{id}")
-    public String info(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public simpleUserDto info(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User tokenInfo = userDetails.getUser();
         User info = userService.profile(id);
 
-        JsonObject json = new JsonObject();
-        json.addProperty("id",tokenInfo.getId());
-        json.addProperty("pageUserId",info.getId());
-        json.addProperty("nickname", info.getNickname());
-        json.addProperty("username", info.getUsername());
-        json.addProperty("profilePic", info.getProfilePic());
-        json.addProperty("address", info.getAddress());
-        json.addProperty("profileInfo", info.getProfileInfo());
-        json.addProperty("kakaoId", info.getKakaoId());
-
-        return json.toString();
+        return new simpleUserDto(
+                tokenInfo.getId(),
+                info.getId(),
+                info.getKakaoId(),
+                info.getUsername(),
+                info.getNickname(),
+                info.getProfilePic(),
+                info.getProfileInfo(),
+                info.getAddress());
+    }
+    @Data
+    static class simpleUserDto{
+        private Long id;
+        private Long pageUserId;
+        private Long kakaoId;
+        private String username;
+        private String nickname;
+        private String profilePic;
+        private String profileInfo;
+        private String address;
+        public simpleUserDto(Long id, Long pageUserId, Long kakaoId, String username, String nickname, String profilePic, String profileInfo, String address) {
+            this.id = id;
+            this.pageUserId = pageUserId;
+            this.kakaoId = kakaoId;
+            this.username = username;
+            this.nickname = nickname;
+            this.profilePic = profilePic;
+            this.profileInfo = profileInfo;
+            this.address = address;
+        }
     }
 
     @GetMapping("/posting/{username}")
