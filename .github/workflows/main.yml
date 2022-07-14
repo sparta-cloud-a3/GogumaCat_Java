@@ -46,20 +46,7 @@ jobs:
         uses: abhilash1in/aws-secrets-manager-action@v2.1.0
         with:
           secrets: |
-            username
-            password
-            engine
-            host
-            port
-            dbname
-            dbInstanceIdentifier
-            aws.s3.accessKey
-            aws.s3.secretKey
-            aws.s3.region
-            aws.s3.bucket
-            kakao.restApikey
-            kakao.callbacUri
-            service.secretKey
+            *gogumacat*
           parse-json: true
 
 
