@@ -41,7 +41,7 @@ public class UserController {
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
-    public String registerUser(SignupRequestDto requestDto) {
+    public String registerUser(@RequestBody SignupRequestDto requestDto) {
         userService.registerUser(requestDto);
         return "redirect:/";
     }
@@ -61,13 +61,13 @@ public class UserController {
 
     @ResponseBody
     @PostMapping ("/user/sign_up/check_dup")
-    public int checkUser(@RequestBody CheckRequestDto requestDto){
+    public int checkUser(@RequestBody CheckUsernameRequestDto requestDto){
         return userService.checkUser(requestDto);
     }
 
     @ResponseBody
     @PostMapping("/user/sign_up/check_dup_nick")
-    public int checkNickname (@RequestBody CheckRequestDto requestDto){
+    public int checkNickname (@RequestBody CheckNicknameRequestDto requestDto){
         return userService.checkNickname(requestDto);
     }
 

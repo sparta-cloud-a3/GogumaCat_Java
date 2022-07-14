@@ -1,16 +1,12 @@
 package com.example.goguma.service;
 
-import com.example.goguma.dto.PostImgResponseDto;
-import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.dto.*;
 import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
-import com.example.goguma.dto.CheckRequestDto;
 import com.example.goguma.repository.ChatRepository;
-import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostImgRepository;
 import com.example.goguma.repository.UserRepository;
-import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
 import com.example.goguma.security.kakao.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -79,7 +75,7 @@ public class UserService {
     }
 
     //아이디, 닉네임 중복 체크
-    public int checkUser(CheckRequestDto requestDto) {
+    public int checkUser(CheckUsernameRequestDto requestDto) {
         String username = requestDto.getUsername();
         Optional<User> found = userRepository.findByUsername(username);
         int count = 0;
@@ -91,7 +87,7 @@ public class UserService {
         return count;
     }
 
-    public int checkNickname (CheckRequestDto requestDto) {
+    public int checkNickname (CheckNicknameRequestDto requestDto) {
         String nickname = requestDto.getNickname();
         Optional<User> foundNick = userRepository.findByNickname(nickname);
         int count = 0;

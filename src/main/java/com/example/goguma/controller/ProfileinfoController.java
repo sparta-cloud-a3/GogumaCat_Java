@@ -13,7 +13,7 @@ public class ProfileinfoController {
     private final PwService pwService;
 
     @PostMapping("/profileinfo/check")
-    public boolean password(PasswordCheckDto passwordCheckDto){
+    public boolean password(@RequestBody PasswordCheckDto passwordCheckDto){
         return pwService.checkPw(passwordCheckDto);
     }
     @PutMapping(value = "/update_profile/{id}", consumes = {"multipart/form-data"})
