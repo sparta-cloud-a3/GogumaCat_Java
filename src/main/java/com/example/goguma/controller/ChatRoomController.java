@@ -4,55 +4,77 @@ import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/chat")
 public class ChatRoomController {
     private final ChatService chatService;
-    private Map<String,Integer> map = new HashMap<String, Integer>();
+
+    @Data
+    static class ChatDto {
+        private String nickname;
+        private String roomId;
+        private Boolean isSeller;
+
+        public ChatDto(String nickname, String roomId, Boolean isSeller) {
+            this.nickname = nickname;
+            this.roomId = roomId;
+            this.isSeller = isSeller;
+        }
+    }
+
+    @Data
+    static class ChatListDto {
+        private String nickname;
+        private Long postId;
+        private Boolean isSeller;
+
+        public ChatListDto(String nickname, Long postId) {
+            this.nickname = nickname;
+            this.postId = postId;
+        }
+    }
 
     /**
      * 채팅 버튼 클린
      * if 작성자라면(판매자라면) -> 연락이 온 채팅방 리스트를 보여줌
      * if 작성자가 아니라면(소비자라면) -> 채팅을 보낼 수 있도록 채팅방을 열러줌
      * @param postId
-     * @param model
      * @return 각자에 맞는 view를 리턴
      */
     @GetMapping("/room/enter/{postId}")
-    public String rooms(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public Object rooms(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
 
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
         if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
             if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
-                model.addAttribute("nickname", info.getNickname());
-                model.addAttribute("roomId", chatService.createRoom(info, postId));
-                model.addAttribute("isSeller", false);
-                return "/roomdetail";
+//                model.addAttribute("nickname", info.getNickname());
+//                model.addAttribute("roomId", chatService.createRoom(info, postId));
+//                model.addAttribute("isSeller", false);
+//                return "/roomdetail";
+                return new ChatDto(info.getNickname(), chatService.createRoom(info, postId), false);
             } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
-                model.addAttribute("nickname", info.getNickname());
-                model.addAttribute("roomId", existsRoom.getRoomId());
-                model.addAttribute("isSeller", false);
-                return "/roomdetail";
+//                model.addAttribute("nickname", info.getNickname());
+//                model.addAttribute("roomId", existsRoom.getRoomId());
+//                model.addAttribute("isSeller", false);
+//                return "/roomdetail";
+                return new ChatDto(info.getNickname(), existsRoom.getRoomId(), false);
             }
         } else {
             // 만약 판매자라면 -> 연락온 리스트를 리턴
-            model.addAttribute("nickname", info.getNickname());
-            model.addAttribute("postId", postId);
-            return "/room";
+//            model.addAttribute("nickname", info.getNickname());
+//            model.addAttribute("postId", postId);
+//            return "/room";
+            return new ChatListDto(info.getNickname(), postId);
         }
     }
 
@@ -69,19 +91,18 @@ public class ChatRoomController {
 
     /**
      * 채팅방 입장
-     * @param model
      * @param roomId
-     * @param response
      * @return
      * @throws IOException
      */
     @GetMapping("/mypostroom/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
+    public ChatDto roomDetail(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        model.addAttribute("nickname", info.getNickname());
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
-        return "/roomdetail";
+//        model.addAttribute("nickname", info.getNickname());
+//        model.addAttribute("roomId", roomId);
+//        model.addAttribute("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
+//        return "/roomdetail";
+        return new ChatDto(info.getNickname(), roomId, chatService.isSeller(userDetails.getUsername(), roomId));
     }
 
     /**
