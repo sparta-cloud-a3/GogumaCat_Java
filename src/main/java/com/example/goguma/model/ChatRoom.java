@@ -23,7 +23,7 @@ public class ChatRoom extends Timestamped{
     @JsonIgnore
     private Post post;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name= "user_id")
     @JsonIgnore
     private User user;
@@ -42,7 +42,6 @@ public class ChatRoom extends Timestamped{
 
     public void addUser(User user) {
         this.user = user;
-        user.addChatRoom(this);
     }
 
     @Override

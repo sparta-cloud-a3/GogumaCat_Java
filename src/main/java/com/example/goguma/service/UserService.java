@@ -3,14 +3,12 @@ package com.example.goguma.service;
 import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.jwt.JwtProvider;
-import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
-import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.dto.CheckRequestDto;
+import com.example.goguma.repository.ChatRepository;
 import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.repository.PostImgRepository;
-import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
 import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
@@ -20,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,7 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
     private final PostImgRepository postImgRepository;
-    private final LikeRepository likeRepository;
+    private final ChatRepository chatRepository;
     private final JwtProvider jwtProvider;
 
     public void registerUser(SignupRequestDto requestDto) {
