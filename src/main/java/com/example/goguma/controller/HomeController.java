@@ -3,54 +3,69 @@ package com.example.goguma.controller;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.UserService;
+import com.google.gson.JsonObject;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class HomeController {
 
     private final UserService userService;
 
     @RequestMapping("/")
-    public String home(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String home(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        model.addAttribute("id",info.getId());
-        model.addAttribute("nickname", info.getNickname());
-        return "index";
+        JsonObject json = new JsonObject();
+        json.addProperty("id",info.getId());
+        json.addProperty("nickname", info.getNickname());
+        return json.toString();
     }
 
     @GetMapping("/profileinfo/{id}")
-    @ResponseBody
-    public User info(@PathVariable Long id, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public simpleUserDto info(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User tokenInfo = userDetails.getUser();
-//        model.addAttribute("id",tokenInfo.getId());
         User info = userService.profile(id);
-//        model.addAttribute("pageUserId", info.getId());
-//        model.addAttribute("nickname", info.getNickname());
-//        model.addAttribute("username", info.getUsername());
-//        model.addAttribute("profilePic", info.getProfilePic());
-//        model.addAttribute("kakaoId", info.getKakaoId());
-//        model.addAttribute("address", info.getAddress());
-//        model.addAttribute("profileInfo", info.getProfileInfo());
-        User user = new User();
-        user.setId(tokenInfo.getId());
-        user.setNickname(info.getNickname());
-        user.setUsername(info.getUsername());
-        user.setProfilePic(info.getProfilePic());
-        user.setKakaoId(info.getKakaoId());
-        user.setAddress(info.getAddress());
-        user.setProfileInfo(info.getProfileInfo());
-        return user;
+
+        return new simpleUserDto(
+                tokenInfo.getId(),
+                info.getId(),
+                info.getKakaoId(),
+                info.getUsername(),
+                info.getNickname(),
+                info.getProfilePic(),
+                info.getProfileInfo(),
+                info.getAddress());
+    }
+    @Data
+    static class simpleUserDto{
+        private Long id;
+        private Long pageUserId;
+        private Long kakaoId;
+        private String username;
+        private String nickname;
+        private String profilePic;
+        private String profileInfo;
+        private String address;
+        public simpleUserDto(Long id, Long pageUserId, Long kakaoId, String username, String nickname, String profilePic, String profileInfo, String address) {
+            this.id = id;
+            this.pageUserId = pageUserId;
+            this.kakaoId = kakaoId;
+            this.username = username;
+            this.nickname = nickname;
+            this.profilePic = profilePic;
+            this.profileInfo = profileInfo;
+            this.address = address;
+        }
     }
 
     @GetMapping("/posting/{username}")
-    public String posting(@PathVariable String username, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public String posting(@PathVariable String username, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        model.addAttribute("username", info.getUsername());
-        return "posting";
+        JsonObject json = new JsonObject();
+        json.addProperty("username", info.getUsername());
+        return json.toString();
     }
 }

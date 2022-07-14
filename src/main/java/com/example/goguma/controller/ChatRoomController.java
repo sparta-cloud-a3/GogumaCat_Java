@@ -4,7 +4,10 @@ import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
+
 import lombok.Data;
+import com.google.gson.JsonObject;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +56,7 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{postId}")
     public Object rooms(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
+        JsonObject json = new JsonObject();
 
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
         if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
