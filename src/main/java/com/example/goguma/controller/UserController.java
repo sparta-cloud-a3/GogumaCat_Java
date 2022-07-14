@@ -61,16 +61,14 @@ public class UserController {
 
     @ResponseBody
     @PostMapping ("/user/sign_up/check_dup")
-    public int checkUser(CheckRequestDto requestDto){
-        int result = userService.checkUser(requestDto);
-        return result;
+    public int checkUser(@RequestBody CheckRequestDto requestDto){
+        return userService.checkUser(requestDto);
     }
 
     @ResponseBody
     @PostMapping("/user/sign_up/check_dup_nick")
-    public int checkNickname (CheckRequestDto requestDto){
-        int result = userService.checkNickname(requestDto);
-        return result;
+    public int checkNickname (@RequestBody CheckRequestDto requestDto){
+        return userService.checkNickname(requestDto);
     }
 
     /**
