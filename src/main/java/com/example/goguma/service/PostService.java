@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,27 +36,22 @@ public class PostService {
 
         if (orderType.equals("latest")) { //최신순
              posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(
-                     p -> {
-                         return new PostResponseDto(
+                     p -> new PostResponseDto(
                                  p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                         );
-                     }
+                     )
+
              ).collect(Collectors.toList());
         } else { //인기순
             posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount")).stream().map(
-                    p -> {
-                        return new PostResponseDto(
+                    p -> new PostResponseDto(
                                 p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                        );
-                    }
-            ).collect(Collectors.toList());;
+                    )
+            ).collect(Collectors.toList());
         }
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
-                    pi -> {
-                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                    }
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
             );
         }
 
@@ -71,18 +65,14 @@ public class PostService {
      */
     public List<PostResponseDto> getSearchPosts(String keyword) {
         List<PostResponseDto> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword).stream().map(
-                p -> {
-                    return new PostResponseDto(
+                p -> new PostResponseDto(
                             p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                    );
-                }
+                )
         ).collect(Collectors.toList());
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
-                    pi -> {
-                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                    }
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
             );
         }
 
@@ -95,10 +85,8 @@ public class PostService {
         );
         PostResponseDto postResponseDto = PostResponseDto.toDto(post);
 
-        postImgRepository.findByPostId(postId).stream().forEach(
-                pi -> {
-                    postResponseDto.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                }
+        postImgRepository.findByPostId(postId).forEach(
+                pi -> postResponseDto.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
         );
 
         return postResponseDto;
@@ -110,11 +98,11 @@ public class PostService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
         );
-        post.addUser(user);
+        user.addPost(post);
         postRepository.save(post);
         if (postRequestDto.getFile() != null) {
             String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             PostImg postImg = new PostImg(imgUrl);
 
             post.addPostImg(postImg);
@@ -126,19 +114,10 @@ public class PostService {
     @Transactional
     public void  deletePost(Long postId) {
         List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);
-        String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+        String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
         s3Service.delete(spliturl[1]);
         likeRepository.deleteByPostId(postId);
-        postImgRepository.deleteAllByPostId(postId);
         postRepository.deleteById(postId);
-    }
-
-    public void deleteAllPost(Long userId) {
-        List<Post> post = postRepository.findByUserId(userId);
-        for(int i=0; i<post.size();i++){
-            Long postId =post.get(i).getId();
-            deletePost(postId);
-        }
     }
 
     @Transactional
@@ -155,11 +134,11 @@ public class PostService {
         //사진 변경(사진 한 장만 가능)
         if (postRequestDto.getFile() != null) {
             postImgRepository.deleteAllByPostId(postId);
-            String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat.s3.ap-northeast-2.amazonaws.com/");
+            String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
             s3Service.delete(spliturl[1]);
 
             String name = s3Service.uploadToAWS(postRequestDto.getFile());
-            String imgUrl = "https://gogumacat.s3.ap-northeast-2.amazonaws.com/" + name;
+            String imgUrl = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
             PostImg postImg = new PostImg(imgUrl);
             post.addPostImg(postImg);
         }

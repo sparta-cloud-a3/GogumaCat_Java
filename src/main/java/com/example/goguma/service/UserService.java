@@ -1,18 +1,12 @@
 package com.example.goguma.service;
 
-import com.example.goguma.dto.PostImgResponseDto;
-import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.dto.*;
 import com.example.goguma.jwt.JwtProvider;
-import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
-import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
-import com.example.goguma.dto.CheckRequestDto;
-import com.example.goguma.repository.LikeRepository;
+import com.example.goguma.repository.ChatRepository;
 import com.example.goguma.repository.PostImgRepository;
-import com.example.goguma.repository.PostRepository;
 import com.example.goguma.repository.UserRepository;
-import com.example.goguma.dto.SignupRequestDto;
 import com.example.goguma.security.kakao.KakaoOAuth2;
 import com.example.goguma.security.kakao.KakaoUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,9 +24,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final KakaoOAuth2 kakaoOAuth2;
-    private final PostRepository postRepository;
     private final PostImgRepository postImgRepository;
-    private final LikeRepository likeRepository;
+    private final ChatRepository chatRepository;
     private final JwtProvider jwtProvider;
 
     public void registerUser(SignupRequestDto requestDto) {
@@ -82,7 +75,7 @@ public class UserService {
     }
 
     //아이디, 닉네임 중복 체크
-    public int checkUser(CheckRequestDto requestDto) {
+    public int checkUser(CheckUsernameRequestDto requestDto) {
         String username = requestDto.getUsername();
         Optional<User> found = userRepository.findByUsername(username);
         int count = 0;
@@ -94,7 +87,7 @@ public class UserService {
         return count;
     }
 
-    public int checkNickname (CheckRequestDto requestDto) {
+    public int checkNickname (CheckNicknameRequestDto requestDto) {
         String nickname = requestDto.getNickname();
         Optional<User> foundNick = userRepository.findByNickname(nickname);
         int count = 0;
@@ -112,19 +105,24 @@ public class UserService {
      * @return List<PostResponseDto> posts: 작성한 게시물
      */
     public List<PostResponseDto> getMyPosts(Long userId) {
-        List<Post> findPosts = postRepository.findByUserId(userId);
-        List<PostResponseDto> posts = new ArrayList<>();
-        List<PostImg> findPostImgs;
-        PostResponseDto postResponseDto = null;
-        for (Post findPost : findPosts) {
-            postResponseDto = new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
-            findPostImgs = postImgRepository.findByPostId(findPost.getId());
-            //post의 사진 추가
-            for (PostImg findPostImg : findPostImgs) {
-                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-            }
-            posts.add(postResponseDto);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
+        );
+
+        List<PostResponseDto> posts = user.getPosts().stream().map(
+                p -> {
+                    return new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    );
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
         }
 
         return posts;
@@ -137,28 +135,32 @@ public class UserService {
     }
 
     public List<PostResponseDto> getLikePosts(Long userId) {
-        List<Like> findLikes = likeRepository.findByUserId(userId);
-        List<PostResponseDto> posts = new ArrayList<>();
-        List<PostImg> findPostImgs;
-        Post findPost;
-        PostResponseDto postResponseDto = null;
-        for (Like findLike : findLikes) {
-            findPost = findLike.getPost();
-            postResponseDto = new PostResponseDto(
-                    findPost.getId(), findPost.getTitle(), findPost.getPrice(), findPost.getAddress(), findPost.getLikeCount());
-            findPostImgs = postImgRepository.findByPostId(findPost.getId());
-            //post의 사진 추가
-            for (PostImg findPostImg : findPostImgs) {
-                postResponseDto.getPostImgs().add(new PostImgResponseDto(findPostImg.getImg_url()));
-            }
-            posts.add(postResponseDto);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+        );
+
+        List<PostResponseDto> posts = user.getLikes().stream().map(
+                l -> {
+                    Post p = l.getPost();
+                    return new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    );
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
         }
 
         return posts;
     }
 
     @Transactional
-    public Long delete(Long id){
+    public Long deleteUser(Long id){
         userRepository.deleteById(id);
         return id;
     }

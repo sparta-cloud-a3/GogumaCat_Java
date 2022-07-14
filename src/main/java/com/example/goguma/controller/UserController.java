@@ -2,8 +2,6 @@ package com.example.goguma.controller;
 
 import com.example.goguma.dto.*;
 import com.example.goguma.service.AuthService;
-import com.example.goguma.service.LikeService;
-import com.example.goguma.service.PostService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,8 +19,6 @@ public class UserController {
 
     private final UserService userService;
     private final AuthService authService;
-    private final LikeService likeService;
-    private final PostService postService;
 
     //회원 로그인
     @PostMapping("/user/login1")
@@ -45,7 +41,7 @@ public class UserController {
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
-    public String registerUser(SignupRequestDto requestDto) {
+    public String registerUser(@RequestBody SignupRequestDto requestDto) {
         userService.registerUser(requestDto);
         return "redirect:/";
     }
@@ -65,16 +61,14 @@ public class UserController {
 
     @ResponseBody
     @PostMapping ("/user/sign_up/check_dup")
-    public int checkUser(CheckRequestDto requestDto){
-        int result = userService.checkUser(requestDto);
-        return result;
+    public int checkUser(@RequestBody CheckUsernameRequestDto requestDto){
+        return userService.checkUser(requestDto);
     }
 
     @ResponseBody
     @PostMapping("/user/sign_up/check_dup_nick")
-    public int checkNickname (CheckRequestDto requestDto){
-        int result = userService.checkNickname(requestDto);
-        return result;
+    public int checkNickname (@RequestBody CheckNicknameRequestDto requestDto){
+        return userService.checkNickname(requestDto);
     }
 
     /**
@@ -100,13 +94,9 @@ public class UserController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/user/delete/{id}")
     @ResponseBody
     public Long deleteUser(@PathVariable Long id){
-       likeService.deleteLike(id);
-       postService.deleteAllPost(id);
-       userService.delete(id);
-       return id;
-
+       return userService.deleteUser(id);
     }
 }

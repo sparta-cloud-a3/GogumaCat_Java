@@ -26,7 +26,6 @@ public class Post extends Timestamped {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Column(nullable = false)
@@ -54,6 +53,14 @@ public class Post extends Timestamped {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<PostImg> postImgs = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<ChatRoom> chatRooms = new ArrayList<>();
+
     public Post(String title, int price, String content, String address, String date) {
         this.title = title;
         this.price = price;
@@ -71,6 +78,15 @@ public class Post extends Timestamped {
     public void addPostImg(PostImg postImg) {
         postImg.addPost(this);
         postImgs.add(postImg);
+    }
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.addPost(this);
+    }
+
+    public void addChatRoom(ChatRoom chatRoom) {
+        chatRooms.add(chatRoom);
     }
 
     public void update(PostRequestDto postRequestDto) {
@@ -115,6 +131,5 @@ public class Post extends Timestamped {
     public int hashCode() {
         return Objects.hash(getId(), getUser(), getTitle(), getPrice(), getContent(), getLikeCount(), getAddress(), getDate(), isSold(), getPostImgs());
     }
-
 
 }

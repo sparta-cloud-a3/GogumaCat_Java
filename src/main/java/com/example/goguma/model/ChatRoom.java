@@ -18,12 +18,12 @@ public class ChatRoom extends Timestamped{
     private String roomId;
     private String roomName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name="post_id")
     @JsonIgnore
     private Post post;
 
-    @OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch=FetchType.LAZY)
     @JoinColumn(name= "user_id")
     @JsonIgnore
     private User user;
@@ -37,6 +37,7 @@ public class ChatRoom extends Timestamped{
 
     public void addPost(Post post) {
         this.post = post;
+        post.addChatRoom(this);
     }
 
     public void addUser(User user) {

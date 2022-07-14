@@ -22,21 +22,12 @@ public class OrderService {
         );
 
         Post post = chatRoom.getPost();
-
-        //판매완료
-        post.sold(true);
-
-        String[] dateSplit = post.getDate().split("~");
-        String startDate = dateSplit[0].trim();
-        String endDate = dateSplit[1].trim();
-
-        int price = post.getPrice();
         User customer = chatRoom.getUser();
 
         //주문 저장
-        Order order = new Order(startDate, endDate, price);
-        order.addCustomer(customer);
-        order.addPost(post);
+        Order order = Order.makeOrder(post);
+        customer.addOrder(order);
+        post.addOrder(order);
         orderRepository.save(order);
 
         //구매자한테 알림

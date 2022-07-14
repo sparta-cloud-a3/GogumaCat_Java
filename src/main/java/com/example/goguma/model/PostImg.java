@@ -22,7 +22,6 @@ public class PostImg {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
     public PostImg(String img_url) {
