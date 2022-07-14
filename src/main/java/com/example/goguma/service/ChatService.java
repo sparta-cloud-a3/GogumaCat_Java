@@ -49,12 +49,15 @@ public class ChatService {
     public String createRoom(User user, Long postId) {
         //채팅방 객체 만듦
         ChatRoom chatRoom = ChatRoom.create(user.getNickname());
+
         //연관관계 주입
         chatRoom.addUser(user);
+
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지않는 게시물 입니다.")
         );
         chatRoom.addPost(post);
+
         //채팅방 db에 저장
         ChatRoom save = chatRepository.save(chatRoom);
         return save.getRoomId();

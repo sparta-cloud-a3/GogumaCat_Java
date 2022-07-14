@@ -15,7 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,27 +36,22 @@ public class PostService {
 
         if (orderType.equals("latest")) { //최신순
              posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(
-                     p -> {
-                         return new PostResponseDto(
+                     p -> new PostResponseDto(
                                  p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                         );
-                     }
+                     )
+
              ).collect(Collectors.toList());
         } else { //인기순
             posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount")).stream().map(
-                    p -> {
-                        return new PostResponseDto(
+                    p -> new PostResponseDto(
                                 p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                        );
-                    }
-            ).collect(Collectors.toList());;
+                    )
+            ).collect(Collectors.toList());
         }
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
-                    pi -> {
-                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                    }
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
             );
         }
 
@@ -71,18 +65,14 @@ public class PostService {
      */
     public List<PostResponseDto> getSearchPosts(String keyword) {
         List<PostResponseDto> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword).stream().map(
-                p -> {
-                    return new PostResponseDto(
+                p -> new PostResponseDto(
                             p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                    );
-                }
+                )
         ).collect(Collectors.toList());
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
-                    pi -> {
-                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                    }
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
             );
         }
 
@@ -95,10 +85,8 @@ public class PostService {
         );
         PostResponseDto postResponseDto = PostResponseDto.toDto(post);
 
-        postImgRepository.findByPostId(postId).stream().forEach(
-                pi -> {
-                    postResponseDto.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
-                }
+        postImgRepository.findByPostId(postId).forEach(
+                pi -> postResponseDto.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
         );
 
         return postResponseDto;
