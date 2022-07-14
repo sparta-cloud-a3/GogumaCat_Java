@@ -9,12 +9,10 @@ import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PostService;
 import com.example.goguma.model.User;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,20 +37,25 @@ public class PostController {
      */
     @ResponseBody
     @RequestMapping("/post/{postId}")
-    public String getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public SimplePostDto getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-
-        JsonObject json = new JsonObject();
-        Gson gson = new Gson();
-
-        json.addProperty("post", gson.toJson(postService.getOnePost(postId)));
-        json.addProperty("nickname", info.getNickname());
-        json.addProperty("userId", info.getId());
-        json.addProperty("likeByMe", likeRepository.existsByuserIdAndPostId(info.getId(), postId));
-
-        return json.toString();
+        return new SimplePostDto(info.getId(), info.getNickname(), likeRepository.existsByuserIdAndPostId(info.getId(), postId), postService.getOnePost(postId));
     }
 
+    @Data
+    static class SimplePostDto {
+        private Long userId;
+        private String nickname;
+        private Boolean likeByMe;
+        private PostResponseDto post;
+
+        public SimplePostDto(Long userId, String nickname, Boolean likeByMe, PostResponseDto post) {
+            this.userId = userId;
+            this.nickname = nickname;
+            this.likeByMe = likeByMe;
+            this.post = post;
+        }
+    }
 
     @PostMapping(value = "/user_post", consumes = {"multipart/form-data"})
     @ResponseBody
@@ -68,12 +71,9 @@ public class PostController {
     }
 
     @RequestMapping("/posting_update/{postId}")
-    public String updatePostPage(@PathVariable Long postId) {
-        JsonObject json = new JsonObject();
-        Gson gson = new Gson();
-
-        json.addProperty("post", gson.toJson(postService.getOnePost(postId)));
-        return json.toString();
+    @ResponseBody
+    public PostResponseDto updatePostPage(@PathVariable Long postId) {
+        return postService.getOnePost(postId);
     }
 
     @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
