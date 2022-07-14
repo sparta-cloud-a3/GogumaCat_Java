@@ -3,6 +3,7 @@ package com.example.goguma;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
+import com.example.goguma.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class initDB {
 
     @PostConstruct
     public void init() {
-        initService.dbInit1();
+        initService.dbInit();
     }
 
 
@@ -30,8 +31,9 @@ public class initDB {
     static class InitService {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
+        private final ChatService chatService;
 
-        public void dbInit1() {
+        public void dbInit() {
             String pw = passwordEncoder.encode("aaaa");
 
             User user1 = new User("user1", pw, "호구마", "서울시 중구 뭐동");
@@ -76,6 +78,9 @@ public class initDB {
 
             em.flush();
             em.clear();
+
+            chatService.createRoom(user2, post1.getId());
+            chatService.createRoom(user3, post1.getId());
         }
     }
 }

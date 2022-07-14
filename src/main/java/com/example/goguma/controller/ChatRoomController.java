@@ -1,19 +1,20 @@
 package com.example.goguma.controller;
-
+import com.example.goguma.dto.ChatRoomResponseDto;
+import com.example.goguma.dto.Result;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
 
 import lombok.Data;
-import com.google.gson.JsonObject;
-
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -56,9 +57,8 @@ public class ChatRoomController {
     @GetMapping("/room/enter/{postId}")
     public Object rooms(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        JsonObject json = new JsonObject();
-
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
+
         if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
             if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
 //                model.addAttribute("nickname", info.getNickname());
@@ -88,9 +88,12 @@ public class ChatRoomController {
      * @return post에 만들어진 채팅방
      */
     @GetMapping("/rooms/{postId}")
-    @ResponseBody
-    public List<ChatRoom> findRoomByPostId(@PathVariable Long postId) {
-        return chatService.findRoomByPostId(postId);
+    public Result findRoomByPostId(@PathVariable Long postId) {
+        List<ChatRoom> chatRooms = chatService.findRoomByPostId(postId);
+        List<ChatRoomResponseDto> chatRoomsResp = chatRooms.stream().map(
+                c -> new ChatRoomResponseDto(c.getRoomId(), c.getRoomName())
+        ).collect(Collectors.toList());
+        return new Result(chatRoomsResp.size(), chatRoomsResp);
     }
 
     /**
@@ -115,8 +118,8 @@ public class ChatRoomController {
      * @return roomId와 같은 인덱스를 가진 채팅방 반환
      */
     @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatService.findById(roomId);
+    public ChatRoomResponseDto roomInfo(@PathVariable String roomId) {
+        ChatRoom chatRoom = chatService.findById(roomId);
+        return new ChatRoomResponseDto(chatRoom.getRoomId(), chatRoom.getRoomName());
     }
 }
