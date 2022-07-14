@@ -4,6 +4,7 @@ import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.ChatService;
+import com.google.gson.JsonObject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -32,27 +33,32 @@ public class ChatRoomController {
      * @return 각자에 맞는 view를 리턴
      */
     @GetMapping("/room/enter/{postId}")
+    @ResponseBody
     public String rooms(@PathVariable Long postId, Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
+        JsonObject json = new JsonObject();
 
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
         if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
             if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
-                model.addAttribute("nickname", info.getNickname());
-                model.addAttribute("roomId", chatService.createRoom(info, postId));
-                model.addAttribute("isSeller", false);
-                return "/roomdetail";
+                json.addProperty("nickname", info.getNickname());
+                json.addProperty("roomId", chatService.createRoom(info, postId));
+                json.addProperty("isSeller", false);
+                return json.toString();
+//                return "/roomdetail";
             } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
-                model.addAttribute("nickname", info.getNickname());
-                model.addAttribute("roomId", existsRoom.getRoomId());
-                model.addAttribute("isSeller", false);
-                return "/roomdetail";
+                json.addProperty("nickname", info.getNickname());
+                json.addProperty("roomId", existsRoom.getRoomId());
+                json.addProperty("isSeller", false);
+                return json.toString();
+//                return "/roomdetail";
             }
         } else {
             // 만약 판매자라면 -> 연락온 리스트를 리턴
-            model.addAttribute("nickname", info.getNickname());
-            model.addAttribute("postId", postId);
-            return "/room";
+            json.addProperty("nickname", info.getNickname());
+            json.addProperty("postId", postId);
+            return json.toString();
+//            return "/room";
         }
     }
 
@@ -76,12 +82,15 @@ public class ChatRoomController {
      * @throws IOException
      */
     @GetMapping("/mypostroom/enter/{roomId}")
+    @ResponseBody
     public String roomDetail(Model model, @PathVariable String roomId, HttpServletResponse response,@AuthenticationPrincipal UserDetailsImpl userDetails) throws IOException {
         User info = userDetails.getUser();
-        model.addAttribute("nickname", info.getNickname());
-        model.addAttribute("roomId", roomId);
-        model.addAttribute("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
-        return "/roomdetail";
+        JsonObject json = new JsonObject();
+        json.addProperty("nickname", info.getNickname());
+        json.addProperty("roomId", roomId);
+        json.addProperty("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
+        return json.toString();
+//        return "/roomdetail";
     }
 
     /**
