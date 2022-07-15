@@ -4,7 +4,7 @@ spring:
 
   datasource:
     driver-class-name: com.amazonaws.secretsmanager.sql.AWSSecretsManagerMySQLDriver
-    url: jdbc-secretsmanager:mysql://gogumacat.cimrt630hwo7.ap-northeast-2.rds.amazonaws.com:3306/ebdb
+    url: jdbc-secretsmanager:mysql://aa1bdj11860gazf.cimrt630hwo7.ap-northeast-2.rds.amazonaws.com:3306/ebdb
     username: rds-gogumacat
 
   jpa:
