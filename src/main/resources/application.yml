@@ -13,12 +13,12 @@ spring:
 cloud :
   aws :
     credentials:
-      access-key: ${aws.s3.accessKey}
-      secret-key: ${aws.s3.secretKey}
+      access-key: AKIAWRHAIJ66UY7ZU3WS
+      secret-key: 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
     region:
-      static: ${aws.s3.region}
+      static: ap-northeast-2
     s3 :
-      bucket : ${aws.s3.bucket}
+      bucket : gogumacat-s3
 
   jpa:
     hibernate:
