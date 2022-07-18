@@ -10,6 +10,13 @@ spring:
     url: jdbc-secretsmanager:mysql://aa1nobpazppttpv.cimrt630hwo7.ap-northeast-2.rds.amazonaws.com:3306/ebdb
     username: rds-gogumacat1
 
+  aws :
+    s3 :
+      accessKey : ${aws.s3.accessKey}
+      secretKey : ${aws.s3.secretKey}
+      region : ${aws.s3.region}
+      bucket : ${aws.s3.bucket}
+
   jpa:
     hibernate:
       ddl-auto: update
