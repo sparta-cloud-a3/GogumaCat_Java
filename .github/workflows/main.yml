@@ -52,7 +52,7 @@ jobs:
             *gogumacat*
             rds-gogumacat
             /secret/gogumacat
-          parse-json: true
+          parse-json: false
 
 
       # Gradle build를 통해 만들어진 JAR를 beanstalk에 배포하기 위한 ZIP 파일로 만드는 것
