@@ -143,4 +143,20 @@ public class PostService {
             post.addPostImg(postImg);
         }
     }
+
+    public List<PostResponseDto> getTop4Posts() {
+        List<PostResponseDto> posts = postRepository.findTop4ByOrderByLikeCountDesc().stream().map(
+                p -> new PostResponseDto(
+                        p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                )
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()))
+            );
+        }
+
+        return posts;
+    }
 }

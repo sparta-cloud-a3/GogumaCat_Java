@@ -43,6 +43,7 @@ public class PostController {
 
     /**
      * 전체 게시물 리스팅
+     *
      * @param orderType latest or like
      * @return 전체 게시물
      */
@@ -54,6 +55,7 @@ public class PostController {
 
     /**
      * 회원이 게시물을 선택하면 상세페이지를 보여준다.
+     *
      * @param postId
      * @return 상세 게시물
      */
@@ -64,14 +66,14 @@ public class PostController {
     }
 
     @PostMapping(value = "/post/create", consumes = {"multipart/form-data"})
-    public PostResponseDto createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public PostResponseDto createPost(@ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
         Post post = postService.createPost(postRequestDto, info.getId());
         return PostResponseDto.toDto(post);
     }
 
     @DeleteMapping("/post/delete/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId){
+    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/"));
@@ -94,9 +96,14 @@ public class PostController {
     }
 
     @GetMapping("/post/search")
-    public Result search(@RequestParam String query){
+    public Result search(@RequestParam String query) {
         List<PostResponseDto> posts = postService.getSearchPosts(query);
         return new Result(posts.size(), posts);
     }
 
+    @GetMapping("/post/top4")
+    public Result getTop4Posts() {
+        List<PostResponseDto> posts = postService.getTop4Posts();
+        return new Result(posts.size(), posts);
+    }
 }
