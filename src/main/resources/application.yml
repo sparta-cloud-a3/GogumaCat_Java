@@ -18,7 +18,7 @@ cloud :
     region:
       static: ${aws.s3.region}
     s3 :
-      bucket : ${aws.s3.bucket}      
+      bucket : ${aws.s3.bucket}
 
   jpa:
     hibernate:
