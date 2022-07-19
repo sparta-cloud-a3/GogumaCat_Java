@@ -1,7 +1,5 @@
 venv
 
-main/resources/application.properties
-
 HELP.md
 .gradle
 build/
@@ -39,3 +37,5 @@ out/
 
 ### VS Code ###
 .vscode/
+
+main/resources/application.properties
