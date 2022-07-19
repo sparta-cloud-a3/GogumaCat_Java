@@ -58,27 +58,12 @@ public class ChatRoomController {
     public Object rooms(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
+        System.out.println("existsRoom = " + existsRoom);
 
-        if (chatService.isCustomer(info, postId)) { //생성된 방이 아니라면
-            if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
-//                model.addAttribute("nickname", info.getNickname());
-//                model.addAttribute("roomId", chatService.createRoom(info, postId));
-//                model.addAttribute("isSeller", false);
-//                return "/roomdetail";
-                return new ChatDto(info.getNickname(), chatService.createRoom(info, postId), false);
-            } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
-//                model.addAttribute("nickname", info.getNickname());
-//                model.addAttribute("roomId", existsRoom.getRoomId());
-//                model.addAttribute("isSeller", false);
-//                return "/roomdetail";
-                return new ChatDto(info.getNickname(), existsRoom.getRoomId(), false);
-            }
-        } else {
-            // 만약 판매자라면 -> 연락온 리스트를 리턴
-//            model.addAttribute("nickname", info.getNickname());
-//            model.addAttribute("postId", postId);
-//            return "/room";
-            return new ChatListDto(info.getNickname(), postId);
+        if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
+            return new ChatDto(info.getNickname(), chatService.createRoom(info, postId), false);
+        } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
+            return new ChatDto(info.getNickname(), existsRoom.getRoomId(), false);
         }
     }
 
@@ -105,10 +90,6 @@ public class ChatRoomController {
     @GetMapping("/mypostroom/enter/{roomId}")
     public ChatDto roomDetail(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-//        model.addAttribute("nickname", info.getNickname());
-//        model.addAttribute("roomId", roomId);
-//        model.addAttribute("isSeller", chatService.isSeller(userDetails.getUsername(), roomId));
-//        return "/roomdetail";
         return new ChatDto(info.getNickname(), roomId, chatService.isSeller(userDetails.getUsername(), roomId));
     }
 
