@@ -26,6 +26,5 @@ public class LikeController {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(uri));
         return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
-//        return "redirect:/post/" + postId;
     }
 }

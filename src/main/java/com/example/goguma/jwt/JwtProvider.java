@@ -109,19 +109,8 @@ public class JwtProvider {
     }
 
     public String resolveToken(HttpServletRequest request) {
-//        Cookie[] cookies = request.getCookies();
-//        String token = null;
-//        if(cookies != null) {
-//            for (Cookie cookie : cookies) {
-//                if (cookie.getName().equals("mytoken")) {
-//                    token = cookie.getValue();
-//                    System.out.println("cookie = " + cookie);
-//                }
-//            }
-//        }
-        String token = request.getHeader("token");
-        System.out.println("token = " + token);
-        return token;
+        return request.getHeader("token");
+
     }
 
     public boolean validateJwtToken(ServletRequest request, String authToken) {
