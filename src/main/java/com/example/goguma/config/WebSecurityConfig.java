@@ -45,15 +45,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 그 외 모든 요청은 인증과정 필요
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/user/login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout()
-                .logoutUrl("/user/logout")
-                .permitAll()
-                .and()
                 .exceptionHandling()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
