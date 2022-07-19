@@ -28,7 +28,7 @@ public class UserService {
     private final ChatRepository chatRepository;
     private final JwtProvider jwtProvider;
 
-    public void registerUser(SignupRequestDto requestDto) {
+    public Long registerUser(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
         String nickname = requestDto.getNickname();
 
@@ -37,7 +37,7 @@ public class UserService {
         String address = requestDto.getAddress();
 
         User user = new User(username, password, nickname, address);
-        userRepository.save(user);
+        return userRepository.save(user).getId();
     }
 
     public String kakaoLogin(String authorizedCode) {
