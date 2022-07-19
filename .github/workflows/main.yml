@@ -52,7 +52,7 @@
 #            *gogumacat*
 #            rds-gogumacat
 #            /secret/gogumacat
-#          parse-json: true
+#          parse-json: false
 #
 #
 #      # Gradle build를 통해 만들어진 JAR를 beanstalk에 배포하기 위한 ZIP 파일로 만드는 것
@@ -77,6 +77,3 @@
 #          region: ap-northeast-2
 #          deployment_package: deploy/deploy.zip
 #          wait_for_environment_recovery: 180 # default wait time은 30초이며, 필자의 EB가 느려서 180초로 지정했습니다(지정 안하면 간혹 timeout 발생).
-#
-#
-#
