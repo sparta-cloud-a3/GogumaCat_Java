@@ -41,9 +41,9 @@ public class UserController {
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
-    public String registerUser(@RequestBody SignupRequestDto requestDto) {
-        userService.registerUser(requestDto);
-        return "redirect:/";
+    @ResponseBody
+    public Long registerUser(@RequestBody SignupRequestDto requestDto) {
+        return userService.registerUser(requestDto);
     }
 
     @GetMapping("/user/kakao/callback")

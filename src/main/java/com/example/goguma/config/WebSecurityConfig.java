@@ -13,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
@@ -30,8 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-        http.headers().addHeaderWriter(
-                new StaticHeadersWriter("Access-Control-Allow-Origin", "*"));
         http.authorizeRequests()
                 // 폴더를 login 없이 허용
                 .antMatchers("/js/**").permitAll()
@@ -41,6 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/actuator/health").permitAll()
+                .antMatchers("/ws/chat/**").permitAll()
+                .antMatchers("/queue/**").permitAll()
+                .antMatchers("/topic/**").permitAll()
+                .antMatchers("/app/**").permitAll()
                 // 그 외 모든 요청은 인증과정 필요
                 .anyRequest().authenticated()
                 .and()

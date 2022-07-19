@@ -10,16 +10,18 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
+    private final static String URL = "http://127.0.0.1:5500";
+
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws/chat")
+                .setAllowedOriginPatterns(URL)
+                .withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-
         registry.enableSimpleBroker("/queue", "/topic");
-
         registry.setApplicationDestinationPrefixes("/app");
     }
 }
