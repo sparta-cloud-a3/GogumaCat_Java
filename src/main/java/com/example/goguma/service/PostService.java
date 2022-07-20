@@ -3,6 +3,8 @@ package com.example.goguma.service;
 import com.example.goguma.dto.PostImgResponseDto;
 import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
+import com.example.goguma.exception.NoSuchPostException;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
@@ -81,7 +83,7 @@ public class PostService {
 
     public PostResponseDto getOnePost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 상품입니다.")
+                NoSuchPostException::new
         );
         PostResponseDto postResponseDto = PostResponseDto.toDto(post);
 
@@ -96,7 +98,7 @@ public class PostService {
     public Post createPost(PostRequestDto postRequestDto, Long userId) {
         Post post = postRequestDto.toEntity();
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
+                NoSuchUserException::new
         );
         user.addPost(post);
         postRepository.save(post);
@@ -124,7 +126,7 @@ public class PostService {
     public void updatePost(Long postId, PostRequestDto postRequestDto) {
         //사진 외에 post field 변경
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+                NoSuchPostException::new
         );
 
         post.update(postRequestDto);

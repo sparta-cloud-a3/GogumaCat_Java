@@ -39,17 +39,11 @@ public class S3Service {
             PutObjectResult result = s3Client.putObject(request);
             return key;
         } catch (AmazonServiceException e) {
-            // The call was transmitted successfully, but Amazon S3 couldn't process
-            // it, so it returned an error response.
-            log.error("uploadToAWS AmazonServiceException filePath={}, yyyymm={}, error={}", e.getMessage());
+            log.error("uploadToAWS AmazonServiceException filePath={}, error={}",key, e.getMessage());
         } catch (SdkClientException e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}",key, e.getMessage());
         } catch (Exception e) {
-            // Amazon S3 couldn't be contacted for a response, or the client
-            // couldn't parse the response from Amazon S3.
-            log.error("uploadToAWS SdkClientException filePath={}, error={}", e.getMessage());
+            log.error("uploadToAWS SdkClientException filePath={}, error={}",key, e.getMessage());
         }
 
         return key;

@@ -2,6 +2,7 @@ package com.example.goguma.service;
 
 import com.example.goguma.dto.PasswordCheckDto;
 import com.example.goguma.dto.ProfileUpdateDto;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +22,17 @@ public class PwService {
     public boolean checkPw(PasswordCheckDto passwordCheckDto){
         String nickname = passwordCheckDto.getNickname();
         String pw = passwordCheckDto.getPassword();
-        Optional<User> found = userRepository.findByNickname(nickname);
-        String dbPw = found.get().getPassword();
-        boolean result = passwordEncoder.matches(pw, dbPw);
-        return result;
+        User found = userRepository.findByNickname(nickname).orElseThrow(
+                NoSuchUserException::new
+        );
+        String dbPw = found.getPassword();
+        return passwordEncoder.matches(pw, dbPw);
     }
 
     @Transactional
     public void update(Long id, ProfileUpdateDto profileUpdateDto){
         User user = userRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("ID가 존재하지 않습니다.")
+                NoSuchUserException::new
         );
         if (user.getProfilePic() != null){
             String[] spliturl = user.getProfilePic().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");

@@ -1,6 +1,7 @@
 package com.example.goguma.service;
 
 import com.example.goguma.dto.*;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.jwt.JwtProvider;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -81,9 +82,8 @@ public class UserService {
         int count = 0;
         if (found.isPresent()) {
             count += 1;
-        } else {
-            count = 0;
         }
+
         return count;
     }
 
@@ -93,9 +93,8 @@ public class UserService {
         int count = 0;
         if (foundNick.isPresent()) {
             count += 1;
-        } else {
-            count = 0;
         }
+
         return count;
     }
 
@@ -106,7 +105,7 @@ public class UserService {
      */
     public List<PostResponseDto> getMyPosts(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원 입니다.")
+                NoSuchUserException::new
         );
 
         List<PostResponseDto> posts = user.getPosts().stream().map(
@@ -118,7 +117,7 @@ public class UserService {
         ).collect(Collectors.toList());
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+            postImgRepository.findByPostId(post.getPostId()).forEach(
                     pi -> {
                         post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
                     }
@@ -130,13 +129,13 @@ public class UserService {
 
     public User profile(Long id){
         return userRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+                NoSuchUserException::new
         );
     }
 
     public List<PostResponseDto> getLikePosts(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 사용자 입니다.")
+                NoSuchUserException::new
         );
 
         List<PostResponseDto> posts = user.getLikes().stream().map(
@@ -149,7 +148,7 @@ public class UserService {
         ).collect(Collectors.toList());
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
-            postImgRepository.findByPostId(post.getPostId()).stream().forEach(
+            postImgRepository.findByPostId(post.getPostId()).forEach(
                     pi -> {
                         post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
                     }

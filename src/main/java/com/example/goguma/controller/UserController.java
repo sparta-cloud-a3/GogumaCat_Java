@@ -4,7 +4,6 @@ import com.example.goguma.dto.*;
 import com.example.goguma.service.AuthService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -13,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
@@ -22,14 +21,12 @@ public class UserController {
 
     //회원 로그인
     @PostMapping("/user/login1")
-    @ResponseBody
     public String login(@RequestBody @Valid UserRequestDto.LoginDto loginDto) { //@Valid는 LoginDto에 모든 칸이 채워졌는지 검사
         return authService.login(loginDto);
     }
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
-    @ResponseBody
     public Long registerUser(@RequestBody SignupRequestDto requestDto) {
         return userService.registerUser(requestDto);
     }
@@ -47,13 +44,11 @@ public class UserController {
         return "redirect:/";
     }
 
-    @ResponseBody
     @PostMapping ("/user/sign_up/check_dup")
     public int checkUser(@RequestBody CheckUsernameRequestDto requestDto){
         return userService.checkUser(requestDto);
     }
 
-    @ResponseBody
     @PostMapping("/user/sign_up/check_dup_nick")
     public int checkNickname (@RequestBody CheckNicknameRequestDto requestDto){
         return userService.checkNickname(requestDto);
@@ -64,7 +59,6 @@ public class UserController {
      * @param userId
      * @return 작성한 게시물 리스트
      */
-    @ResponseBody
     @GetMapping("/user/get_write_posts/{userId}")
     public List<PostResponseDto> getMyPosts(@PathVariable Long userId) {
         return userService.getMyPosts(userId);
@@ -75,7 +69,6 @@ public class UserController {
      * @param userId
      * @return 관심 상품 리스트
      */
-    @ResponseBody
     @GetMapping("/user/get_like_posts/{userId}")
     public List<PostResponseDto> getLikePosts(@PathVariable Long userId) {
         return userService.getLikePosts(userId);
@@ -83,7 +76,6 @@ public class UserController {
 
 
     @DeleteMapping("/user/delete/{id}")
-    @ResponseBody
     public Long deleteUser(@PathVariable Long id){
        return userService.deleteUser(id);
     }

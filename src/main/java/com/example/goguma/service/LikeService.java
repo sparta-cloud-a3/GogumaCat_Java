@@ -1,5 +1,7 @@
 package com.example.goguma.service;
 
+import com.example.goguma.exception.NoSuchPostException;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -20,11 +22,12 @@ public class LikeService {
 
     public void updateLike(Long postId, String action, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 회원입니다.")
+                NoSuchUserException::new
         );
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+                NoSuchPostException::new
         );
+
         if (action.equals("like")) {
             Like like = new Like(post, user);
             user.addLike(like);

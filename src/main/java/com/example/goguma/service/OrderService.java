@@ -1,5 +1,6 @@
 package com.example.goguma.service;
 
+import com.example.goguma.exception.NoSuchRoomException;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Order;
 import com.example.goguma.model.Post;
@@ -18,7 +19,7 @@ public class OrderService {
 
     public String order(String roomId) {
         ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                NoSuchRoomException::new
         );
 
         Post post = chatRoom.getPost();
