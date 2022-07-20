@@ -1,5 +1,6 @@
 package com.example.goguma.service;
 
+import com.example.goguma.exception.NoSuchPostException;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -29,15 +30,13 @@ public class ChatService {
      */
     public boolean isCustomer(User clickUser, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지않는 게시물 입니다.")
+                NoSuchPostException::new
         );
         User postUser = post.getUser();
 
-        if (clickUser.getId().equals(postUser.getId())) { //login user와 post의 user가 같다면 -> 판매자
-            return false;
-        }  else { //login user와 post의 user가 같다면 -> 소비자
-            return true;
-        }
+        //login user와 post의 user가 같다면 -> 판매자
+        //login user와 post의 user가 같다면 -> 소비자
+        return !clickUser.getId().equals(postUser.getId());
     }
 
     /**
