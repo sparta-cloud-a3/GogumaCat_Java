@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/user/kakao/callback")
-    public String kakaoLogin(String code, HttpServletResponse httpServletResponse) {
+    public Cookie kakaoLogin(String code, HttpServletResponse httpServletResponse) {
         // authorizedCode: 카카오 서버로부터 받은 인가 코드
         String jwt = userService.kakaoLogin(code);
         //카카오 로그인 시 발급 받은 토큰으로 쿠키 만들어서 클라이언트로 넘겨주는 코드
@@ -41,7 +41,7 @@ public class UserController {
         cookie.setPath("/");
         httpServletResponse.addCookie(cookie);
 
-        return "redirect:/";
+        return cookie;
     }
 
     @PostMapping ("/user/sign_up/check_dup")
