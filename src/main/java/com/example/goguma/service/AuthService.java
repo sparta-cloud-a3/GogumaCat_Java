@@ -1,6 +1,7 @@
 package com.example.goguma.service;
 
 import com.example.goguma.dto.UserRequestDto;
+import com.example.goguma.exception.LoginException;
 import com.example.goguma.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,9 @@ public class AuthService {
                     new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
             );
         } catch (Exception e) {
-            log.error(e.getMessage());
+            throw new LoginException();
         }
+
         jwtProvider.createRefreshToken(loginDto);
 
         return jwtProvider.createAccessToken(loginDto);
