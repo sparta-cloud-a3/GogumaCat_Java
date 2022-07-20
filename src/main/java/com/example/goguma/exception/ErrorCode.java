@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public enum ErrorCode {
 
     NO_SUCH_POST(400, "P001", "존재하지 않는 게시물 입니다."),
+    NO_SUCH_ROOM(400, "R001", "존재하지 않는 채팅방 입니다."),
     INTERNAL_SERVER_ERROR(500, "500", "서버 에러");
 
     private int status;

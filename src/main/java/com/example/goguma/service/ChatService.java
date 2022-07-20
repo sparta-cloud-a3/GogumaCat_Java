@@ -1,6 +1,7 @@
 package com.example.goguma.service;
 
 import com.example.goguma.exception.NoSuchPostException;
+import com.example.goguma.exception.NoSuchRoomException;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -34,8 +35,7 @@ public class ChatService {
         );
         User postUser = post.getUser();
 
-        //login user와 post의 user가 같다면 -> 판매자
-        //login user와 post의 user가 같다면 -> 소비자
+        //login user와 post의 user가 같다면 -> 판매자, login user와 post의 user가 같다면 -> 소비자
         return !clickUser.getId().equals(postUser.getId());
     }
 
@@ -53,7 +53,7 @@ public class ChatService {
         chatRoom.addUser(user);
 
         Post post = postRepository.findById(postId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지않는 게시물 입니다.")
+                NoSuchRoomException::new
         );
         chatRoom.addPost(post);
 
@@ -81,7 +81,7 @@ public class ChatService {
      */
     public ChatRoom findById(String roomId) {
         return chatRepository.findById(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                NoSuchRoomException::new
         );
     }
 
@@ -96,7 +96,7 @@ public class ChatService {
 
     public boolean isSeller(String username, String roomId) {
         ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 채팅방입니다.")
+                NoSuchRoomException::new
         );
         String seller = chatRoom.getPost().getUser().getUsername();
         return seller.equals(username);
