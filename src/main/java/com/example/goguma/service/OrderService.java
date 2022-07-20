@@ -38,7 +38,11 @@ public class OrderService {
         return customer.getNickname() + "님과 거래가 되었습니다!";
     }
 
-    public List<Order> orderList(Long userId) {
-        return orderRepository.findAllByIsCheckedAndUserId(false, userId);
+    public List<Order> notCheckedOrderList(Long userId) {
+        return orderRepository.findAllByUserIdAndIsChecked(userId, false);
+    }
+
+    public boolean hasOrder(Long userId) {
+        return orderRepository.existsByUserIdAndIsChecked(userId, false);
     }
 }
