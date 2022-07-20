@@ -107,12 +107,10 @@ public class User extends Timestamped {
 
     public void accessToken(String accessToken){
         this.accessToken = accessToken;
-        System.out.println("this.accessToken : "+this.accessToken);
     }
 
     public void refreshToken(String refreshToken){
         this.refreshToken = refreshToken;
-        System.out.println("this.refreshToken : "+this.refreshToken);
     }
 }
 

@@ -9,6 +9,8 @@ public enum ErrorCode {
     NO_SUCH_ROOM(400, "R001", "존재하지 않는 채팅방 입니다."),
     NO_SUCH_USER(400, "U001", "존재하지 않는 사용자 입니다."),
     LOGIN(400, "U002", "아이디나 비밀번호가 일치하지 않습니다."),
+    NO_TOKEN(403, "U003", "로그인을 먼저 해주세요."),
+    INVALID_TOKEN(500, "U004", "토큰이 옳지 않습니다. 로그인을 다시 해주세요."),
     INTERNAL_SERVER_ERROR(500, "500", "서버 에러");
 
     private int status;

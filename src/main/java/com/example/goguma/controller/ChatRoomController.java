@@ -58,7 +58,6 @@ public class ChatRoomController {
     public Object rooms(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
-        System.out.println("existsRoom = " + existsRoom);
 
         if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
             return new ChatDto(info.getNickname(), chatService.createRoom(info, postId), false);

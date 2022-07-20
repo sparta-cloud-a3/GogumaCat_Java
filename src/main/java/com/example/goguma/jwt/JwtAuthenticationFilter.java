@@ -1,5 +1,6 @@
 package com.example.goguma.jwt;
 
+import com.example.goguma.exception.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,10 +28,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 // SecurityContext 에 Authentication 객체를 저장합니다.
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new InvalidTokenException();
         }
+
         chain.doFilter(request, response);
     }
 }

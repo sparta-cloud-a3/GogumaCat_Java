@@ -1,6 +1,7 @@
 package com.example.goguma.jwt;
 
 import com.example.goguma.dto.UserRequestDto;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.UserDetailsServiceImpl;
@@ -9,12 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
@@ -57,10 +56,12 @@ public class JwtProvider {
                 .setExpiration(expiration)    // 토큰 만료 시간
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
+
         User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
-                () -> new NullPointerException("Username이 존재하지 않습니다."));
+                NoSuchUserException::new
+        );
+
         user.accessToken(jwt);
-        System.out.println("여기는 AccessToken : "+jwt);
 
         return jwt;
     }
@@ -86,13 +87,17 @@ public class JwtProvider {
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
+
         User user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
-                () -> new NullPointerException("Username이 존재하지 않습니다."));
+                NoSuchUserException::new
+        );
+
         user.refreshToken(jwt);
-        System.out.println("여기가 리프레쉬 토큰 : " +jwt);
+
         Map<String, String> result = new HashMap<>();
         result.put("refreshToken", jwt);
         result.put("refreshTokenExpirationAt", refreshTokenExpirationAt);
+
         return result;
     }
 
@@ -110,7 +115,6 @@ public class JwtProvider {
 
     public String resolveToken(HttpServletRequest request) {
         return request.getHeader("token");
-
     }
 
     public boolean validateJwtToken(ServletRequest request, String authToken) {
@@ -162,9 +166,9 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new NullPointerException("Username이 존재하지 않습니다."));
+                NoSuchUserException::new
+        );
         user.accessToken(jwt);
-        System.out.println("여기는 AccessToken : "+jwt);
 
         return jwt;
     }
@@ -191,12 +195,14 @@ public class JwtProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
                 .compact();
         User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new NullPointerException("Username이 존재하지 않습니다."));
+                NoSuchUserException::new
+        );
         user.refreshToken(jwt);
-        System.out.println("여기가 리프레쉬 토큰 : " +jwt);
+
         Map<String, String> result = new HashMap<>();
         result.put("refreshToken", jwt);
         result.put("refreshTokenExpirationAt", refreshTokenExpirationAt);
+
         return result;
     }
 }
