@@ -52,20 +52,10 @@ dependencies {
     implementation 'org.webjars:sockjs-client:1.1.2'
     implementation 'org.webjars:stomp-websocket:2.3.3-1'
 
-    //view
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-freemarker'
-    implementation 'org.springframework.boot:spring-boot-devtools'
-    implementation 'org.webjars.bower:bootstrap:4.3.1'
-    implementation 'org.webjars.bower:vue:2.5.16'
-    implementation 'org.webjars.bower:axios:0.17.1'
-    implementation 'com.google.code.gson:gson:2.8.0'
-
     // aws s3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.239'
     implementation 'com.amazonaws:aws-java-sdk-secretsmanager:1.12.239'
     implementation 'com.amazonaws:aws-encryption-sdk-java:2.4.0'
-
 
     //다중 이미지 처리
     implementation 'commons-io:commons-io:2.11.0'
