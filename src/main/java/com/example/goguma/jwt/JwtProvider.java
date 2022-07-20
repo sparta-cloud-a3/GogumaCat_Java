@@ -1,6 +1,7 @@
 package com.example.goguma.jwt;
 
 import com.example.goguma.dto.UserRequestDto;
+import com.example.goguma.exception.InvalidTokenException;
 import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
@@ -139,6 +140,15 @@ public class JwtProvider {
             request.setAttribute("exception", "IllegalArgumentException");
         }
         return false;
+    }
+
+    public boolean validateJwtToken(String authToken) {
+        try {
+            Jwts.parser().setSigningKey(secretKey.getBytes()).parseClaimsJws(authToken);
+            return true;
+        } catch (Exception e) {
+            throw new InvalidTokenException();
+        }
     }
 
     @Transactional

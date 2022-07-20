@@ -10,6 +10,8 @@ import com.example.goguma.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -34,5 +36,9 @@ public class OrderService {
         //구매자한테 알림
 
         return customer.getNickname() + "님과 거래가 되었습니다!";
+    }
+
+    public List<Order> orderList(Long userId) {
+        return orderRepository.findAllByIsCheckedAndUserId(false, userId);
     }
 }
