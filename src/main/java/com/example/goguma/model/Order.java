@@ -22,6 +22,8 @@ public class Order extends Timestamped{
 
     private int price;
 
+    private boolean isChecked;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     private Post post;
@@ -34,6 +36,7 @@ public class Order extends Timestamped{
         this.startDate = startDate;
         this.endDate = endDate;
         this.price = price;
+        this.isChecked = false;
     }
 
     public void addCustomer(User user) {
