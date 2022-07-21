@@ -39,3 +39,5 @@ out/
 .vscode/
 
 main/resources/application.properties
+
+application_log/
