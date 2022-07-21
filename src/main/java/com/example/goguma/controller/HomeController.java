@@ -1,7 +1,9 @@
 package com.example.goguma.controller;
 
+import com.example.goguma.dto.UserInfoResponseDto;
 import com.example.goguma.model.User;
 import com.example.goguma.security.UserDetailsImpl;
+import com.example.goguma.service.OrderService;
 import com.example.goguma.service.UserService;
 import com.google.gson.JsonObject;
 import lombok.Data;
@@ -14,14 +16,17 @@ import org.springframework.web.bind.annotation.*;
 public class HomeController {
 
     private final UserService userService;
+    private final OrderService orderService;
 
     @RequestMapping("/")
-    public String home(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public UserInfoResponseDto home(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        JsonObject json = new JsonObject();
-        json.addProperty("id",info.getId());
-        json.addProperty("nickname", info.getNickname());
-        return json.toString();
+        Long userId = info.getId();
+        UserInfoResponseDto userInfoResponseDto = new UserInfoResponseDto(userId, info.getNickname());
+        if(orderService.hasOrder(userId)) {
+            userInfoResponseDto.addOrders(orderService.notCheckedOrderList(userId));
+        }
+        return userInfoResponseDto;
     }
 
     @GetMapping("/profileinfo/{id}")

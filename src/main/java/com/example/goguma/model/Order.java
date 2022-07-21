@@ -61,4 +61,17 @@ public class Order extends Timestamped{
 
         return new Order(startDate, endDate, price);
     }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", price=" + price +
+                ", isChecked=" + isChecked +
+                ", post=" + post +
+                ", user=" + user +
+                '}';
+    }
 }

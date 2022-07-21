@@ -4,6 +4,7 @@ import com.example.goguma.model.Post;
 import com.example.goguma.model.PostImg;
 import com.example.goguma.model.User;
 import com.example.goguma.service.ChatService;
+import com.example.goguma.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class initDB {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
         private final ChatService chatService;
+        private final OrderService orderService;
 
         public void dbInit() {
             String pw = passwordEncoder.encode("aaaa");
@@ -79,8 +81,10 @@ public class initDB {
             em.flush();
             em.clear();
 
-            chatService.createRoom(user2, post1.getId());
+            String roomId = chatService.createRoom(user2, post1.getId());
             chatService.createRoom(user3, post1.getId());
+
+            orderService.order(roomId);
         }
     }
 }
