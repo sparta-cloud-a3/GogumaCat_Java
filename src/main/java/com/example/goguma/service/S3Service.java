@@ -35,7 +35,7 @@ public class S3Service {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
             PutObjectRequest request = new PutObjectRequest(bucketName, key, file.getInputStream(), metadata);
-            request.withCannedAcl(CannedAccessControlList.PublicRead); // 접근권한 체크
+            request.withCannedAcl(CannedAccessControlList.PublicReadWrite); // 접근권한 체크
             PutObjectResult result = s3Client.putObject(request);
             return key;
         } catch (AmazonServiceException e) {

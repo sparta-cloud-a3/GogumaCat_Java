@@ -59,7 +59,7 @@ public class UserController {
      * @param userId
      * @return 작성한 게시물 리스트
      */
-    @GetMapping("/user/get_write_posts/{userId}")
+    @GetMapping("/get_write_posts/{userId}")
     public List<PostResponseDto> getMyPosts(@PathVariable Long userId) {
         return userService.getMyPosts(userId);
     }
@@ -69,13 +69,13 @@ public class UserController {
      * @param userId
      * @return 관심 상품 리스트
      */
-    @GetMapping("/user/get_like_posts/{userId}")
+    @GetMapping("/get_like_posts/{userId}")
     public List<PostResponseDto> getLikePosts(@PathVariable Long userId) {
         return userService.getLikePosts(userId);
     }
 
 
-    @DeleteMapping("/user/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public Long deleteUser(@PathVariable Long id){
        return userService.deleteUser(id);
     }
