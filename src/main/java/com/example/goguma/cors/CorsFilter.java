@@ -13,7 +13,7 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter implements Filter {
 
-    private final static String URL = "http://127.0.0.1:5500";
+    private final static String URL = "https://www.hoinlee.shop";
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
