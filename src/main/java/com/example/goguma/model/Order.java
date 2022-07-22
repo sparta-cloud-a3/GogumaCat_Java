@@ -56,7 +56,7 @@ public class Order extends Timestamped{
         post.sold(true);
 
         //날짜 필터링 - startDate, endDate
-        String[] dateSplit = post.getDate().split("~");
+        String[] dateSplit = post.getDate().split("-");
         String startDate = dateSplit[0].trim();
         String endDate = dateSplit[1].trim();
 
