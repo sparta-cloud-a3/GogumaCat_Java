@@ -17,4 +17,9 @@ public class OrderController {
         json.addProperty("msg", orderService.order(roomId));
         return json.toString();
     }
+
+    @PostMapping("/order/check/{orderId}")
+    public boolean checkedOrder(@PathVariable Long orderId) {
+        return orderService.checkedOrder(orderId);
+    }
 }
