@@ -47,6 +47,10 @@ public class Order extends Timestamped{
         this.post = post;
     }
 
+    public void checkOrder(boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+
     public static Order makeOrder(Post post) {
         //판매완료
         post.sold(true);
@@ -60,18 +64,5 @@ public class Order extends Timestamped{
         int price = post.getPrice();
 
         return new Order(startDate, endDate, price);
-    }
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", price=" + price +
-                ", isChecked=" + isChecked +
-                ", post=" + post +
-                ", user=" + user +
-                '}';
     }
 }

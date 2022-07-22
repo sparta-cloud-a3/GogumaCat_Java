@@ -30,7 +30,7 @@ public class PwService {
     }
 
     @Transactional
-    public void update(Long id, ProfileUpdateDto profileUpdateDto){
+    public void update(Long id, ProfileUpdateDto profileUpdateDto) {
         User user = userRepository.findById(id).orElseThrow(
                 NoSuchUserException::new
         );
