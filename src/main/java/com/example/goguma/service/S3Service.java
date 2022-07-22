@@ -4,12 +4,14 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 @Slf4j
@@ -33,10 +35,16 @@ public class S3Service {
         try {
 
             ObjectMetadata metadata = new ObjectMetadata();
+            byte[] bytes = IOUtils.toByteArray(file.getInputStream());
+            metadata.setContentLength(bytes.length);
             metadata.setContentType(file.getContentType());
-            PutObjectRequest request = new PutObjectRequest(bucketName, key, file.getInputStream(), metadata);
+
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+            PutObjectRequest request = new PutObjectRequest(bucketName, key, byteArrayInputStream, metadata);
             request.withCannedAcl(CannedAccessControlList.PublicReadWrite); // 접근권한 체크
             PutObjectResult result = s3Client.putObject(request);
+
             return key;
         } catch (AmazonServiceException e) {
             log.error("uploadToAWS AmazonServiceException filePath={}, error={}",key, e.getMessage());

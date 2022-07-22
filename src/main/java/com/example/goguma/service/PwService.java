@@ -35,6 +35,12 @@ public class PwService {
                 NoSuchUserException::new
         );
         if (profileUpdateDto.getProfilePic() != null){
+            if (user.getProfilePic() == null){
+                String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
+                String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
+                String password = passwordEncoder.encode(profileUpdateDto.getPassword());
+                user.update(profileUpdateDto, password,profilePic);
+            }
             if(user.getProfilePic().contains("kakaocdn")){
 
                 String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
