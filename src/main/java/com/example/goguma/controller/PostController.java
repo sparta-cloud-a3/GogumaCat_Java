@@ -96,8 +96,8 @@ public class PostController {
     }
 
     @GetMapping("/post/search")
-    public Result search(@RequestParam String query) {
-        List<PostResponseDto> posts = postService.getSearchPosts(query);
+    public Result search(@RequestParam String query, @RequestParam String orderType) {
+        List<PostResponseDto> posts = postService.getSearchPosts(query, orderType);
         return new Result(posts.size(), posts);
     }
 

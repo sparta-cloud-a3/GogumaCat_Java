@@ -8,7 +8,9 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUserId(Long userId);
 
-    List<Post> findByTitleContainingOrContentContaining(String title, String content);
+    List<Post> findByTitleContainingOrContentContainingOrderByCreatedAtDesc(String title, String content);
+
+    List<Post> findByTitleContainingOrContentContainingOrderByLikeCountDesc(String title, String content);
 
     List<Post> findTop4ByOrderByLikeCountDesc();
 }

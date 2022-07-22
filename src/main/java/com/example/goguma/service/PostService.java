@@ -65,12 +65,21 @@ public class PostService {
      * @param keyword 검색어
      * @return 검색결과에 맞는 리스트
      */
-    public List<PostResponseDto> getSearchPosts(String keyword) {
-        List<PostResponseDto> posts = postRepository.findByTitleContainingOrContentContaining(keyword, keyword).stream().map(
-                p -> new PostResponseDto(
+    public List<PostResponseDto> getSearchPosts(String keyword, String orderType) {
+        List<PostResponseDto> posts;
+        if(orderType.equals("latest")) {
+            posts = postRepository.findByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword).stream().map(
+                    p -> new PostResponseDto(
                             p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
-                )
-        ).collect(Collectors.toList());
+                    )
+            ).collect(Collectors.toList());
+        } else {
+            posts = postRepository.findByTitleContainingOrContentContainingOrderByLikeCountDesc(keyword, keyword).stream().map(
+                    p -> new PostResponseDto(
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                    )
+            ).collect(Collectors.toList());
+        }
 
         for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
             postImgRepository.findByPostId(post.getPostId()).forEach(
