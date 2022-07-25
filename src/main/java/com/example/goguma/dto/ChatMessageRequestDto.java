@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -21,7 +24,15 @@ public class ChatMessageRequestDto {
     //내용
     private String message;
 
+    private String sendTime;
+
     public ChatMessage toEntity() {
         return new ChatMessage(type, message);
+    }
+
+    public void setSendTime(LocalDateTime sendTime) {
+        this.sendTime = sendTime.format(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        );
     }
 }

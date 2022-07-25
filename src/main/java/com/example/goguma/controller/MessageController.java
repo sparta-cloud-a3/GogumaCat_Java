@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 public class MessageController {
@@ -22,6 +24,7 @@ public class MessageController {
         if (message.getType().equals(MessageType.ENTER)) {
                 message.setMessage(message.getSender()+"님이 입장하였습니다.");
         } else {
+            message.setSendTime(LocalDateTime.now());
             messageService.saveMessage(message);
         }
 
