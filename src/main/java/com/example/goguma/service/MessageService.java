@@ -1,6 +1,6 @@
 package com.example.goguma.service;
 
-import com.example.goguma.dto.ChatMessageDto;
+import com.example.goguma.dto.ChatMessageRequestDto;
 import com.example.goguma.model.ChatMessage;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
@@ -17,7 +17,7 @@ public class MessageService {
     private final ChatService chatService;
     private final UserService userService;
 
-    public void saveMessage(ChatMessageDto chatMessageDto){
+    public void saveMessage(ChatMessageRequestDto chatMessageDto){
         ChatMessage chatMessage = chatMessageDto.toEntity();
 
         ChatRoom room = chatService.findById(chatMessageDto.getRoomId());

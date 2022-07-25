@@ -53,14 +53,4 @@ public class ChatRoom extends Timestamped{
     public void addMessage(ChatMessage chatMessage){
         messages.add(chatMessage);
     }
-
-    @Override
-    public String toString() {
-        return "ChatRoom{" +
-                "roomId='" + roomId + '\'' +
-                ", roomName='" + roomName + '\'' +
-                ", post=" + post +
-                ", user=" + user +
-                '}';
-    }
 }

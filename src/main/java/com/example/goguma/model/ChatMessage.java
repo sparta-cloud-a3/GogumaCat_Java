@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ChatMessage {
+public class ChatMessage extends Timestamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,16 +47,5 @@ public class ChatMessage {
     public ChatMessage(MessageType type, String message) {
         this.type = type;
         this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        return "ChatMessage{" +
-                "id=" + id +
-                ", type=" + type +
-                ", room=" + room +
-                ", sender=" + sender +
-                ", message='" + message + '\'' +
-                '}';
     }
 }

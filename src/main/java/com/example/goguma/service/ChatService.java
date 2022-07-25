@@ -1,7 +1,9 @@
 package com.example.goguma.service;
 
+import com.example.goguma.dto.ChatMessageResponseDto;
 import com.example.goguma.exception.NoSuchPostException;
 import com.example.goguma.exception.NoSuchRoomException;
+import com.example.goguma.model.ChatMessage;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -12,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -100,5 +103,16 @@ public class ChatService {
         );
         String seller = chatRoom.getPost().getUser().getUsername();
         return seller.equals(username);
+    }
+
+    public List<ChatMessageResponseDto> getChatMessages(String roomId) {
+        ChatRoom chatRoom = chatRepository.findById(roomId).orElseThrow(
+                NoSuchRoomException::new
+        );
+        return chatRoom.getMessages().stream().map(
+                m -> new ChatMessageResponseDto(
+                        m.getSender().getNickname(), m.getMessage(), m.getCreatedAt()
+                )
+        ).collect(Collectors.toList());
     }
 }

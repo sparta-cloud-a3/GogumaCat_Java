@@ -1,4 +1,5 @@
 package com.example.goguma.controller;
+import com.example.goguma.dto.ChatMessageResponseDto;
 import com.example.goguma.dto.ChatRoomResponseDto;
 import com.example.goguma.dto.Result;
 import com.example.goguma.model.ChatRoom;
@@ -13,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,11 +30,19 @@ public class ChatRoomController {
         private String nickname;
         private String roomId;
         private Boolean isSeller;
+        private List<ChatMessageResponseDto> messages;
 
         public ChatDto(String nickname, String roomId, Boolean isSeller) {
             this.nickname = nickname;
             this.roomId = roomId;
             this.isSeller = isSeller;
+        }
+
+        public ChatDto(String nickname, String roomId, Boolean isSeller, List<ChatMessageResponseDto> messages) {
+            this.nickname = nickname;
+            this.roomId = roomId;
+            this.isSeller = isSeller;
+            this.messages = messages;
         }
     }
 
@@ -47,6 +58,7 @@ public class ChatRoomController {
         }
     }
 
+
     /**
      * 채팅 버튼 클린
      * if 작성자라면(판매자라면) -> 연락이 온 채팅방 리스트를 보여줌
@@ -59,10 +71,10 @@ public class ChatRoomController {
         User info = userDetails.getUser();
         ChatRoom existsRoom = chatService.isExistsRoom(info.getId(), postId);
 
-        if (existsRoom == null) { //만약 소비자라면 -> 새로운 방을 생성
+        if (existsRoom == null) { //방이 없음-> 새로운 방을 생성
             return new ChatDto(info.getNickname(), chatService.createRoom(info, postId), false);
         } else { //이미 생성되어있는 방이라면 -> 생성되어있는 방을 리턴
-            return new ChatDto(info.getNickname(), existsRoom.getRoomId(), false);
+            return new ChatDto(info.getNickname(), existsRoom.getRoomId(), false, chatService.getChatMessages(existsRoom.getRoomId()));
         }
     }
 
@@ -89,7 +101,7 @@ public class ChatRoomController {
     @GetMapping("/mypostroom/enter/{roomId}")
     public ChatDto roomDetail(@PathVariable String roomId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User info = userDetails.getUser();
-        return new ChatDto(info.getNickname(), roomId, chatService.isSeller(userDetails.getUsername(), roomId));
+        return new ChatDto(info.getNickname(), roomId, chatService.isSeller(userDetails.getUsername(), roomId), chatService.getChatMessages(roomId));
     }
 
     /**
