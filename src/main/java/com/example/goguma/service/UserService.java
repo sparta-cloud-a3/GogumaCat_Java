@@ -159,8 +159,8 @@ public class UserService {
     }
 
     @Transactional
-    public Long deleteUser(Long id){
+    public String deleteUser(Long id){
         userRepository.deleteById(id);
-        return id;
+        return "회원 탈퇴에 성공하였습니다.";
     }
 }

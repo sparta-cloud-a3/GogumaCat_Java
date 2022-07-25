@@ -73,12 +73,11 @@ public class PostController {
     }
 
     @DeleteMapping("/post/delete/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/"));
-        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
-//        return "redirect:/";
+    public String deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl user) {
+        return postService.deletePost(postId, user.getUsername());
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create("/"));
+//        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/post/update/{postId}")
@@ -87,12 +86,11 @@ public class PostController {
     }
 
     @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
-    public ResponseEntity<String> updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto) {
-        postService.updatePost(postId, postRequestDto);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("/post/" + postId));
-        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
-//        return "redirect:/post/" + postId;
+    public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl user) {
+        return postService.updatePost(postId, postRequestDto, user.getUsername());
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setLocation(URI.create("/post/" + postId));
+//        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/post/search")

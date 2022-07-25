@@ -65,7 +65,5 @@ public class PwService {
             user.update(profileUpdateDto, password,profilePic);
         }
 
-
-
     }
 }

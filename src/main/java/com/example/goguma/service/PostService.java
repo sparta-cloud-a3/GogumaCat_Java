@@ -123,20 +123,30 @@ public class PostService {
     }
 
     @Transactional
-    public void  deletePost(Long postId) {
+    public String  deletePost(Long postId, String username) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                NoSuchPostException::new
+        );
+        if (!username.equals(post.getUser().getUsername()))
+            return "작성자만 게시물을 삭제할 수 있습니다.";
+
         List<PostImg> findPostImgs = postImgRepository.findByPostId(postId);
         String[] spliturl = findPostImgs.get(0).getImg_url().split("https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/");
         s3Service.delete(spliturl[1]);
         likeRepository.deleteByPostId(postId);
         postRepository.deleteById(postId);
+        return "게시물 삭제에 성공하였습니다.";
     }
 
     @Transactional
-    public void updatePost(Long postId, PostRequestDto postRequestDto) {
+    public String updatePost(Long postId, PostRequestDto postRequestDto, String username) {
         //사진 외에 post field 변경
         Post post = postRepository.findById(postId).orElseThrow(
                 NoSuchPostException::new
         );
+
+        if(!username.equals(post.getUser().getUsername()))
+            return "작성자만 게시물을 수정할 수 있습니다.";
 
         post.update(postRequestDto);
 
@@ -153,6 +163,7 @@ public class PostService {
             PostImg postImg = new PostImg(imgUrl);
             post.addPostImg(postImg);
         }
+        return "게시물 수정 성공하였습니다.";
     }
 
     public List<PostResponseDto> getTop4Posts() {

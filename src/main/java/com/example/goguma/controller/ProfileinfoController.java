@@ -2,8 +2,10 @@ package com.example.goguma.controller;
 
 import com.example.goguma.dto.PasswordCheckDto;
 import com.example.goguma.dto.ProfileUpdateDto;
+import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PwService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,9 +19,12 @@ public class ProfileinfoController {
         return pwService.checkPw(passwordCheckDto);
     }
     @PutMapping(value = "/update_profile/{id}", consumes = {"multipart/form-data"})
-    public Long updateProfile(@PathVariable Long id, ProfileUpdateDto profileUpdateDto){
+    public String updateProfile(@PathVariable Long id, ProfileUpdateDto profileUpdateDto, @AuthenticationPrincipal UserDetailsImpl user){
+        if(!id.equals(user.getUser().getId())) {
+            return "회원정보 수정은 본인만 가능합니다.";
+        }
         pwService.update(id, profileUpdateDto);
-        return id;
+        return "회원정보 수정 성공하였습니다.";
     }
 
 }

@@ -1,9 +1,11 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.dto.*;
+import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.AuthService;
 import com.example.goguma.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -76,7 +78,10 @@ public class UserController {
 
 
     @DeleteMapping("/delete/{id}")
-    public Long deleteUser(@PathVariable Long id){
-       return userService.deleteUser(id);
+    public String deleteUser(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl user){
+        if(!id.equals(user.getUser().getId())) {
+            return "탈퇴는 본인만 가능합니다.";
+        }
+        return userService.deleteUser(id);
     }
 }
