@@ -10,7 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://d9gox7s2vayxc.cloudfront.net", "http://gogumacat-frontend.s3-website.ap-northeast-2.amazonaws.com", "http://127.0.0.1:5500","https://www.hoinlee.shop")
+                .allowedOrigins("http://d9gox7s2vayxc.cloudfront.net", "http://127.0.0.1:5500", "https://www.gogumacat.shop")
                 .allowedMethods("*");
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class ChatConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final static String URL = "https://www.hoinlee.shop";
+    private final static String URL = "https://www.gogumacat.shop";
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
