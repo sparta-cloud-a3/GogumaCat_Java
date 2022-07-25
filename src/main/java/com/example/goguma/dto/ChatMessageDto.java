@@ -24,4 +24,14 @@ public class ChatMessageDto {
     public ChatMessage toEntity() {
         return new ChatMessage(type, message);
     }
+
+    @Override
+    public String toString() {
+        return "ChatMessageDto{" +
+                "type=" + type +
+                ", roomId='" + roomId + '\'' +
+                ", sender='" + sender + '\'' +
+                ", message='" + message + '\'' +
+                '}';
+    }
 }

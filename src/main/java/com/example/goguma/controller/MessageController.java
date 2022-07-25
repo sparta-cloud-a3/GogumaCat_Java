@@ -6,6 +6,7 @@ import com.example.goguma.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,9 +20,11 @@ public class MessageController {
     @MessageMapping("/chat/message")
     public void enter(@RequestBody ChatMessageDto message) {
         if (message.getType().equals(MessageType.ENTER)) {
-            message.setMessage(message.getSender()+"님이 입장하였습니다.");
+                message.setMessage(message.getSender()+"님이 입장하였습니다.");
+        } else {
+            //메세지 저장
+            messageService.saveMessage(message);
         }
-        //메세지 저장
 
         sendingOperations.convertAndSend("/topic/chat/room/" + message.getRoomId(), message);
     }
