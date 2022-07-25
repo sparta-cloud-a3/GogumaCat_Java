@@ -68,13 +68,13 @@ public class PostService {
     public List<PostResponseDto> getSearchPosts(String keyword, String orderType) {
         List<PostResponseDto> posts;
         if(orderType.equals("latest")) {
-            posts = postRepository.findByTitleContainingOrContentContainingOrderByCreatedAtDesc(keyword, keyword).stream().map(
+            posts = postRepository.findByTitleContainingOrContentContainingOrAddressContainingOrderByCreatedAtDesc(keyword, keyword, keyword).stream().map(
                     p -> new PostResponseDto(
                             p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
                     )
             ).collect(Collectors.toList());
         } else {
-            posts = postRepository.findByTitleContainingOrContentContainingOrderByLikeCountDesc(keyword, keyword).stream().map(
+            posts = postRepository.findByTitleContainingOrContentContainingOrAddressContainingOrderByLikeCountDesc(keyword, keyword, keyword).stream().map(
                     p -> new PostResponseDto(
                             p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
                     )

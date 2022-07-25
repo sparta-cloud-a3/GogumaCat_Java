@@ -42,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/queue/**").permitAll()
                 .antMatchers("/topic/**").permitAll()
                 .antMatchers("/app/**").permitAll()
-                .antMatchers("/post/top4").permitAll()
+                .antMatchers("/post/top4", "/post/all","/post/search","/post/detail/**").permitAll()
                 // 그 외 모든 요청은 인증과정 필요
                 .anyRequest().authenticated()
                 .and()

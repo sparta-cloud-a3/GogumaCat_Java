@@ -33,10 +33,7 @@ public class PostController {
         private Boolean likeByMe;
         private PostResponseDto post;
 
-        public SimplePostDto(Long userId, String nickname, Boolean likeByMe, PostResponseDto post) {
-            this.userId = userId;
-            this.nickname = nickname;
-            this.likeByMe = likeByMe;
+        public SimplePostDto(PostResponseDto post) {
             this.post = post;
         }
     }
@@ -59,10 +56,9 @@ public class PostController {
      * @param postId
      * @return 상세 게시물
      */
-    @GetMapping("/post/{postId}")
+    @GetMapping("/post/detail/{postId}")
     public SimplePostDto getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User info = userDetails.getUser();
-        return new SimplePostDto(info.getId(), info.getNickname(), likeRepository.existsByuserIdAndPostId(info.getId(), postId), postService.getOnePost(postId));
+        return new SimplePostDto(postService.getOnePost(postId));
     }
 
     @PostMapping(value = "/post/create", consumes = {"multipart/form-data"})

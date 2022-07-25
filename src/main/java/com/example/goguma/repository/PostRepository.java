@@ -8,9 +8,9 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findByUserId(Long userId);
 
-    List<Post> findByTitleContainingOrContentContainingOrderByCreatedAtDesc(String title, String content);
+    List<Post> findByTitleContainingOrContentContainingOrAddressContainingOrderByCreatedAtDesc(String title, String content,String address);
 
-    List<Post> findByTitleContainingOrContentContainingOrderByLikeCountDesc(String title, String content);
+    List<Post> findByTitleContainingOrContentContainingOrAddressContainingOrderByLikeCountDesc(String title, String content,String address);
 
     List<Post> findTop4ByOrderByLikeCountDesc();
 }
