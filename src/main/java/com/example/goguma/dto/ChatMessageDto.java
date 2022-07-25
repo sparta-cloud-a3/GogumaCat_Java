@@ -1,5 +1,7 @@
 package com.example.goguma.dto;
 
+import com.example.goguma.model.ChatMessage;
+import com.example.goguma.model.MessageType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,10 +11,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessageRequestDto {
-    public enum MessageType {
-        ENTER, TALK
-    }
+public class ChatMessageDto {
 
     private MessageType type;
     //채팅방 ID
@@ -21,4 +20,8 @@ public class ChatMessageRequestDto {
     private String sender;
     //내용
     private String message;
+
+    public ChatMessage toEntity() {
+        return new ChatMessage(type, message);
+    }
 }

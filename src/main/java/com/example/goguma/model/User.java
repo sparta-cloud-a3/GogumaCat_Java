@@ -62,6 +62,10 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<ChatMessage> messages  = new ArrayList<>();
+
     public void addPost(Post post) {
         posts.add(post);
         post.addUser(this);
@@ -74,6 +78,10 @@ public class User extends Timestamped {
     public void addOrder(Order order) {
         orders.add(order);
         order.addCustomer(this);
+    }
+
+    public void addMessages(ChatMessage chatMessage) {
+        messages.add(chatMessage);
     }
 
     public User(String username, String password, String nickname, String address) {

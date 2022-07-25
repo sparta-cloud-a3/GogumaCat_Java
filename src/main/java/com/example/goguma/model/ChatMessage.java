@@ -3,7 +3,6 @@ package com.example.goguma.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,10 +12,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatMessage {
-    public enum MessageType {
-        ENTER, TALK
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "msg_id")
@@ -43,9 +38,16 @@ public class ChatMessage {
 
     public void addRoom(ChatRoom room) {
         this.room = room;
+        room.addMessage(this);
     }
 
     public void addSender(User sender) {
         this.sender = sender;
+        sender.addMessages(this);
+    }
+
+    public ChatMessage(MessageType type, String message) {
+        this.type = type;
+        this.message = message;
     }
 }

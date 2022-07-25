@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -28,6 +30,10 @@ public class ChatRoom extends Timestamped{
     @JsonIgnore
     private User user;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<ChatMessage> messages = new ArrayList<>();
+
     public static ChatRoom create(String name) {
         ChatRoom room = new ChatRoom();
         room.roomId = UUID.randomUUID().toString();
@@ -42,6 +48,10 @@ public class ChatRoom extends Timestamped{
 
     public void addUser(User user) {
         this.user = user;
+    }
+
+    public void addMessage(ChatMessage chatMessage){
+        messages.add(chatMessage);
     }
 
     @Override
