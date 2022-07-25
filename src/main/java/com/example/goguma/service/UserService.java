@@ -163,4 +163,10 @@ public class UserService {
         userRepository.deleteById(id);
         return "회원 탈퇴에 성공하였습니다.";
     }
+
+    public User findByNickname(String nickname) {
+        return userRepository.findByNickname(nickname).orElseThrow(
+                NoSuchUserException::new
+        );
+    }
 }
