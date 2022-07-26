@@ -20,7 +20,6 @@ public class MessageController {
 
     @MessageMapping("/chat/message")
     public void enter(@RequestBody ChatMessageRequestDto message) {
-        System.out.println("MessageController.enter");
         if (message.getType().equals(MessageType.ENTER)) {
                 message.setMessage(message.getSender()+"님이 입장하였습니다.");
         } else {

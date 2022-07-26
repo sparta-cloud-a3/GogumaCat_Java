@@ -5,7 +5,9 @@ import com.example.goguma.model.ChatMessage;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.ChatMessageRepository;
+import com.example.goguma.security.msg.Aes128;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

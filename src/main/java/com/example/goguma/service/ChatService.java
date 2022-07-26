@@ -3,7 +3,6 @@ package com.example.goguma.service;
 import com.example.goguma.dto.ChatMessageResponseDto;
 import com.example.goguma.exception.NoSuchPostException;
 import com.example.goguma.exception.NoSuchRoomException;
-import com.example.goguma.model.ChatMessage;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
@@ -111,7 +110,7 @@ public class ChatService {
         );
         return chatRoom.getMessages().stream().map(
                 m -> new ChatMessageResponseDto(
-                        m.getSender().getNickname(), m.getMessage(), m.getCreatedAt()
+                        m.getSender().getNickname(), m.decodeMsg(m.getMessage()), m.getCreatedAt()
                 )
         ).collect(Collectors.toList());
     }
