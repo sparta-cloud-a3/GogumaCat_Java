@@ -1,25 +1,32 @@
 package com.example.goguma.controller;
 
 import com.example.goguma.dto.ChatMessageRequestDto;
-import com.example.goguma.model.ChatMessage;
+import com.example.goguma.model.MessageType;
+import com.example.goguma.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 public class MessageController {
 
     private final SimpMessageSendingOperations sendingOperations;
+    private final MessageService messageService;
 
     @MessageMapping("/chat/message")
     public void enter(@RequestBody ChatMessageRequestDto message) {
-        if (ChatMessageRequestDto.MessageType.ENTER.equals(message.getType())) {
-            message.setMessage(message.getSender()+"님이 입장하였습니다.");
+        if (message.getType().equals(MessageType.ENTER)) {
+                message.setMessage(message.getSender()+"님이 입장하였습니다.");
+        } else {
+            message.setSendTime(LocalDateTime.now());
+            messageService.saveMessage(message);
         }
-        //메세지 저장
+
         sendingOperations.convertAndSend("/topic/chat/room/" + message.getRoomId(), message);
     }
 }
