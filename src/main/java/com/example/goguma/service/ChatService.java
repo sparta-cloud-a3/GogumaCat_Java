@@ -8,6 +8,7 @@ import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.ChatRepository;
 import com.example.goguma.repository.PostRepository;
+import com.example.goguma.security.msg.Aes128;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -110,7 +111,7 @@ public class ChatService {
         );
         return chatRoom.getMessages().stream().map(
                 m -> new ChatMessageResponseDto(
-                        m.getSender().getNickname(), m.decodeMsg(m.getMessage()), m.getCreatedAt()
+                        m.getSender().getNickname(), Aes128.getAES128decode(m.getMessage()), m.getCreatedAt()
                 )
         ).collect(Collectors.toList());
     }

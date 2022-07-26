@@ -47,14 +47,6 @@ public class ChatMessage extends Timestamped{
 
     public ChatMessage(MessageType type, String message) {
         this.type = type;
-        this.message = encodeMsg(message);
-    }
-
-    public String encodeMsg(String message) {
-        return Aes128.getAES128encode(message);
-    }
-
-    public String decodeMsg(String message) {
-        return Aes128.getAES128decode(message);
+        this.message = Aes128.getAES128encode(message);
     }
 }

@@ -34,15 +34,12 @@ public class Aes128 {
     public static String getAES128decode(String decodeData) {
         String result = "";
         try {
-
-            // TODO [인풋으로 들어온 base64 문자열 데이터를 가지고 디코딩 수행 실시]
             byte[] textBytes = Base64Utils.decode(decodeData.getBytes());
             AlgorithmParameterSpec ivSpec = new IvParameterSpec(aes128ivBytes);
             SecretKeySpec newKey = new SecretKeySpec(aes128ivBytesUtf8, "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, newKey, ivSpec);
 
-            // TODO [리턴 데이터 반환 실시]
             return new String(cipher.doFinal(textBytes), "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
