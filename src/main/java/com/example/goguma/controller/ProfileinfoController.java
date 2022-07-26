@@ -2,6 +2,7 @@ package com.example.goguma.controller;
 
 import com.example.goguma.dto.PasswordCheckDto;
 import com.example.goguma.dto.ProfileUpdateDto;
+import com.example.goguma.dto.PwUpdateDto;
 import com.example.goguma.security.UserDetailsImpl;
 import com.example.goguma.service.PwService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,15 @@ public class ProfileinfoController {
         }
         pwService.update(id, profileUpdateDto);
         return "회원정보 수정 성공하였습니다.";
+    }
+
+    @PutMapping("/update_pw/{id}")
+    public String updatePw(@PathVariable Long id, @RequestBody PwUpdateDto pwUpdateDto, @AuthenticationPrincipal UserDetailsImpl user){
+        if(!id.equals(user.getUser().getId())) {
+            return "회원정보 수정은 본인만 가능합니다.";
+        }
+        pwService.pwUpdate(id,pwUpdateDto);
+        return "비밀번호 수정이 완료되었습니다.";
     }
 
 }

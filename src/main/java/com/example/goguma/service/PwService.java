@@ -2,6 +2,7 @@ package com.example.goguma.service;
 
 import com.example.goguma.dto.PasswordCheckDto;
 import com.example.goguma.dto.ProfileUpdateDto;
+import com.example.goguma.dto.PwUpdateDto;
 import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.UserRepository;
@@ -38,15 +39,13 @@ public class PwService {
             if (user.getProfilePic() == null){
                 String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
                 String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-                String password = passwordEncoder.encode(profileUpdateDto.getPassword());
-                user.update(profileUpdateDto, password,profilePic);
+                user.update(profileUpdateDto,profilePic);
             }
             if(user.getProfilePic().contains("kakaocdn")){
 
                 String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
                 String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-                String password = passwordEncoder.encode(profileUpdateDto.getPassword());
-                user.update(profileUpdateDto, password,profilePic);
+                user.update(profileUpdateDto,profilePic);
             }
 
             if(user.getProfilePic() != null){
@@ -55,15 +54,22 @@ public class PwService {
 
                 String name = s3Service.uploadToAWS(profileUpdateDto.getProfilePic());
                 String profilePic = "https://gogumacat-s3.s3.ap-northeast-2.amazonaws.com/" + name;
-                String password = passwordEncoder.encode(profileUpdateDto.getPassword());
-                user.update(profileUpdateDto, password,profilePic);
+                user.update(profileUpdateDto,profilePic);
 
             }
         } else {
             String profilePic = user.getProfilePic();
-            String password = passwordEncoder.encode(profileUpdateDto.getPassword());
-            user.update(profileUpdateDto, password,profilePic);
+            user.update(profileUpdateDto,profilePic);
         }
 
+    }
+
+    @Transactional
+    public void pwUpdate(Long id, PwUpdateDto pwUpdateDto){
+        User user = userRepository.findById(id).orElseThrow(
+                NoSuchUserException::new
+        );
+        String password = passwordEncoder.encode(pwUpdateDto.getPassword());
+        user.pwUpdate(password);
     }
 }

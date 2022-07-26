@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileUpdateDto {
     private String username;
     private String nickname;
-    private String password;
     private String address;
     private MultipartFile profilePic;
     private String profileInfo;
@@ -19,7 +18,6 @@ public class ProfileUpdateDto {
         return "ProfileUpdateDto{" +
                 "username=" + username + '\'' +
                 ", nickname=" + nickname + '\'' +
-                ", password=" + password + '\'' +
                 ", address=" + address + '\'' +
                 ", profilePic="+profilePic+ '\'' +
                 ", profileInfo="+profileInfo+ '\'' +

@@ -97,12 +97,15 @@ public class User extends Timestamped {
     }
 
 
-    public void update(ProfileUpdateDto profileUpdateDto,String password,String profilePic){
+    public void update(ProfileUpdateDto profileUpdateDto,String profilePic){
         this.nickname = profileUpdateDto.getNickname();
-        this.password = password;
         this.address = profileUpdateDto.getAddress();
         this.profilePic = profilePic;
         this.profileInfo = profileUpdateDto.getProfileInfo();
+    }
+
+    public void pwUpdate(String password){
+        this.password = password;
     }
 
     public void accessToken(String accessToken){
