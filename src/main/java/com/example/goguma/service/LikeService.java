@@ -20,7 +20,7 @@ public class LikeService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public void updateLike(Long postId, String action, String username) {
+    public Long updateLike(Long postId, String action, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(
                 NoSuchUserException::new
         );
@@ -37,6 +37,7 @@ public class LikeService {
         }
 
         updateLikeCount(post, action);
+        return postId;
     }
 
     public void updateLikeCount(Post post, String action){

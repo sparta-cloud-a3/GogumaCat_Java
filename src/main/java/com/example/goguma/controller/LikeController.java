@@ -20,11 +20,7 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/update_like")
-    public ResponseEntity<String> updateLike(@RequestParam String postId, @RequestParam String action, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        likeService.updateLike(Long.parseLong(postId), action, userDetails.getUsername());
-        String uri = "/post/" + postId;
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(uri));
-        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
+    public Long updateLike(@RequestParam String postId, @RequestParam String action, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return likeService.updateLike(Long.parseLong(postId), action, userDetails.getUsername());
     }
 }
