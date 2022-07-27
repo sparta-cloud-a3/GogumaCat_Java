@@ -12,5 +12,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findByTitleContainingOrContentContainingOrAddressContainingOrderByLikeCountDesc(String title, String content,String address);
 
-    List<Post> findTop4ByOrderByLikeCountDesc();
+    List<Post> findTop8ByOrderByLikeCountDesc();
 }

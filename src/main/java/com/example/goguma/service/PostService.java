@@ -166,8 +166,8 @@ public class PostService {
         return "게시물 수정 성공하였습니다.";
     }
 
-    public List<PostResponseDto> getTop4Posts() {
-        List<PostResponseDto> posts = postRepository.findTop4ByOrderByLikeCountDesc().stream().map(
+    public List<PostResponseDto> getTop8Posts() {
+        List<PostResponseDto> posts = postRepository.findTop8ByOrderByLikeCountDesc().stream().map(
                 p -> new PostResponseDto(
                         p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                 )

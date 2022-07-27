@@ -84,4 +84,10 @@ public class UserController {
         }
         return userService.deleteUser(id);
     }
+
+    @GetMapping("/order/my/{userId}")
+    public Result getOrderPosts(@PathVariable Long userId){
+        List<PostResponseDto> posts = userService.getMyOrderPosts(userId);
+        return new Result(posts.size(), posts);
+    }
 }

@@ -97,9 +97,9 @@ public class PostController {
         return new Result(posts.size(), posts);
     }
 
-    @GetMapping("/post/top4")
-    public Result getTop4Posts() {
-        List<PostResponseDto> posts = postService.getTop4Posts();
+    @GetMapping("/post/top8")
+    public Result getTop8Posts() {
+        List<PostResponseDto> posts = postService.getTop8Posts();
         return new Result(posts.size(), posts);
     }
 }

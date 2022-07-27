@@ -3,6 +3,7 @@ package com.example.goguma.service;
 import com.example.goguma.dto.*;
 import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.jwt.JwtProvider;
+import com.example.goguma.model.Order;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.ChatRepository;
@@ -168,5 +169,27 @@ public class UserService {
         return userRepository.findByNickname(nickname).orElseThrow(
                 NoSuchUserException::new
         );
+    }
+
+    public List<PostResponseDto> getMyOrderPosts(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                NoSuchUserException::new
+        );
+        List<PostResponseDto> posts = user.getOrders().stream().map(
+                o -> {
+                    Post p = o.getPost();
+                    return new PostResponseDto(p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold());
+                }
+        ).collect(Collectors.toList());
+
+        for (PostResponseDto post : posts) { //fetch type이 LAZY이기 때문에 하나씩 받아오기
+            postImgRepository.findByPostId(post.getPostId()).forEach(
+                    pi -> {
+                        post.getPostImgs().add(new PostImgResponseDto(pi.getImg_url()));
+                    }
+            );
+        }
+
+        return posts;
     }
 }
