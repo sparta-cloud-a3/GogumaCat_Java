@@ -111,7 +111,7 @@ public class UserService {
         List<PostResponseDto> posts = user.getPosts().stream().map(
                 p -> {
                     return new PostResponseDto(
-                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                     );
                 }
         ).collect(Collectors.toList());
@@ -142,7 +142,7 @@ public class UserService {
                 l -> {
                     Post p = l.getPost();
                     return new PostResponseDto(
-                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                     );
                 }
         ).collect(Collectors.toList());

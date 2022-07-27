@@ -43,4 +43,8 @@ public class LikeService {
     public void updateLikeCount(Post post, String action){
         post.updateLikeCount(action);
     }
+
+    public boolean isLikeByMe(Long userId, Long postId) {
+        return likeRepository.existsByuserIdAndPostId(userId, postId);
+    }
 }

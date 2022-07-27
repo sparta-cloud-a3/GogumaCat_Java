@@ -25,15 +25,18 @@ public class PostResponseDto {
 
     private String date;
 
-    public PostResponseDto(Long postId, String title, int price, String address, int likeCount) {
+    private boolean isSold;
+
+    public PostResponseDto(Long postId, String title, int price, String address, int likeCount, boolean isSold) {
         this.postId = postId;
         this.title = title;
         this.price = price;
         this.address = address;
         this.likeCount = likeCount;
+        this.isSold = isSold;
     }
 
-    public PostResponseDto(Long postId, String title, int price, String address, int likeCount, String content, Long writeUserId, String writerNickname, String writerProfile, String date) {
+    public PostResponseDto(Long postId, String title, int price, String address, int likeCount, String content, Long writeUserId, String writerNickname, String writerProfile, String date, boolean isSold) {
         this.postId = postId;
         this.title = title;
         this.price = price;
@@ -44,13 +47,14 @@ public class PostResponseDto {
         this.writerNickname = writerNickname;
         this.writerProfile = writerProfile;
         this.date = date;
+        this.isSold = isSold;
     }
 
     public static PostResponseDto toDto(Post post) {
         User user = post.getUser();
         return new PostResponseDto(
                 post.getId(), post.getTitle(), post.getPrice(), post.getAddress(), post.getLikeCount(),
-                post.getContent(), user.getId(), user.getNickname(), user.getProfilePic(), post.getDate()
+                post.getContent(), user.getId(), user.getNickname(), user.getProfilePic(), post.getDate(), post.isSold()
         );
     }
 }

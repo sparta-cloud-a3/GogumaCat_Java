@@ -3,28 +3,25 @@ package com.example.goguma.controller;
 import com.example.goguma.dto.PostRequestDto;
 import com.example.goguma.dto.PostResponseDto;
 import com.example.goguma.dto.Result;
+import com.example.goguma.model.Like;
 import com.example.goguma.model.Post;
 
-import com.example.goguma.repository.LikeRepository;
 import com.example.goguma.security.UserDetailsImpl;
+import com.example.goguma.service.LikeService;
 import com.example.goguma.service.PostService;
 import com.example.goguma.model.User;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-    private final LikeRepository likeRepository;
+    private final LikeService likeService;
 
     @Data
     static class SimplePostDto {
@@ -34,6 +31,13 @@ public class PostController {
         private PostResponseDto post;
 
         public SimplePostDto(PostResponseDto post) {
+            this.post = post;
+        }
+
+        public SimplePostDto(Long userId, String nickname, Boolean likeByMe, PostResponseDto post) {
+            this.userId = userId;
+            this.nickname = nickname;
+            this.likeByMe = likeByMe;
             this.post = post;
         }
     }
@@ -58,6 +62,10 @@ public class PostController {
      */
     @GetMapping("/post/detail/{postId}")
     public SimplePostDto getOnePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if(userDetails != null) {
+            User user = userDetails.getUser();
+            return new SimplePostDto(user.getId(), user.getNickname(), likeService.isLikeByMe(user.getId(), postId),postService.getOnePost(postId));
+        }
         return new SimplePostDto(postService.getOnePost(postId));
     }
 
@@ -71,9 +79,6 @@ public class PostController {
     @DeleteMapping("/post/delete/{postId}")
     public String deletePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl user) {
         return postService.deletePost(postId, user.getUsername());
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(URI.create("/"));
-//        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/post/update/{postId}")
@@ -84,9 +89,6 @@ public class PostController {
     @PostMapping(value = "/post/update/{postId}", consumes = {"multipart/form-data"})
     public String updatePost(@PathVariable Long postId, @ModelAttribute PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl user) {
         return postService.updatePost(postId, postRequestDto, user.getUsername());
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setLocation(URI.create("/post/" + postId));
-//        return new ResponseEntity(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     @GetMapping("/post/search")

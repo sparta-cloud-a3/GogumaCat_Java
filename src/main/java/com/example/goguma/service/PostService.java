@@ -39,14 +39,14 @@ public class PostService {
         if (orderType.equals("latest")) { //최신순
              posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt")).stream().map(
                      p -> new PostResponseDto(
-                                 p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                                 p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                      )
 
              ).collect(Collectors.toList());
         } else { //인기순
             posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "likeCount")).stream().map(
                     p -> new PostResponseDto(
-                                p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                                p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                     )
             ).collect(Collectors.toList());
         }
@@ -70,13 +70,13 @@ public class PostService {
         if(orderType.equals("latest")) {
             posts = postRepository.findByTitleContainingOrContentContainingOrAddressContainingOrderByCreatedAtDesc(keyword, keyword, keyword).stream().map(
                     p -> new PostResponseDto(
-                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                     )
             ).collect(Collectors.toList());
         } else {
             posts = postRepository.findByTitleContainingOrContentContainingOrAddressContainingOrderByLikeCountDesc(keyword, keyword, keyword).stream().map(
                     p -> new PostResponseDto(
-                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                            p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                     )
             ).collect(Collectors.toList());
         }
@@ -169,7 +169,7 @@ public class PostService {
     public List<PostResponseDto> getTop4Posts() {
         List<PostResponseDto> posts = postRepository.findTop4ByOrderByLikeCountDesc().stream().map(
                 p -> new PostResponseDto(
-                        p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount()
+                        p.getId(), p.getTitle(), p.getPrice(), p.getAddress(), p.getLikeCount(), p.isSold()
                 )
         ).collect(Collectors.toList());
 
