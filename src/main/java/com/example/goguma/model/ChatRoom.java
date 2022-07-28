@@ -25,7 +25,7 @@ public class ChatRoom extends Timestamped{
     @JsonIgnore
     private Post post;
 
-    @OneToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name= "user_id")
     @JsonIgnore
     private User user;

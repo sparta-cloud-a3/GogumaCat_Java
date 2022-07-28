@@ -54,7 +54,7 @@ public class Post extends Timestamped {
     private List<Order> orders = new ArrayList<>();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
     public Post(String title, int price, String content, String address, String date) {

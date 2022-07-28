@@ -3,11 +3,13 @@ package com.example.goguma.service;
 import com.example.goguma.dto.ChatMessageResponseDto;
 import com.example.goguma.exception.NoSuchPostException;
 import com.example.goguma.exception.NoSuchRoomException;
+import com.example.goguma.exception.NoSuchUserException;
 import com.example.goguma.model.ChatRoom;
 import com.example.goguma.model.Post;
 import com.example.goguma.model.User;
 import com.example.goguma.repository.ChatRepository;
 import com.example.goguma.repository.PostRepository;
+import com.example.goguma.repository.UserRepository;
 import com.example.goguma.security.msg.Aes128;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class ChatService {
 
     private final ChatRepository chatRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     /**
      * 소비자인지 아닌지를 확인
@@ -44,15 +47,18 @@ public class ChatService {
 
     /**
      * 방을 생성
-     * @param user
+     * @param info
      * @param postId
      * @return 생성된 방의 아이디
      */
-    public String createRoom(User user, Long postId) {
+    public String createRoom(User info, Long postId) {
         //채팅방 객체 만듦
-        ChatRoom chatRoom = ChatRoom.create(user.getNickname());
+        ChatRoom chatRoom = ChatRoom.create(info.getNickname());
 
         //연관관계 주입
+        User user = userRepository.findById(info.getId()).orElseThrow(
+                NoSuchUserException::new
+        );
         chatRoom.addUser(user);
 
         Post post = postRepository.findById(postId).orElseThrow(

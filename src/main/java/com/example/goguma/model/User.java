@@ -66,9 +66,18 @@ public class User extends Timestamped {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
     private List<ChatMessage> messages  = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ChatRoom> rooms = new ArrayList<>();
+
     public void addPost(Post post) {
         posts.add(post);
         post.addUser(this);
+    }
+
+    public void addRoom(ChatRoom chatRoom) {
+        rooms.add(chatRoom);
+        chatRoom.addUser(this);
     }
 
     public void addLike(Like like) {
