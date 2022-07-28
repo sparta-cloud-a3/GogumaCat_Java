@@ -20,7 +20,7 @@ public class ChatRoom extends Timestamped{
     private String roomId;
     private String roomName;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="post_id")
     @JsonIgnore
     private Post post;
