@@ -56,7 +56,7 @@ public class ChatService {
         chatRoom.addUser(user);
 
         Post post = postRepository.findById(postId).orElseThrow(
-                NoSuchRoomException::new
+                NoSuchPostException::new
         );
         chatRoom.addPost(post);
 
