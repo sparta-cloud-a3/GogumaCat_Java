@@ -161,7 +161,6 @@ public class UserService {
 
     @Transactional
     public String deleteUser(Long id){
-        chatRepository.deleteByUserId(id);
         userRepository.deleteById(id);
         return "회원 탈퇴에 성공하였습니다.";
     }

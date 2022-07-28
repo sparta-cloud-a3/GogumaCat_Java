@@ -23,7 +23,7 @@ public class ChatMessage extends Timestamped{
     private MessageType type;
 
     //채팅방 ID
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "room_id", nullable = false)
     private ChatRoom room;
 
